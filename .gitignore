@@ -1,0 +1,11 @@
+# macOS / editor junk
+.DS_Store
+.thumbnail
+
+# Design-canvas artifacts not needed by the live website.
+# The site loads its photos from the images/ folder via each container's src=,
+# so the embedded-image sidecar is redundant online (and 2 MB). Keep it out.
+.image-slots.state.json
+
+# Original pasted source images — not referenced by the site.
+uploads/

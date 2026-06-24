@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  html { background:#1a1b20; }
+  body { margin:0; background:#1a1b20; color:#e8e6e1; font-family:'Archivo',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#e8e6e1; color:#1a1b20; }
+  ::-webkit-scrollbar { width:9px; }
+  ::-webkit-scrollbar-track { background:#1a1b20; }
+  ::-webkit-scrollbar-thumb { background:#3a3b43; }
+  @keyframes rise { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:none; } }
+  @keyframes detailIn { from { opacity:0; transform:translateY(36px); } to { opacity:1; transform:none; } }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.15;} }
+  @keyframes drift { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(7px); } }
+  @keyframes grainShift { 0%{transform:translate(0,0);} 25%{transform:translate(-3%,-2%);} 50%{transform:translate(2%,-4%);} 75%{transform:translate(-2%,3%);} 100%{transform:translate(0,0);} }
+  @keyframes scanmove { 0%,100%{ transform:translateY(-40%); opacity:0; } 12%,88%{ opacity:1; } 50%{ transform:translateY(40%); } }
+</style>
+<script src="./image-slot.js"></script>
+</helmet>
+
+<div style="min-height:100vh;background-color:#1a1b20;background-image:repeating-linear-gradient(0deg,rgba(236,235,230,0.024) 0 1px,transparent 1px 6px);position:relative;overflow-x:hidden;">
+
+  <div id="scrollbar" style="position:fixed;top:0;left:0;height:2px;width:100%;background:#e8e6e1;transform:scaleX(0);transform-origin:0 50%;z-index:1000;will-change:transform;"></div>
+
+  <sc-if value="{{ showGrain }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed;inset:-50%;z-index:998;pointer-events:none;opacity:0.05;mix-blend-mode:screen;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');animation:grainShift 1.2s steps(3) infinite;"></div>
+  </sc-if>
+
+  <nav id="nav" style="position:fixed;top:0;left:0;right:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;height:66px;border-bottom:1px solid transparent;backdrop-filter:blur(8px);transition:background .4s,border-color .4s;box-sizing:border-box;">
+    <button data-hover onClick="{{ goIntro }}" style="appearance:none;border:none;background:none;color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.2em;cursor:pointer;padding:0;text-transform:uppercase;">O. ARROYO</button>
+    <div style="display:flex;gap:34px;align-items:center;">
+      <button data-hover onClick="{{ goWork }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;cursor:pointer;text-transform:uppercase;transition:color .3s;" style-hover="color:#e8e6e1;">Work</button>
+      <button data-hover onClick="{{ goProjects }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;cursor:pointer;text-transform:uppercase;transition:color .3s;" style-hover="color:#e8e6e1;">Projects</button>
+      <button data-hover onClick="{{ goAbout }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;cursor:pointer;text-transform:uppercase;transition:color .3s;" style-hover="color:#e8e6e1;">About</button>
+      <button data-hover onClick="{{ goContact }}" style="appearance:none;border:1px solid rgba(232,230,225,0.25);background:none;color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;cursor:pointer;text-transform:uppercase;padding:8px 16px;transition:background .3s,color .3s;" style-hover="background:#e8e6e1;color:#1a1b20;">Contact</button>
+    </div>
+  </nav>
+
+  <!-- ============ HOME ============ -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <main data-screen-label="Home" style="display:block;">
+
+    <!-- HERO — EDITORIAL COVER -->
+    <section id="intro" data-screen-label="Hero" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:104px 6vw 0;box-sizing:border-box;overflow:hidden;background:radial-gradient(120% 70% at 80% -8%, rgba(255,255,255,0.07), rgba(26,27,32,0) 56%);">
+
+      <!-- top meta bar -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;z-index:2;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#8d8a84;text-transform:uppercase;line-height:1.9;">FIG. 00 — Cover<br><span style="color:#56544f;">Omar Arroyo / Index of work</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.22em;color:#8d8a84;text-transform:uppercase;text-align:right;line-height:1.9;">New Brunswick, Canada<br><span style="color:#e8e6e1;">● Available for work</span></div>
+      </div>
+
+      <!-- centre: interactive name + manifesto -->
+      <div style="display:grid;grid-template-columns:minmax(0,1.55fr) minmax(220px,0.82fr);gap:clamp(28px,5vw,80px);align-items:center;z-index:2;padding:30px 0;">
+        <div>
+          <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0;">Omar Arroyo</h1>
+          <div id="nameStage" style="position:relative;width:100%;perspective:1300px;">
+            <div id="nameTilt" style="transform-style:preserve-3d;will-change:transform;">
+              <canvas id="heroName" style="display:block;width:100%;height:clamp(150px,25vw,340px);pointer-events:none;"></canvas>
+            </div>
+            <div style="position:absolute;bottom:0;right:2px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;">Move cursor — type reacts</div>
+          </div>
+          <div style="margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;color:#8d8a84;text-transform:uppercase;text-wrap:balance;">Software Developer · Brand &amp; Systems · Marine Technology</div>
+        </div>
+
+        <div style="border-left:1px solid rgba(232,230,225,0.16);padding-left:clamp(18px,2vw,28px);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;color:#56544f;text-transform:uppercase;margin-bottom:16px;">Manifesto / 001</div>
+          <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.92;color:#bdbab4;text-align:justify;hyphens:auto;">A software developer and operations lead working at the seam where engineering meets the running of a business. Native macOS and iOS apps, AI integrations, customs paperwork and brand systems — built by the same hands, in monochrome, with an editorial eye carried over from a decade behind a camera. Built in production, not in theory.</p>
+        </div>
+      </div>
+
+      <!-- bottom: giant bleeding word -->
+      <div style="position:relative;z-index:1;">
+        <div style="display:flex;justify-content:flex-end;align-items:flex-end;padding-bottom:6px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;text-align:right;line-height:1.9;">Scroll <span style="display:inline-block;margin-left:6px;animation:drift 2.4s ease-in-out infinite;">↓</span><br>Est. 2022 — Richibucto, NB</div>
+        </div>
+        <div aria-hidden="true" style="font-family:'Archivo',sans-serif;font-weight:900;font-size:17vw;line-height:0.72;letter-spacing:-0.05em;color:#e8e6e1;margin:0 0 -0.135em -0.015em;white-space:nowrap;">developer.</div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#8d8a84;text-transform:uppercase;margin-bottom:64px;">FIG. 01 — Statement</div>
+      <div style="display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:8vw;align-items:start;">
+        <div>
+          <p style="margin:0 0 30px;font-size:clamp(24px,2.7vw,40px);line-height:1.32;font-weight:500;letter-spacing:-0.01em;text-wrap:pretty;">I sit at the seam between engineering and operations — the person who builds the software and also runs the business it serves.</p>
+          <p style="margin:0 0 22px;font-size:17px;line-height:1.7;color:#bdbab4;max-width:60ch;text-wrap:pretty;">As Manager of Digital &amp; Operations for a dual-entity marine business, my scope runs from a native macOS app I architected from scratch, through international customs declarations and QuickBooks automation, to brand identity and AI receptionists. The same hands write the Swift and file the CBSA paperwork.</p>
+          <p style="margin:0;font-size:17px;line-height:1.7;color:#bdbab4;max-width:60ch;text-wrap:pretty;">Before software there was photography — eBay product shoots for vintage ironstone and bone china, where a monochromatic eye for composition was sharpened into a permanent practice. It still governs every interface I draw.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#6a6862;text-transform:uppercase;">PLATE / PORTRAIT — MONOCHROME</div>
+          <div style="position:relative;width:100%;aspect-ratio:3/4;border:1px solid rgba(232,230,225,0.16);overflow:hidden;">
+            <image-slot id="portrait" src="images/portrait" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="DROP PORTRAIT"></image-slot>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:20px;margin-bottom:70px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#8d8a84;text-transform:uppercase;margin-bottom:22px;">FIG. 02 — Capabilities</div>
+          <h2 style="margin:0;font-weight:900;font-size:clamp(44px,6.5vw,108px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;">The Collection</h2>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#56544f;text-transform:uppercase;max-width:240px;text-align:right;line-height:1.8;">Five rooms — from raw language to the business that runs on it.</div>
+      </div>
+      <div style="border-top:1px solid rgba(232,230,225,0.12);border-left:1px solid rgba(232,230,225,0.12);display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));">
+        <sc-for list="{{ skills }}" as="cat" hint-placeholder-count="5">
+          <div style="border-right:1px solid rgba(232,230,225,0.12);border-bottom:1px solid rgba(232,230,225,0.12);padding:34px 30px;display:flex;flex-direction:column;gap:26px;min-height:340px;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <h3 style="margin:0;font-weight:700;font-size:19px;letter-spacing:-0.01em;max-width:74%;">{{ cat.category }}</h3>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56544f;text-transform:uppercase;">{{ cat.note }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:13px;">
+              <sc-for list="{{ cat.items }}" as="sk" hint-placeholder-count="4">
+                <div data-hover style="display:flex;flex-direction:column;gap:4px;padding-bottom:12px;border-bottom:1px solid rgba(232,230,225,0.07);cursor:default;transition:padding-left .35s;" style-hover="padding-left:8px;">
+                  <span style="font-size:14.5px;color:#e8e6e1;font-weight:500;">{{ sk.name }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.16em;color:#7a7872;text-transform:uppercase;">{{ sk.tag }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="work" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#8d8a84;text-transform:uppercase;margin-bottom:22px;">FIG. 03 — Provenance</div>
+      <h2 style="margin:0 0 64px;font-weight:900;font-size:clamp(44px,6.5vw,108px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;">Experience</h2>
+      <div style="border-top:1px solid rgba(232,230,225,0.16);">
+        <sc-for list="{{ experience }}" as="job" hint-placeholder-count="4">
+          <div data-hover style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:5vw;padding:42px 8px;border-bottom:1px solid rgba(232,230,225,0.12);transition:background .4s,padding-left .4s;cursor:default;" style-hover="background:#23242c;padding-left:22px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#8d8a84;text-transform:uppercase;padding-top:6px;">{{ job.period }}</div>
+            <div>
+              <h3 style="margin:0 0 8px;font-weight:700;font-size:clamp(22px,2.3vw,32px);letter-spacing:-0.01em;">{{ job.role }}</h3>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.12em;color:#9d9a94;text-transform:uppercase;margin-bottom:22px;">{{ job.org }} — {{ job.place }}</div>
+              <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px;max-width:74ch;">
+                <sc-for list="{{ job.items }}" as="pt" hint-placeholder-count="3">
+                  <li style="display:flex;gap:14px;font-size:15.5px;line-height:1.55;color:#bdbab4;"><span style="color:#56544f;font-family:'JetBrains Mono',monospace;font-size:12px;padding-top:2px;">—</span><span style="text-wrap:pretty;">{{ pt }}</span></li>
+                </sc-for>
+              </ul>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- PROJECTS — LIGHT GALLERY -->
+    <section id="projects" data-screen-label="Selected Work" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);background:#e7e5e0;color:#1a1b20;padding:128px 6vw 40px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:40px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#6a6862;text-transform:uppercase;">FIG. 04 — Exhibition</div>
+          <h2 style="margin:18px 0 0;font-weight:900;font-size:clamp(54px,9.5vw,158px);line-height:0.82;letter-spacing:-0.04em;text-transform:uppercase;">Selected<br>Work</h2>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:20px;max-width:340px;">
+          <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.85;letter-spacing:0.06em;color:#56544f;text-transform:uppercase;text-wrap:pretty;">Five plates of software, built in production and set in glass. Drop your own screens into the devices.</p>
+          <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;">
+            <sc-for list="{{ filters }}" as="flt" hint-placeholder-count="7">
+              <button data-hover onClick="{{ flt.onClick }}" style="{{ flt.style }}">{{ flt.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:70px;border-top:1px solid rgba(26,27,32,0.2);">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
+          <article style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,6vw,92px);align-items:center;padding:clamp(60px,8vw,112px) 0;border-bottom:1px solid rgba(26,27,32,0.16);">
+
+            <!-- TYPE -->
+            <div style="order:{{ p.typeOrder }};display:flex;flex-direction:column;justify-content:center;">
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.12em;color:#8a8882;">{{ p.num }} / 05</span>
+                <span style="flex:1;height:1px;background:rgba(26,27,32,0.18);"></span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#1a1b20;text-transform:uppercase;border:1px solid rgba(26,27,32,0.28);padding:5px 10px;">{{ p.status }}</span>
+              </div>
+              <button data-hover onClick="{{ p.onOpen }}" style="text-align:left;appearance:none;border:none;background:none;padding:0;cursor:pointer;color:#1a1b20;font-family:inherit;">
+                <h3 style="margin:0;font-weight:900;font-size:clamp(40px,5.4vw,88px);line-height:0.88;letter-spacing:-0.035em;text-transform:uppercase;text-wrap:balance;">{{ p.title }}</h3>
+              </button>
+              <div style="margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.14em;color:#6a6862;text-transform:uppercase;">{{ p.kind }} · {{ p.year }}</div>
+              <p style="margin:24px 0 0;max-width:46ch;font-size:16px;line-height:1.62;color:#3c3d44;text-wrap:pretty;">{{ p.blurb }}</p>
+              <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:24px;">
+                <sc-for list="{{ p.tags }}" as="t" hint-placeholder-count="2">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.16em;color:#6a6862;text-transform:uppercase;border:1px solid rgba(26,27,32,0.2);padding:4px 8px;">{{ t }}</span>
+                </sc-for>
+              </div>
+              <button data-hover onClick="{{ p.onOpen }}" style="margin-top:30px;align-self:flex-start;appearance:none;cursor:pointer;border:1px solid rgba(26,27,32,0.3);background:none;color:#1a1b20;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;padding:13px 22px;transition:background .3s,color .3s;" style-hover="background:#1a1b20;color:#e7e5e0;">Open plate →</button>
+            </div>
+
+            <!-- VISUAL -->
+            <div style="order:{{ p.visOrder }};display:flex;flex-direction:column;justify-content:center;">
+              <sc-if value="{{ p.isMac }}" hint-placeholder-val="{{ true }}">
+                <div style="perspective:1600px;width:100%;max-width:560px;align-self:center;">
+                  <div style="transform:rotateY(-12deg) rotateX(6deg);transform-origin:center;">
+                    <div style="background:#0b0c0f;border:1px solid rgba(26,27,32,0.35);border-radius:15px 15px 4px 4px;padding:9px 9px 0;box-shadow:0 42px 64px -32px rgba(0,0,0,0.5);">
+                      <div style="position:relative;border-radius:7px;overflow:hidden;background:#15161b;aspect-ratio:16/10;">
+                        <image-slot id="shot-{{ p.id }}" src="images/shot-{{ p.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ p.shotLabel }}"></image-slot>
+                      </div>
+                    </div>
+                    <div style="position:relative;height:13px;width:110%;margin-left:-5%;background:linear-gradient(180deg,#cbc9c3,#a7a59f);border-radius:0 0 12px 12px;">
+                      <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:15%;height:5px;background:rgba(26,27,32,0.22);border-radius:0 0 7px 7px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ p.isPhone }}" hint-placeholder-val="{{ true }}">
+                <div style="perspective:1600px;width:100%;max-width:268px;align-self:center;">
+                  <div style="transform:rotateY(13deg) rotateX(4deg);transform-origin:center;">
+                    <div style="background:#0b0c0f;border-radius:46px;padding:11px;box-shadow:0 42px 64px -32px rgba(0,0,0,0.5);">
+                      <div style="position:relative;border-radius:36px;overflow:hidden;background:#15161b;aspect-ratio:9/19.5;">
+                        <image-slot id="shot-{{ p.id }}" src="images/shot-{{ p.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ p.shotLabel }}"></image-slot>
+                        <div style="position:absolute;top:13px;left:50%;transform:translateX(-50%);width:33%;height:21px;background:#0b0c0f;border-radius:14px;z-index:3;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:150px 6vw 70px;border-top:1px solid rgba(232,230,225,0.12);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#8d8a84;text-transform:uppercase;margin-bottom:40px;">FIG. 05 — Closing</div>
+      <h2 style="margin:0;font-weight:900;font-size:clamp(44px,9vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;">Let's build<br>something</h2>
+      <div style="margin-top:60px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;align-items:flex-end;">
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <a data-hover href="mailto:omaralex0422@gmail.com" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid rgba(232,230,225,0.25);padding:14px 22px;transition:background .3s,color .3s;" style-hover="background:#e8e6e1;color:#1a1b20;">Email →</a>
+          <a data-hover href="https://www.linkedin.com/in/omar-arroyo-b153b33ab/" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid rgba(232,230,225,0.25);padding:14px 22px;transition:background .3s,color .3s;" style-hover="background:#e8e6e1;color:#1a1b20;">LinkedIn →</a>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#56544f;text-transform:uppercase;text-align:right;line-height:1.9;">Omar Arroyo<br>Richibucto · New Brunswick · Canada<br><a data-hover href="mailto:omaralex0422@gmail.com" style="color:#8d8a84;text-decoration:none;text-transform:none;transition:color .3s;" style-hover="color:#e8e6e1;">omaralex0422@gmail.com</a><br>© 2026 — Index of work</div>
+      </div>
+    </section>
+
+  </main>
+  </sc-if>
+
+  <!-- ============ DETAIL ============ -->
+  <sc-if value="{{ detail }}" hint-placeholder-val="{{ true }}">
+  <main data-screen-label="Project Detail" style="padding:120px 6vw 70px;min-height:100vh;box-sizing:border-box;">
+    <button data-hover onClick="{{ close }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;padding:0;margin-bottom:60px;transition:color .3s;" style-hover="color:#e8e6e1;">← Back to index</button>
+
+    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.16em;color:#56544f;">{{ detail.num }} / 05</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#8d8a84;text-transform:uppercase;border:1px solid rgba(232,230,225,0.18);padding:6px 12px;">{{ detail.status }}</span>
+    </div>
+    <h1 style="margin:26px 0 0;font-weight:900;font-size:clamp(44px,8.5vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;text-wrap:balance;">{{ detail.title }}</h1>
+    <p style="margin:30px 0 0;max-width:680px;font-size:clamp(18px,1.8vw,24px);line-height:1.5;color:#cfccc6;text-wrap:pretty;">{{ detail.overview }}</p>
+
+    <sc-if value="{{ detail.web }}" hint-placeholder-val="{{ true }}">
+      <a data-hover href="{{ detail.link }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:12px;margin-top:34px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid rgba(232,230,225,0.3);padding:14px 24px;transition:background .3s,color .3s;" style-hover="background:#e8e6e1;color:#1a1b20;">Visit Site →</a>
+    </sc-if>
+
+    <div style="margin-top:60px;border-top:1px solid rgba(232,230,225,0.12);border-left:1px solid rgba(232,230,225,0.12);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+      <div style="border-right:1px solid rgba(232,230,225,0.12);border-bottom:1px solid rgba(232,230,225,0.12);padding:24px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;margin-bottom:12px;">Discipline</div>
+        <div style="font-size:15px;color:#e8e6e1;">{{ detail.kind }}</div>
+      </div>
+      <div style="border-right:1px solid rgba(232,230,225,0.12);border-bottom:1px solid rgba(232,230,225,0.12);padding:24px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;margin-bottom:12px;">Period</div>
+        <div style="font-size:15px;color:#e8e6e1;">{{ detail.year }}</div>
+      </div>
+      <div style="border-right:1px solid rgba(232,230,225,0.12);border-bottom:1px solid rgba(232,230,225,0.12);padding:24px;grid-column:span 2;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;margin-bottom:12px;">Stack</div>
+        <div style="font-size:15px;color:#e8e6e1;line-height:1.5;">{{ detail.stack }}</div>
+      </div>
+    </div>
+
+    <div style="margin-top:56px;background:#e7e5e0;color:#1a1b20;padding:clamp(38px,5vw,68px) clamp(26px,4vw,58px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(34px,5vw,72px);align-items:center;">
+      <div style="display:flex;justify-content:center;">
+        <sc-if value="{{ detail.isMac }}" hint-placeholder-val="{{ true }}">
+          <div style="perspective:1700px;width:100%;max-width:620px;">
+            <div style="transform:rotateY(-11deg) rotateX(6deg);transform-origin:center;">
+              <div style="background:#0b0c0f;border:1px solid rgba(26,27,32,0.35);border-radius:16px 16px 4px 4px;padding:10px 10px 0;box-shadow:0 50px 70px -34px rgba(0,0,0,0.55);">
+                <div style="position:relative;border-radius:8px;overflow:hidden;background:#15161b;aspect-ratio:16/10;">
+                  <image-slot id="shot-{{ detail.id }}" src="images/shot-{{ detail.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ detail.shotLabel }}"></image-slot>
+                </div>
+              </div>
+              <div style="position:relative;height:14px;width:110%;margin-left:-5%;background:linear-gradient(180deg,#cbc9c3,#a7a59f);border-radius:0 0 13px 13px;">
+                <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:15%;height:6px;background:rgba(26,27,32,0.22);border-radius:0 0 8px 8px;"></div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ detail.isPhone }}" hint-placeholder-val="{{ true }}">
+          <div style="perspective:1700px;width:100%;max-width:300px;">
+            <div style="transform:rotateY(12deg) rotateX(4deg);transform-origin:center;">
+              <div style="background:#0b0c0f;border-radius:50px;padding:12px;box-shadow:0 50px 70px -34px rgba(0,0,0,0.55);">
+                <div style="position:relative;border-radius:39px;overflow:hidden;background:#15161b;aspect-ratio:9/19.5;">
+                  <image-slot id="shot-{{ detail.id }}" src="images/shot-{{ detail.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ detail.shotLabel }}"></image-slot>
+                  <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);width:33%;height:22px;background:#0b0c0f;border-radius:14px;z-index:3;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#56544f;text-transform:uppercase;border-bottom:1px solid rgba(26,27,32,0.2);padding-bottom:12px;">
+          <span>{{ detail.graph.caption }}</span><span style="color:#8a8882;">{{ detail.graph.axis }}</span>
+        </div>
+        <svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;display:block;margin-top:18px;overflow:visible;">
+          <sc-for list="{{ detail.graph.lines }}" as="l" hint-placeholder-count="0"><line x1="{{ l.x1 }}" y1="{{ l.y1 }}" x2="{{ l.x2 }}" y2="{{ l.y2 }}" stroke="#1a1b20" stroke-width="{{ l.w }}" stroke-opacity="{{ l.o }}" stroke-linecap="round"></line></sc-for>
+          <sc-for list="{{ detail.graph.rects }}" as="r" hint-placeholder-count="0"><rect x="{{ r.x }}" y="{{ r.y }}" width="{{ r.w }}" height="{{ r.h }}" fill="#1a1b20" fill-opacity="{{ r.o }}"></rect></sc-for>
+          <sc-for list="{{ detail.graph.circles }}" as="c" hint-placeholder-count="0"><circle cx="{{ c.x }}" cy="{{ c.y }}" r="{{ c.r }}" fill="#1a1b20" fill-opacity="{{ c.o }}"></circle></sc-for>
+        </svg>
+        <div style="margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#6a6862;text-transform:uppercase;text-wrap:pretty;">Figure derived from the build — structure over precision. Drop a real screen into the device at left.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:80px;display:flex;flex-direction:column;gap:60px;">
+      <sc-for list="{{ detail.sections }}" as="sec" hint-placeholder-count="2">
+        <div style="display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:5vw;align-items:start;border-top:1px solid rgba(232,230,225,0.16);padding-top:34px;">
+          <h2 style="margin:0;font-weight:700;font-size:clamp(22px,2.4vw,32px);letter-spacing:-0.01em;">{{ sec.heading }}</h2>
+          <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:16px;">
+            <sc-for list="{{ sec.items }}" as="it" hint-placeholder-count="4">
+              <li style="display:flex;gap:16px;font-size:16px;line-height:1.6;color:#cfccc6;border-bottom:1px solid rgba(232,230,225,0.07);padding-bottom:16px;"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#56544f;padding-top:3px;">—</span><span style="text-wrap:pretty;">{{ it }}</span></li>
+            </sc-for>
+          </ul>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:100px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;border-bottom:2px solid rgba(232,230,225,0.85);padding-bottom:18px;">
+        <h2 style="margin:0;font-weight:900;font-size:clamp(34px,5vw,72px);line-height:0.85;letter-spacing:-0.04em;text-transform:uppercase;">Gallery</h2>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#8a8882;text-transform:uppercase;">{{ detail.title }} — Index of plates · Click to enlarge</span>
+      </div>
+      <div style="margin-top:30px;border-top:1px solid rgba(232,230,225,0.16);border-left:1px solid rgba(232,230,225,0.16);display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));">
+        <sc-for list="{{ detail.gallery }}" as="cell" hint-placeholder-count="6">
+          <figure style="margin:0;border-right:1px solid rgba(232,230,225,0.16);border-bottom:1px solid rgba(232,230,225,0.16);">
+            <figcaption style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(232,230,225,0.12);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.22em;color:#8a8882;text-transform:uppercase;">
+              <span>{{ cell.n }}</span>
+              <button data-hover onClick="{{ cell.onView }}" style="appearance:none;cursor:pointer;background:none;border:1px solid rgba(232,230,225,0.28);color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;padding:6px 11px;transition:background .25s,color .25s;" style-hover="background:#e8e6e1;color:#1a1b20;">View ⤢</button>
+            </figcaption>
+            <div style="position:relative;aspect-ratio:4/3;background:#0b0c0f;">
+              <image-slot id="{{ cell.id }}" src="images/{{ cell.id }}" fit="contain" shape="rect" res="2800" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ cell.ph }}"></image-slot>
+            </div>
+          </figure>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ detailNext }}" hint-placeholder-val="{{ true }}">
+      <button data-hover onClick="{{ detailNext.onOpen }}" style="margin-top:90px;width:100%;text-align:left;appearance:none;cursor:pointer;border:none;border-top:1px solid rgba(232,230,225,0.16);background:none;color:#e8e6e1;padding:46px 4px;display:flex;justify-content:space-between;align-items:center;gap:30px;font-family:inherit;transition:padding .4s;" style-hover="padding-left:24px;padding-right:24px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#8d8a84;text-transform:uppercase;margin-bottom:14px;">Next — {{ detailNext.num }}</div>
+          <div style="font-weight:800;font-size:clamp(28px,4vw,56px);line-height:0.95;letter-spacing:-0.03em;text-transform:uppercase;">{{ detailNext.title }}</div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:clamp(20px,3vw,40px);color:#e8e6e1;">→</span>
+      </button>
+    </sc-if>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ lightbox.open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeLightbox }}" style="position:fixed;inset:0;z-index:9999;background:rgba(8,9,12,0.95);display:flex;flex-direction:column;padding:clamp(18px,3.5vw,56px);box-sizing:border-box;cursor:zoom-out;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(232,230,225,0.2);padding-bottom:16px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#8a8882;text-transform:uppercase;">{{ lightbox.label }}</span>
+        <button data-hover onClick="{{ closeLightbox }}" style="appearance:none;cursor:pointer;background:none;border:1px solid rgba(232,230,225,0.3);color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:9px 14px;transition:background .25s,color .25s;" style-hover="background:#e8e6e1;color:#1a1b20;">Close ✕</button>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:28px 0;">
+        <img src="{{ lightbox.src }}" alt="" style="max-width:100%;max-height:100%;object-fit:contain;border:1px solid rgba(232,230,225,0.22);">
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;grain&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;cursor&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { filter: "ALL", view: "home", project: null, lightbox: null };
+
+  componentDidMount() {
+    this.setupReveal();
+    this.setupCursor();
+    this.setupScroll();
+    this.setupHeroEvents();
+    this.initHero();
+    this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
+    document.addEventListener("keydown", this._esc);
+  }
+  componentWillUnmount() { if (this._esc) document.removeEventListener("keydown", this._esc); }
+  componentDidUpdate() { this.setupReveal(); this.initHero(); }
+
+  setupHeroEvents() {
+    if (this._heroEvt) return;
+    this._heroEvt = true;
+    this._pointer = { x: -9999, y: -9999 };
+    this._tiltTarget = { rx: 0, ry: 0 };
+    this._tiltCur = { rx: 0, ry: 0 };
+    const self = this;
+    window.addEventListener("mousemove", (e) => {
+      self._pointer.x = e.clientX; self._pointer.y = e.clientY;
+      const cl = (v) => Math.max(-1, Math.min(1, v));
+      const nx = cl((e.clientX / (window.innerWidth || 1) - 0.5) * 2);
+      const ny = cl((e.clientY / (window.innerHeight || 1) - 0.5) * 2);
+      self._tiltTarget.ry = nx * 7;
+      self._tiltTarget.rx = -ny * 5;
+    }, { passive: true });
+    window.addEventListener("resize", () => {
+      clearTimeout(self._heroRT);
+      self._heroRT = setTimeout(() => {
+        const c = document.getElementById("heroName");
+        if (c) { c.__init = false; if (self._heroRAF) { cancelAnimationFrame(self._heroRAF); self._heroRAF = null; } self.initHero(); }
+      }, 180);
+    });
+  }
+
+  initHero() {
+    const cv = document.getElementById("heroName");
+    if (!cv || cv.__init) return;
+    cv.__init = true;
+    if (!this._pointer) { this._pointer = { x: -9999, y: -9999 }; this._tiltTarget = { rx: 0, ry: 0 }; this._tiltCur = { rx: 0, ry: 0 }; }
+    if (this._heroRAF) { cancelAnimationFrame(this._heroRAF); this._heroRAF = null; }
+    const self = this;
+    const tilt = document.getElementById("nameTilt");
+    const ctx = cv.getContext("2d");
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W = 1, H = 1, particles = [], capW = 8, capH = 4, gap = 8;
+
+    const build = () => {
+      const r = cv.getBoundingClientRect();
+      W = Math.max(1, r.width); H = Math.max(1, r.height);
+      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+      const off = document.createElement("canvas");
+      off.width = Math.round(W); off.height = Math.round(H);
+      const o = off.getContext("2d");
+      o.clearRect(0, 0, W, H);
+      o.fillStyle = "#fff"; o.textAlign = "center"; o.textBaseline = "middle";
+      const fs = Math.floor(H * 0.46);
+      o.font = "900 " + fs + "px 'Archivo','Archivo Black',sans-serif";
+      o.fillText("OMAR", W / 2, H * 0.29);
+      o.fillText("ARROYO", W / 2, H * 0.75);
+      const data = o.getImageData(0, 0, off.width, off.height).data;
+      gap = Math.max(4, Math.round(W / 280));
+      particles = [];
+      for (let y = Math.floor(gap / 2); y < off.height; y += gap) {
+        for (let x = Math.floor(gap / 2); x < off.width; x += gap) {
+          if (data[(y * off.width + x) * 4 + 3] > 130) {
+            particles.push({ hx: x, hy: y, x: x, y: y, row: Math.round(y / gap), seed: Math.random() * Math.PI * 2 });
+          }
+        }
+      }
+      capW = Math.max(1.4, gap * 0.6); capH = Math.max(1.4, gap * 0.55);
+    };
+
+    const cap = (x, y) => {
+      const rx = x - capW / 2, ry = y - capH / 2, rr = capH / 2;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(rx, ry, capW, capH, rr);
+      else ctx.rect(rx, ry, capW, capH);
+      ctx.fill();
+    };
+
+    const drawStatic = () => {
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = "#ecebe6"; ctx.globalAlpha = 1;
+      for (const p of particles) cap(p.hx, p.hy);
+    };
+
+    let lastNoise = -1000;
+    const draw = (now) => {
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = "#ecebe6";
+      const r = cv.getBoundingClientRect();
+      const px = self._pointer.x - r.left, py = self._pointer.y - r.top;
+      const R = 120;
+      const refresh = (now - lastNoise) > 45; // ~22fps shimmer, calmer than per-frame
+      if (refresh) lastNoise = now;
+      const jx = gap * 0.16, jy = gap * 0.14;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        if (refresh) {
+          p.ox = (Math.random() - 0.5) * jx;
+          p.oy = (Math.random() - 0.5) * jy;
+          p.al = Math.random() < 0.04 ? 0.3 : (0.74 + 0.26 * Math.random());
+        }
+        let fx = p.hx + p.ox, fy = p.hy + p.oy;
+        // cursor carves into the static (repel measured from the home cell)
+        const dx = p.hx - px, dy = p.hy - py, d2 = dx * dx + dy * dy;
+        if (d2 < R * R) { const d = Math.sqrt(d2) || 1; const f = 1 - d / R; const push = f * f * 60; fx += dx / d * push; fy += dy / d * push * 0.55; }
+        ctx.globalAlpha = p.al;
+        cap(fx, fy);
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    const t0 = performance.now();
+    const frame = (now) => {
+      draw(now);
+      if (tilt) {
+        self._tiltCur.rx += (self._tiltTarget.rx - self._tiltCur.rx) * 0.08;
+        self._tiltCur.ry += (self._tiltTarget.ry - self._tiltCur.ry) * 0.08;
+        tilt.style.transform = "rotateX(" + self._tiltCur.rx.toFixed(2) + "deg) rotateY(" + self._tiltCur.ry.toFixed(2) + "deg)";
+      }
+      self._heroRAF = requestAnimationFrame(frame);
+    };
+
+    build();
+    if (reduced) { drawStatic(); }
+    else { draw(0); self._heroRAF = requestAnimationFrame(frame); }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => { if (document.getElementById("heroName") === cv) { build(); if (reduced) drawStatic(); } });
+    }
+  }
+
+  _show(el) { el.style.opacity = "1"; el.style.transform = "none"; if (this._io) this._io.unobserve(el); }
+
+  setupReveal() {
+    if (!this._io) {
+      this._io = new IntersectionObserver((es) => {
+        es.forEach((e) => { if (e.isIntersecting) this._show(e.target); });
+      }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+    }
+    const vh = window.innerHeight || 800;
+    document.querySelectorAll("[data-reveal]").forEach((el) => {
+      if (el.__rev) return;
+      el.__rev = true;
+      if (el.getBoundingClientRect().top > vh * 0.85) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
+        this._io.observe(el);
+      }
+    });
+  }
+
+  setupCursor() {
+    if (this._cursorDone) return;
+    if (this.props.cursor === false) return;
+    if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return;
+    this._cursorDone = true;
+    const dot = document.createElement("div");
+    dot.style.cssText = "position:fixed;top:-50px;left:-50px;width:13px;height:13px;border:1px solid #e8e6e1;border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s,opacity .3s;mix-blend-mode:difference;will-change:transform;";
+    document.body.appendChild(dot);
+    document.body.style.cursor = "none";
+    window.addEventListener("mousemove", (e) => {
+      dot.style.left = e.clientX + "px";
+      dot.style.top = e.clientY + "px";
+      const t = e.target.closest && e.target.closest("[data-hover]");
+      if (t) { dot.style.width = "46px"; dot.style.height = "46px"; dot.style.background = "#e8e6e1"; }
+      else { dot.style.width = "13px"; dot.style.height = "13px"; dot.style.background = "transparent"; }
+    });
+  }
+
+  setupScroll() {
+    if (this._scrollDone) return;
+    this._scrollDone = true;
+    const onScroll = () => {
+      const h = document.documentElement;
+      const bar = document.getElementById("scrollbar");
+      const nav = document.getElementById("nav");
+      const max = h.scrollHeight - h.clientHeight;
+      const p = max > 0 ? h.scrollTop / max : 0;
+      if (bar) bar.style.transform = "scaleX(" + p + ")";
+      if (nav) {
+        if (h.scrollTop > 36) { nav.style.background = "rgba(26,27,32,0.86)"; nav.style.borderBottomColor = "rgba(232,230,225,0.12)"; }
+        else { nav.style.background = "transparent"; nav.style.borderBottomColor = "transparent"; }
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  goTo(id) {
+    if (this.state.view !== "home") {
+      this.setState({ view: "home", project: null }, () => {
+        requestAnimationFrame(() => { const el = document.getElementById(id); if (el) window.scrollTo({ top: el.offsetTop - 1, behavior: "smooth" }); });
+      });
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.offsetTop - 1, behavior: "smooth" });
+  }
+
+  setFilter(f) { this.setState({ filter: f }); }
+  openLightbox(id, label) {
+    const el = document.getElementById(id);
+    const img = el && el.shadowRoot && el.shadowRoot.querySelector("img");
+    const src = img && img.getAttribute("src");
+    if (src && img.style.display !== "none") this.setState({ lightbox: { src: src, label: label } });
+  }
+  open(id) { const p = this.data().find((x) => x.id === id); this.setState({ view: "detail", project: p }); window.scrollTo({ top: 0 }); }
+  close() { this.setState({ view: "home", project: null }); window.scrollTo({ top: 0 }); }
+
+  data() {
+    return [
+      { id: "mmg", num: "01", title: "MMG Operations", kind: "macOS App", year: "2024 — Present", status: "In Production", tags: ["MACOS", "AI"],
+        stack: "Swift 6 · SwiftUI · Supabase + PostGIS · Microsoft Graph API · Claude API",
+        blurb: "A native macOS operations platform built from scratch — the central intelligence layer for two marine companies.",
+        overview: "The most technically complex thing I have built: a full production software project, not a prototype. It fuses Microsoft Outlook, geospatial data and the Claude API into a single command surface for Modern Marine Group and Dock Marine Canada.",
+        imglabel: "MMG OPERATIONS · macOS", device: "macbook", shotLabel: "DROP — MMG macOS APP",
+        sections: [
+          { heading: "What is built", items: [
+            "Fibonacci spiral loader — 571 dots, phyllotaxis distribution, a 12-second breathing cycle rendered in pure SwiftUI Canvas",
+            "Microsoft Outlook integration — Graph API sync with PKCE OAuth, Keychain token storage, delta sync and historical backfill",
+            "Type-aware email rendering — a three-layer classifier with SwiftSoup parsing, Safelinks unwrapping and AI-generated link summaries",
+            "Peek Window — a sandboxed WKWebView overlay browser to open links without leaving the app (click = peek, ⌘+click = real browser)",
+            "AI-powered email search — a command palette with token-by-token streaming, result cards and an open_emails tool the model can call",
+            "Products module — inventory with low-stock thresholds, multi-currency input and PostGIS-backed location data",
+            "Dock Builder — a visual drag-and-drop dock layout tool, in development directly with the CEO" ] },
+          { heading: "Stack", items: [
+            "Swift 6 / SwiftUI / Combine",
+            "Supabase — PostgreSQL, PostGIS, Row-Level Security, Edge Functions",
+            "Microsoft Graph · Claude Sonnet API",
+            "pg_trgm trigram search" ] } ] },
+      { id: "receiptflow", num: "02", title: "ReceiptFlow", kind: "iOS App", year: "In Development", status: "App Store Bound", tags: ["IOS"],
+        stack: "Flutter · Dart · Firebase · Apple Vision Framework",
+        blurb: "An expense tracker with fully on-device OCR receipt scanning, built for the Canadian market.",
+        overview: "An expense tracking iOS app designed for App Store submission, using Apple's Vision Framework for receipt OCR entirely on-device — no API costs.",
+        imglabel: "RECEIPTFLOW · iOS", device: "iphone", shotLabel: "DROP — RECEIPTFLOW / iOS",
+        sections: [
+          { heading: "Features", items: [
+            "On-device OCR receipt scanning with Apple's Vision Framework",
+            "Intelligent parsing of merchant, total and date — even when receipts are scanned months after the fact",
+            "Manual payment entry with Canadian merchant categorization",
+            "Glassmorphism UI with Apple Wallet-style cards",
+            "Monthly subscription tracking with smart reminders, tuned for Canadian merchants (Co-op, Tim Hortons, local shops)" ] } ] },
+      { id: "dmc", num: "03", title: "Modern Marine Group & Dock Marine Canada", kind: "Web · Brand · Wallet", year: "2024 — Present", status: "Shipped", tags: ["WEB", "BRANDING"], web: true, link: "https://modernmarinegroup.com",
+        stack: "Web Development · Brand Design · Apple Wallet · YourAtlas IA",
+        blurb: "Full web presence, brand identity and digital tooling for a marine distribution company — plus a real DNS rescue.",
+        overview: "The complete digital footprint for Dock Marine Canada: website, configurator, brand palette and signed Apple Wallet business cards — and a real-world recovery from a DNS hijacking.",
+        imglabel: "DOCK MARINE CANADA · Web", device: "macbook", shotLabel: "DROP — DOCK MARINE / WEB",
+        sections: [
+          { heading: "Delivered", items: [
+            "The full Dock Marine Canada website and an interactive dock configurator tool",
+            "Brand color palette and visual identity",
+            "Signed .pkpass Apple Wallet business cards — built properly, not via a template service",
+            "A bilingual EN / FR AI customer service knowledge base via YourAtlas IA",
+            "DNS hijacking recovery after a fraudulent developer redirected the nameservers — restored full email and web" ] },
+          { heading: "Business development & expansion", items: [
+            "Led pitching meetings to open new dealer and partnership markets across Atlantic Canada and the Caribbean — including an Antigua dealer expansion built on a 365-day weather-advantage position and analysis of underserved marina markets",
+            "Drove a partnership expansion pitch with The Elmwood Group (Home Hardware, NB)",
+            "Presented the JetPort product line — Jet Port Plus, Max and Multi Port — with technical specification layouts",
+            "Ran the Seatown Marine PEI dealer partnership pitch" ] } ] },
+      { id: "mindtomind", num: "04", title: "A Mind to Mind", kind: "Brand · Web · Content", year: "2025 — Present", status: "Live Client", tags: ["WEB", "BRANDING"], web: true, link: "https://www.denishachey.com",
+        stack: "Brand Strategy · WordPress · SEO · Content · Meta Ads",
+        blurb: "End-to-end digital marketing and brand strategy for a mindset and wellness platform — delivered with an AI-assisted workflow.",
+        overview: "Digital Marketing Strategist, Brand Consultant and Content Director for A Mind to Mind Conversation — taking a book-centered project and rebuilding it into a full mindset, wellness and personal-development platform. Strategy, content and creative were executed end-to-end using an AI-assisted workflow (ChatGPT).",
+        imglabel: "A MIND TO MIND · Web", device: "macbook", shotLabel: "DROP — MIND TO MIND / WEB",
+        sections: [
+          { heading: "Brand & web", items: [
+            "Defined brand positioning, messaging, audience and long-term growth strategy — repositioning a single book into a wellness platform",
+            "Led the redesign of the official WordPress site: site architecture, UX and storytelling-driven landing pages built for retention and lead generation",
+            "Established visual identity guidelines, content pillars and engagement frameworks",
+            "Integrated SEO throughout — keyword research, metadata, internal linking and long-form content built to rank organically" ] },
+          { heading: "Content & growth", items: [
+            "Built a long-term content calendar with weekly thematic campaigns across psychology, resilience, mindset and community",
+            "Produced social frameworks for Facebook and Instagram — carousels, reflection posts and community prompts",
+            "Developed Meta Ads-ready content and audience-acquisition messaging",
+            "Applied behavioral-design principles to features like a Reflective Wall and interactive community tools" ] } ] }
+    ];
+  }
+
+  skills() {
+    return [
+      { category: "Languages & Frameworks", note: "Build", items: [
+        { name: "Swift 6 / SwiftUI", tag: "Production · Daily" },
+        { name: "Flutter / Dart", tag: "Two apps in dev" },
+        { name: "Python", tag: "MCP · Automation" },
+        { name: "JavaScript / HTML / CSS", tag: "Web · Interactive SVG" },
+        { name: "SQL / PostgreSQL", tag: "PostGIS · pg_trgm" } ] },
+      { category: "AI & APIs", note: "Integrate", items: [
+        { name: "Anthropic Claude API", tag: "Tool-use · Streaming" },
+        { name: "OpenAI API", tag: "Floqua AI" },
+        { name: "Microsoft Graph", tag: "OAuth · Delta sync" },
+        { name: "Model Context Protocol", tag: "Custom MCP servers" } ] },
+      { category: "Infrastructure", note: "Deploy", items: [
+        { name: "Supabase", tag: "PostGIS · RLS · Edge" },
+        { name: "Firebase", tag: "Auth · Firestore" },
+        { name: "Git / GitHub", tag: "Version control" },
+        { name: "Apple Developer", tag: "Signing · .pkpass" },
+        { name: "Azure Active Directory", tag: "PKCE OAuth" } ] },
+      { category: "Design & Creative", note: "Compose", items: [
+        { name: "Swiss Modernism", tag: "8px · Golden ratio" },
+        { name: "Monochrome Photography", tag: "Editorial eye" },
+        { name: "Brand Systems", tag: "Palette · Identity" },
+        { name: "Glassmorphism UI", tag: "Native, not exports" } ] },
+      { category: "Business Operations", note: "Run", items: [
+        { name: "Customs & Imports", tag: "CARM · CBSA · Tariff" },
+        { name: "QuickBooks Online", tag: "Multi-company" },
+        { name: "Microsoft 365 Admin", tag: "Tenant" },
+        { name: "DNS / Domain Recovery", tag: "Nameserver migration" } ] }
+    ];
+  }
+
+  experience() {
+    return [
+      { period: "2024 — Present", role: "Manager — Digital & Operations", org: "Modern Marine Group · Dock Marine Canada", place: "Shediac, NB", items: [
+        "Architected and am building MMG Operations, a native macOS intelligence layer for both companies",
+        "Managed the full CARM import declaration for a Turkish floating-dock shipment — tariff classification across 17 lines, brokerage and CBSA payment",
+        "Built a custom Python MCP server for QuickBooks Online from scratch (8 tools, full PKCE OAuth) when the official connector was geo-blocked in Canada",
+        "Deployed a bilingual AI receptionist and configured MCP integrations across Microsoft 365, WhatsApp and QuickBooks",
+        "Created dealer and partnership presentations across Atlantic Canada and the Caribbean" ] },
+      { period: "2022 — Present", role: "Freelance — Technology & Digital Strategy", org: "Independent", place: "New Brunswick", items: [
+        "Web development, AI tool implementation and custom software for local clients",
+        "Business consulting and digital strategy" ] },
+      { period: "2025 — Present", role: "English Language Instructor", org: "Independent", place: "Online", items: [
+        "An original methodology built around Spanish-to-English psycholinguistic interference rather than grammar drilling",
+        "A custom ecosystem of decks, Kahoot quizzes, Google Forms exams and Excalidraw exercises" ] },
+      { period: "Prior", role: "Sales Associate & Photography Manager", org: "Crystal's Emporium", place: "Shediac, NB", items: [
+        "eBay product photography and listing strategy for vintage collectibles — ironstone, bone china, Hollywood Regency",
+        "Where the monochromatic eye for product and composition was sharpened into a consistent practice" ] }
+    ];
+  }
+
+  graphs() {
+    if (this._g) return this._g;
+    const out = {};
+    // 4A — MMG · phyllotaxis (the app's real Fibonacci loader)
+    (() => {
+      const c = []; const n = 150, cx = 160, cy = 76, ga = Math.PI * (3 - Math.sqrt(5));
+      for (let i = 0; i < n; i++) {
+        const a = i * ga, rr = 4.8 * Math.sqrt(i);
+        const x = cx + Math.cos(a) * rr * 1.7, y = cy + Math.sin(a) * rr;
+        if (x < 3 || x > 317 || y < 3 || y > 147) continue;
+        c.push({ x: +x.toFixed(1), y: +y.toFixed(1), r: +(1 + (i / n) * 1.7).toFixed(2), o: +(0.16 + 0.5 * (i / n)).toFixed(2) });
+      }
+      out.mmg = { caption: "FIG.4A — PHYLLOTAXIS / 571 NODES", axis: "SWIFTUI CANVAS · 12s CYCLE", circles: c, lines: [], rects: [] };
+    })();
+    // 4B — Nexus · node graph / mind map
+    (() => {
+      const pts = [[40,42],[92,28],[70,84],[122,60],[162,36],[150,104],[202,70],[212,122],[252,48],[262,102],[292,74],[182,130],[112,120],[30,98]];
+      const edges = [[0,1],[0,2],[1,3],[2,3],[3,4],[3,5],[4,6],[5,6],[6,7],[6,8],[8,9],[9,10],[7,11],[5,12],[2,13],[12,11],[8,10]];
+      const lines = edges.map(([a,b]) => ({ x1: pts[a][0], y1: pts[a][1], x2: pts[b][0], y2: pts[b][1], w: 0.8, o: 0.22 }));
+      const circles = pts.map((p,i) => ({ x: p[0], y: p[1], r: i % 4 === 0 ? 4 : 2.6, o: i % 4 === 0 ? 0.85 : 0.5 }));
+      out.nexus = { caption: "FIG.4B — NODE GRAPH / MIND MAP", axis: "NODES 14 · EDGES 17", circles, lines, rects: [] };
+    })();
+    // 4C — ReceiptFlow · OCR parse
+    (() => {
+      const rects = []; let y = 26; const widths = [118,176,88,158,138,68,148];
+      widths.forEach((w,i) => { rects.push({ x: 48, y, w, h: 5, o: i === 0 ? 0.8 : 0.3 }); y += 15; });
+      rects.push({ x: 212, y: 116, w: 64, h: 14, o: 0.8 });
+      const lines = [{ x1: 32, y1: 16, x2: 32, y2: 138, w: 1, o: 0.45 }, { x1: 48, y1: 96, x2: 300, y2: 96, w: 0.6, o: 0.2 }];
+      out.receiptflow = { caption: "FIG.4C — OCR PARSE / VISION", axis: "ON-DEVICE · 0 API COST", circles: [{ x: 32, y: 96, r: 3, o: 0.8 }], lines, rects };
+    })();
+    // 4D — Dock Marine · market map
+    (() => {
+      const lines = [];
+      for (let gx = 24; gx <= 300; gx += 38) lines.push({ x1: gx, y1: 14, x2: gx, y2: 136, w: 0.5, o: 0.12 });
+      for (let gy = 24; gy <= 130; gy += 28) lines.push({ x1: 18, y1: gy, x2: 304, y2: gy, w: 0.5, o: 0.12 });
+      const dots = [[42,42,1],[80,112,0],[122,60,0],[152,30,1],[192,92,0],[232,50,1],[262,120,0],[292,80,0],[62,82,0],[172,122,0],[212,28,0],[282,42,1]];
+      const circles = dots.map(([x,y,hl]) => ({ x, y, r: hl ? 5 : 3, o: hl ? 0.85 : 0.3 }));
+      out.dmc = { caption: "FIG.4D — MARKET MAP / MARINAS", axis: "ATLANTIC · CARIBBEAN", circles, lines, rects: [] };
+    })();
+    // 4E — Partnership Decks · expansion bars
+    (() => {
+      const rects = []; const base = 132; const hs = [26,34,30,48,44,60,56,74,70,92,100,120]; const bw = 16, gap = 8; let x = 26; const tops = [];
+      hs.forEach((h,i) => { rects.push({ x, y: base - h, w: bw, h, o: i === hs.length - 1 ? 0.8 : 0.26 }); tops.push([x + bw / 2, base - h]); x += bw + gap; });
+      const lines = [];
+      for (let i = 0; i < tops.length - 1; i++) lines.push({ x1: tops[i][0], y1: tops[i][1], x2: tops[i+1][0], y2: tops[i+1][1], w: 1, o: 0.55 });
+      lines.push({ x1: 18, y1: base, x2: 304, y2: base, w: 0.8, o: 0.4 });
+      const circles = tops.map(p => ({ x: p[0], y: p[1], r: 1.8, o: 0.6 }));
+      out.presentations = { caption: "FIG.4E — MARKET EXPANSION", axis: "DEALERS / QUARTER", circles, lines, rects };
+    })();
+    // 4F — A Mind to Mind · content pillars / hub-and-spoke
+    (() => {
+      const cx = 160, cy = 76;
+      const pillars = [[230,76],[195,117.6],[125,117.6],[90,76],[125,34.4],[195,34.4]];
+      const lines = pillars.map(p => ({ x1: cx, y1: cy, x2: p[0], y2: p[1], w: 0.8, o: 0.28 }));
+      const circles = [{ x: cx, y: cy, r: 5, o: 0.85 }];
+      pillars.forEach((p, i) => {
+        circles.push({ x: p[0], y: p[1], r: 3.2, o: 0.5 });
+        const sub = [[p[0] + (p[0] - cx) * 0.32, p[1] + (p[1] - cy) * 0.32]];
+        sub.forEach(s => { lines.push({ x1: p[0], y1: p[1], x2: s[0], y2: s[1], w: 0.5, o: 0.18 }); circles.push({ x: s[0], y: s[1], r: 1.6, o: 0.3 }); });
+      });
+      out.mindtomind = { caption: "FIG.4F — CONTENT PILLARS", axis: "BRAND · WELLNESS · GROWTH", circles, lines, rects: [] };
+    })();
+    this._g = out; return out;
+  }
+
+  renderVals() {
+    const all = this.data();
+    const f = this.state.filter;
+    const filtered = f === "ALL" ? all : all.filter((p) => p.tags.includes(f));
+    const filterStyle = (active) => "appearance:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;padding:8px 14px;transition:background .3s,color .3s,border-color .3s;border:1px solid " +
+      (active ? "#1a1b20;background:#1a1b20;color:#e7e5e0" : "rgba(26,27,32,0.28);background:transparent;color:#56544f");
+    const G = this.graphs();
+    const decorate = (p, i) => ({ ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", flip: i % 2 === 1, typeOrder: i % 2 === 1 ? "2" : "1", visOrder: i % 2 === 1 ? "1" : "2" });
+
+    let detailNext = null;
+    let detailObj = null;
+    if (this.state.view === "detail" && this.state.project) {
+      const i = all.findIndex((p) => p.id === this.state.project.id);
+      const n = all[(i + 1) % all.length];
+      detailNext = { num: n.num, title: n.title, onOpen: () => this.open(n.id) };
+      const p = this.state.project;
+      const gallery = [];
+      const plateCount = p.id === "mmg" ? 4 : 6;
+      for (let k = 1; k <= plateCount; k++) {
+        const gid = "gallery-" + p.id + "-" + k;
+        const nn = String(k).padStart(2, "0");
+        const label = p.title.toUpperCase() + " \u2014 PLATE " + nn;
+        gallery.push({ id: gid, n: nn, ph: "PLATE " + nn, onView: () => this.openLightbox(gid, label) });
+      }
+      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", gallery: gallery };
+    }
+
+    return {
+      isHome: this.state.view === "home",
+      detail: detailObj,
+      lightbox: this.state.lightbox
+        ? { src: this.state.lightbox.src, label: this.state.lightbox.label, open: true }
+        : { src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", label: "", open: false },
+      closeLightbox: () => this.setState({ lightbox: null }),
+      detailNext: detailNext,
+      projects: filtered.map((p, i) => ({ ...decorate(p, i), onOpen: () => this.open(p.id) })),
+      filters: ["ALL", "MACOS", "IOS", "WEB", "AI", "BRANDING"].map((l) => ({
+        label: l, style: filterStyle(l === f), onClick: () => this.setFilter(l) })),
+      skills: this.skills(),
+      experience: this.experience(),
+      showGrain: this.props.grain ?? true,
+      goIntro: () => this.goTo("intro"),
+      goAbout: () => this.goTo("about"),
+      goWork: () => this.goTo("work"),
+      goProjects: () => this.goTo("projects"),
+      goContact: () => this.goTo("contact"),
+      close: () => this.close()
+    };
+  }
+}
+</script>
+</body>
+</html>
