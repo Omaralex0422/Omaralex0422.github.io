@@ -113,7 +113,7 @@
       <div class="light-leak" aria-hidden="true" style="animation-delay:-7s;"></div>
 
       <!-- graphite backdrop: procedural hatched brutalist skyline, drifts with the cursor -->
-      <canvas id="heroGraphite" data-graphite="7" data-kind="hero" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none;z-index:0;will-change:transform;-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);"></canvas>
+      <canvas id="heroGraphite" data-graphite="7" data-kind="hero" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.68;pointer-events:none;z-index:0;will-change:transform;-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);"></canvas>
 
       <!-- top meta bar -->
       <div style="display:flex;justify-content:space-between;align-items:flex-start;z-index:2;">
@@ -170,7 +170,7 @@
 
     <!-- GRAPHITE PLATE I -->
     <div aria-hidden="true" style="position:relative;height:180px;overflow:hidden;border-top:1px solid rgba(232,230,225,0.12);">
-      <canvas data-graphite="11" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.6;pointer-events:none;"></canvas>
+      <canvas data-graphite="11" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.72;pointer-events:none;"></canvas>
       <div style="position:absolute;left:6vw;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;color:#56544f;text-transform:uppercase;">Plate — Graphite / I</div>
     </div>
 
@@ -206,7 +206,7 @@
 
     <!-- GRAPHITE PLATE II -->
     <div aria-hidden="true" style="position:relative;height:180px;overflow:hidden;border-top:1px solid rgba(232,230,225,0.12);">
-      <canvas data-graphite="23" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.6;pointer-events:none;"></canvas>
+      <canvas data-graphite="23" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.72;pointer-events:none;"></canvas>
       <div style="position:absolute;left:6vw;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;color:#56544f;text-transform:uppercase;">Plate — Graphite / II</div>
     </div>
 
@@ -314,7 +314,7 @@
 
     <!-- GRAPHITE PLATE III -->
     <div aria-hidden="true" style="position:relative;height:180px;overflow:hidden;border-top:1px solid rgba(232,230,225,0.12);">
-      <canvas data-graphite="37" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.6;pointer-events:none;"></canvas>
+      <canvas data-graphite="37" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.72;pointer-events:none;"></canvas>
       <div style="position:absolute;left:6vw;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;color:#56544f;text-transform:uppercase;">Plate — Graphite / III</div>
     </div>
 
@@ -694,9 +694,28 @@ class Component extends DCLogic {
       for (let s = -d / 2; s <= d / 2; s += gap * (0.8 + R() * 0.4)) { const px = cx - sa * s, py = cy + ca * s; line(px - ca * d, py - sa * d, px + ca * d, py + sa * d, a * (0.6 + R() * 0.7), lw); }
       ctx.restore();
     };
+    // Charcoal on rough paper: speckle grain, wide soft smudges, dark stains.
+    const speckle = (x, y, w, h, density, a) => {
+      const n = Math.round(w * h * density); ctx.fillStyle = "rgba(" + ink + ",1)";
+      for (let i = 0; i < n; i++) { ctx.globalAlpha = a * (0.3 + R() * 0.7); ctx.fillRect(x + R() * w, y + R() * h, 0.8 + R() * 1.3, 0.8 + R() * 1.3); }
+      ctx.globalAlpha = 1;
+    };
+    const smudge = (x, y, w, h, a) => {
+      ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+      for (let k = 0; k < 3; k++) line(x + R() * w, y + R() * h, x + R() * w, y + R() * h, a * (0.5 + R()), 5 + R() * 10);
+      ctx.restore();
+    };
+    const stain = (x, y, w, h) => {
+      if (R() > 0.4) return;
+      const sx = x + R() * w, sy = y + R() * h, r = Math.max(6, Math.min(w, h) * (0.3 + R() * 0.5));
+      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, r);
+      g.addColorStop(0, "rgba(0,0,0,0.32)"); g.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip(); ctx.fillStyle = g; ctx.fillRect(sx - r, sy - r, r * 2, r * 2); ctx.restore();
+    };
     const base = o.baseline != null ? o.baseline : H;
     const count = o.count || Math.max(3, Math.round(W / 240));
     const sc = o.scale || 1;
+    const roofs = [];
     for (let i = 0; i < count; i++) {
       const tw = (44 + R() * 96) * sc;
       let tx = (i + 0.5) * (W / count) - tw / 2 + (R() - 0.5) * 70;
@@ -711,6 +730,7 @@ class Component extends DCLogic {
         if (sil) {
           ctx.fillStyle = "rgba(" + ink + "," + (o.alpha || 0.1) + ")"; ctx.fillRect(nx, y, nb, bh);
           if (R() < 0.5) hatch(nx, y, nb, bh, 1.1, 7, (o.alpha || 0.1) * 1.6, 0.7);
+          speckle(nx, y, nb, bh, 0.01, (o.alpha || 0.1) * 1.4);
         } else {
           const split = nb * (0.5 + R() * 0.25);
           // Tonal graphite underlay — a soft smudge before the hatch so the
@@ -718,9 +738,17 @@ class Component extends DCLogic {
           ctx.fillStyle = "rgba(" + ink + ",0.045)"; ctx.fillRect(nx, y, split, bh);
           ctx.fillStyle = "rgba(" + ink + ",0.1)"; ctx.fillRect(nx + split, y, nb - split, bh);
           hatch(nx, y, split, bh, 1.12, 4.4 * sc, 0.2, 0.8);
-          hatch(nx + split, y, nb - split, bh, 1.12, 3 * sc, 0.3, 0.8);
-          hatch(nx + split, y, nb - split, bh, 2.25, 4.6 * sc, 0.22, 0.7);
-          line(nx, y, nx + nb, y, 0.6, 1); line(nx, y, nx, y + bh, 0.5, 1); line(nx + nb, y, nx + nb, y + bh, 0.55, 1);
+          hatch(nx + split, y, nb - split, bh, 1.12, 2.6 * sc, 0.32, 0.8);
+          hatch(nx + split, y, nb - split, bh, 2.25, 4.2 * sc, 0.24, 0.7);
+          if (R() < 0.5) hatch(nx + split, y, nb - split, bh, 0.35, 6 * sc, 0.12, 0.6);
+          // Texture: grain on both faces (heavier in shadow), smudges, stains.
+          speckle(nx, y, split, bh, 0.02, 0.32); speckle(nx + split, y, nb - split, bh, 0.055, 0.42);
+          smudge(nx, y, split, bh, 0.035); smudge(nx + split, y, nb - split, bh, 0.05);
+          stain(nx, y, nb, bh);
+          // Double-drawn edges, the way a pencil goes over a line twice.
+          line(nx, y, nx + nb, y, 0.62, 1.1); line(nx + 1, y + 1.2, nx + nb - 1, y + 0.6, 0.26, 0.8);
+          line(nx, y, nx, y + bh, 0.5, 1); line(nx + 1.1, y + 1, nx + 0.4, y + bh - 1, 0.22, 0.8);
+          line(nx + nb, y, nx + nb, y + bh, 0.58, 1.1); line(nx + nb - 1, y + 1, nx + nb - 0.3, y + bh - 1, 0.26, 0.8);
           const rows = Math.floor(bh / (9 * sc)), cols = Math.floor(nb / (8 * sc));
           for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
             if (R() < 0.4) continue;
@@ -734,6 +762,7 @@ class Component extends DCLogic {
         }
         bx = nx; bw = nb;
       }
+      if (bw > 14) roofs.push({ x: bx, y: y, w: bw });
     }
     if (o.ground) {
       for (let k = 0; k < 16; k++) { const yy = base + Math.pow(k / 16, 1.5) * (H - base); line(-10, yy + (R() - 0.5) * 4, W + 10, yy + (R() - 0.5) * 4, 0.12 + R() * 0.2, 1); }
@@ -745,6 +774,59 @@ class Component extends DCLogic {
         ctx.moveTo(x - s, y - s * 0.4); ctx.quadraticCurveTo(x, y + s * 0.35, x + s, y - s * 0.4); ctx.stroke();
       }
     }
+    // Lone figures — most stand at a rooftop edge, one or two on the ground.
+    if (o.figures) {
+      const used = [];
+      for (let k = 0; k < o.figures; k++) {
+        const fh = (o.figH || 40) * (0.8 + R() * 0.5);
+        let fx = W * 0.04 + R() * W * 0.92, gy = base + 1;
+        if (roofs.length && R() < 0.7) {
+          const r = roofs[Math.floor(R() * roofs.length)];
+          if (used.indexOf(r) < 0) { used.push(r); fx = r.x + r.w * (0.15 + R() * 0.7); gy = r.y + 0.5; }
+        }
+        this._drawFigure(ctx, { x: fx, gy: gy, h: fh, phase: R(), idle: R() < 0.75, lean: 0.05 + R() * 0.05, ink: o.figInk || ink, alpha: o.figAlpha || 0.8, glow: !!o.figGlow, R: R });
+      }
+    }
+  }
+
+  // A lone figure — thin, hunched, long coat, read as a grainy silhouette.
+  // Pale and faintly glowing on the dark rooms, dark graphite in the light
+  // hall. `phase` drives a walk cycle; `idle` stands still.
+  _drawFigure(ctx, o) {
+    const R = o.R, h = o.h, x = o.x, gy = o.gy, ink = o.ink;
+    const ph = o.idle ? 0 : Math.sin(o.phase * 6.283);
+    const lean = (o.lean || 0.06) * h;
+    const w = (v) => v + (R() - 0.5) * h * 0.025;
+    ctx.save();
+    ctx.globalAlpha = o.alpha;
+    ctx.fillStyle = "rgba(" + ink + ",1)"; ctx.strokeStyle = "rgba(" + ink + ",1)"; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    if (o.glow) { ctx.shadowColor = "rgba(" + ink + ",0.85)"; ctx.shadowBlur = h * 0.14; }
+    // legs
+    ctx.lineWidth = h * 0.055;
+    const hipY = gy - h * 0.46, hipL = x - h * 0.045, hipR = x + h * 0.045;
+    const st = o.idle ? h * 0.035 : ph * h * 0.17;
+    ctx.beginPath(); ctx.moveTo(w(hipL), hipY); ctx.quadraticCurveTo(w(hipL - st * 0.3), gy - h * 0.25, w(x - st), gy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w(hipR), hipY); ctx.quadraticCurveTo(w(hipR + st * 0.3), gy - h * 0.25, w(x + st), gy); ctx.stroke();
+    // coat / torso — shoulders pushed forward, hem flared
+    const shY = gy - h * 0.8, sh = h * 0.12, hem = h * 0.14;
+    ctx.beginPath();
+    ctx.moveTo(w(x - sh + lean), shY); ctx.lineTo(w(x + sh + lean), shY + h * 0.012);
+    ctx.lineTo(w(x + hem * 1.1), gy - h * 0.36); ctx.lineTo(w(x - hem), gy - h * 0.36); ctx.closePath(); ctx.fill();
+    // arms, swinging opposite the legs
+    ctx.lineWidth = h * 0.045;
+    const sw = o.idle ? 0 : ph * h * 0.11;
+    ctx.beginPath(); ctx.moveTo(w(x - sh * 0.8 + lean), shY + h * 0.03); ctx.quadraticCurveTo(w(x - sh - sw * 0.4 + lean), gy - h * 0.6, w(x - sh * 0.7 - sw), gy - h * 0.42); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(w(x + sh * 0.8 + lean), shY + h * 0.03); ctx.quadraticCurveTo(w(x + sh + sw * 0.4 + lean), gy - h * 0.6, w(x + sh * 0.7 + sw), gy - h * 0.42); ctx.stroke();
+    // neck + bowed head
+    ctx.lineWidth = h * 0.05;
+    ctx.beginPath(); ctx.moveTo(w(x + lean), shY); ctx.lineTo(w(x + lean * 1.6), gy - h * 0.87); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(w(x + lean * 1.8), gy - h * 0.93, h * 0.062, h * 0.072, 0.2, 0, 6.283); ctx.fill();
+    ctx.shadowBlur = 0;
+    // erosion — charcoal grain bites into the edges
+    ctx.globalCompositeOperation = "destination-out";
+    const n = Math.round(h * 1.8);
+    for (let i = 0; i < n; i++) { ctx.globalAlpha = 0.25 + R() * 0.55; ctx.fillRect(x + (R() - 0.5) * h * 0.42, gy - R() * h, 1 + R() * 1.3, 1 + R() * 1.3); }
+    ctx.restore();
   }
 
   // Static graphite canvases (hero backdrop + divider plates). Redrawn only
@@ -758,8 +840,8 @@ class Component extends DCLogic {
       c.width = Math.round(W * DPR); c.height = Math.round(H * DPR);
       const ctx = c.getContext("2d"); ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
       const seed = parseInt(c.getAttribute("data-graphite"), 10) || 1;
-      if (c.getAttribute("data-kind") === "hero") this._graphiteScene(ctx, W, H, { seed: seed, baseline: H * 0.93, maxH: H * 0.6, count: Math.max(5, Math.round(W / 175)), ground: true, birds: 30, ember: true });
-      else this._graphiteScene(ctx, W, H, { seed: seed, baseline: H - 14, maxH: H * 0.92, scale: 0.62, count: Math.max(5, Math.round(W / 150)), birds: 12, ember: true });
+      if (c.getAttribute("data-kind") === "hero") this._graphiteScene(ctx, W, H, { seed: seed, baseline: H * 0.93, maxH: H * 0.6, count: Math.max(5, Math.round(W / 175)), ground: true, birds: 30, ember: true, figures: 3, figH: H * 0.05, figInk: "236,232,224", figGlow: true, figAlpha: 0.85 });
+      else this._graphiteScene(ctx, W, H, { seed: seed, baseline: H - 14, maxH: H * 0.92, scale: 0.62, count: Math.max(5, Math.round(W / 150)), birds: 12, ember: true, figures: 2, figH: H * 0.16, figInk: "236,232,224", figGlow: true, figAlpha: 0.85 });
     });
   }
 
@@ -772,12 +854,12 @@ class Component extends DCLogic {
     if (!cv || cv.__amb) return;
     cv.__amb = true;
     const self = this, sec = cv.closest("section"), ctx = cv.getContext("2d");
-    let W = 0, H = 0, layers = [], motes = [], visible = false;
+    let W = 0, H = 0, layers = [], motes = [], figs = [], visible = false;
     const t0 = performance.now();
     const build = () => {
       W = cv.clientWidth; H = cv.clientHeight; if (!W || !H) return;
       cv.width = W; cv.height = H;
-      layers = [[0.46, 0.05, 9, 0.06], [0.6, 0.08, 17, 0.12], [0.8, 0.12, 30, 0.2]].map((L, i) => {
+      layers = [[0.46, 0.035, 9, 0.06], [0.6, 0.055, 17, 0.12], [0.8, 0.08, 30, 0.2]].map((L, i) => {
         const lw = W * 2, lh = Math.round(H * L[0]);
         const oc = document.createElement("canvas"); oc.width = lw; oc.height = lh;
         self._graphiteScene(oc.getContext("2d"), lw, lh, { seed: 101 + i * 17, mode: "silhouette", ink: "26,27,32", alpha: L[1], baseline: lh, maxH: lh * 0.95, count: Math.round(lw / (170 - i * 30)), scale: 0.7 + i * 0.25 });
@@ -785,6 +867,17 @@ class Component extends DCLogic {
       });
       motes = [];
       for (let i = 0; i < 70; i++) motes.push({ x: Math.random() * W, y: Math.random() * H, r: 0.5 + Math.random() * 1.6, s: 4 + Math.random() * 12, a: 0.08 + Math.random() * 0.2, seed: Math.random() * 6.283 });
+      // Walkers: a few lone figures crossing the hall at different depths.
+      // Each has its own sprite, redrawn at 12fps with a new seed so the
+      // silhouette boils like hand-drawn frames; one stands still.
+      figs = [];
+      const n = W > 900 ? 5 : 3;
+      for (let i = 0; i < n; i++) {
+        const depth = i / Math.max(1, n - 1);
+        const h = H * (0.045 + depth * 0.055);
+        const spr = document.createElement("canvas"); spr.width = Math.ceil(h * 0.7); spr.height = Math.ceil(h * 1.15);
+        figs.push({ id: i + 1, depth: depth, h: h, x: Math.random() * W, dir: Math.random() < 0.5 ? -1 : 1, speed: (6 + depth * 14) * (0.8 + Math.random() * 0.4), idle: i === 1, phase: Math.random(), spr: spr, last: -1 });
+      }
     };
     const frame = (now) => {
       if (!cv.isConnected) { io.disconnect(); return; }
@@ -801,6 +894,22 @@ class Component extends DCLogic {
         const off = (t * L.spd) % L.lw;
         const y = H - L.lh + 40 + sr.top * L.par + Math.sin(t * 1.7 + L.spd) * 1.2;
         ctx.drawImage(L.oc, -off, y); ctx.drawImage(L.oc, L.lw - off, y);
+      });
+      // Walkers — stop-motion at 12fps.
+      const fi = Math.floor(t * 12);
+      figs.forEach((f) => {
+        if (fi !== f.last) {
+          f.last = fi;
+          if (!f.idle) { f.x += f.dir * f.speed / 12; f.phase = (f.phase + 0.085) % 1; }
+          if (f.x < -f.h) { f.x = W + f.h * 0.5; } else if (f.x > W + f.h) { f.x = -f.h * 0.5; }
+          const sc = f.spr.getContext("2d"); sc.clearRect(0, 0, f.spr.width, f.spr.height);
+          if (f.dir < 0) { sc.save(); sc.translate(f.spr.width, 0); sc.scale(-1, 1); }
+          self._drawFigure(sc, { x: f.spr.width / 2, gy: f.spr.height - 2, h: f.h, phase: f.phase, idle: f.idle, lean: 0.07, ink: "26,27,32", alpha: 0.2 + f.depth * 0.22, glow: false, R: self._rng(f.id * 7919 + fi) });
+          if (f.dir < 0) sc.restore();
+        }
+        const par = 0.06 + f.depth * 0.14;
+        const gy = H * (0.62 + f.depth * 0.3) + sr.top * par;
+        ctx.drawImage(f.spr, f.x - f.spr.width / 2, gy - f.spr.height + 2);
       });
       motes.forEach((m) => {
         m.x += m.s * 0.008; m.y += Math.sin(t * 0.6 + m.seed) * 0.15 - 0.05;
