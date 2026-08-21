@@ -1020,12 +1020,12 @@ class Component extends DCLogic {
     dot.setAttribute("data-no-capture", "");
     dot.style.cssText = "position:fixed;top:-50px;left:-50px;width:13px;height:13px;border:1px solid #e8e6e1;border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s,opacity .3s;mix-blend-mode:difference;will-change:transform;";
     document.body.appendChild(dot);
-    // Orange lens: over a plate the cursor becomes a warm loupe that tints
-    // whatever is beneath it to ember (a backdrop-filter — the real pixels
-    // of the screenshot, not an overlay).
+    // Torch: over a plate the cursor becomes a soft loupe that lifts
+    // brightness and contrast on the real pixels beneath it — inspecting
+    // an exhibit by flashlight. No colour shift; a thin ink ring.
     const lens = document.createElement("div");
     lens.setAttribute("data-no-capture", "");
-    lens.style.cssText = "position:fixed;top:-300px;left:-300px;width:176px;height:176px;border-radius:50%;pointer-events:none;z-index:9990;transform:translate(-50%,-50%) scale(.5);opacity:0;transition:opacity .28s,transform .32s cubic-bezier(.2,.7,.2,1);-webkit-backdrop-filter:sepia(1) saturate(2.8) hue-rotate(-18deg) contrast(1.08) brightness(1.04);backdrop-filter:sepia(1) saturate(2.8) hue-rotate(-18deg) contrast(1.08) brightness(1.04);box-shadow:0 0 0 1px rgba(255,90,31,.75),inset 0 0 42px rgba(255,90,31,.2),0 0 70px rgba(255,90,31,.16);will-change:transform,opacity;";
+    lens.style.cssText = "position:fixed;top:-300px;left:-300px;width:150px;height:150px;border-radius:50%;pointer-events:none;z-index:9990;transform:translate(-50%,-50%) scale(.5);opacity:0;transition:opacity .28s,transform .32s cubic-bezier(.2,.7,.2,1);-webkit-backdrop-filter:brightness(1.2) contrast(1.06);backdrop-filter:brightness(1.2) contrast(1.06);box-shadow:0 0 0 1px rgba(233,229,220,.55),inset 0 0 30px rgba(255,246,230,.12),0 0 50px rgba(255,246,230,.08);will-change:transform,opacity;";
     document.body.appendChild(lens);
     document.body.style.cursor = "none";
     window.addEventListener("mousemove", (e) => {
