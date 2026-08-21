@@ -410,8 +410,11 @@ class Component extends DCLogic {
     this.initHero();
     this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
     document.addEventListener("keydown", this._esc);
+    // Transport ignition point — combustion spreads outward from the last click.
+    this._onPt = (e) => { this._lastPt = { x: e.clientX, y: e.clientY, t: performance.now() }; };
+    document.addEventListener("pointerdown", this._onPt, true);
   }
-  componentWillUnmount() { if (this._esc) document.removeEventListener("keydown", this._esc); if (this._warpRAF) cancelAnimationFrame(this._warpRAF); }
+  componentWillUnmount() { if (this._esc) document.removeEventListener("keydown", this._esc); if (this._onPt) document.removeEventListener("pointerdown", this._onPt, true); if (this._warpRAF) cancelAnimationFrame(this._warpRAF); }
   componentDidUpdate() { this.setupReveal(); this.initHero(); }
 
   setupHeroEvents() {
@@ -618,82 +621,156 @@ class Component extends DCLogic {
     this._transport(() => this.setState({ view: "home", project: null }, () => window.scrollTo({ top: 0 })));
   }
 
-  // ── Transport transition ────────────────────────────────────────────────
-  // Moving between the index and a project plays a "combust to ash, reform
-  // from the embers" wipe: the current plate is pulled into a dark void while
-  // grey ash and orange embers rise; the React swap happens under peak
-  // darkness; then the veil recedes and the new plate settles out of the
-  // falling ash. All generated on a canvas — no external assets.
+  // ── Transport: the page itself turns to ash ─────────────────────────────
+  // The live <main> is cut into a grid of concrete shards (each shard is a
+  // clipped live clone of the page, so it carries the real pixels — type,
+  // plates, the hero canvas). Ignition spreads outward from the point you
+  // clicked: each shard flares orange, curls up in 3D, and tumbles into the
+  // void while fine ash and embers pour off it. The React swap happens under
+  // cover; the new room then reassembles from its own shards, converging from
+  // the centre as the last ash settles. No external assets — all live DOM +
+  // one canvas.
+  _shatter(main, stage, cols, rows) {
+    const W = window.innerWidth, H = window.innerHeight, r = main.getBoundingClientRect();
+    // One template: sections outside the viewport become same-height spacers
+    // so 50 clones don't each lay out the whole 6000px page.
+    const tpl = main.cloneNode(false);
+    const srcCanv = [];
+    Array.from(main.children).forEach((ch) => {
+      const cr = ch.getBoundingClientRect();
+      if (cr.bottom < -40 || cr.top > H + 40) {
+        const sp = document.createElement("div"); sp.style.cssText = "height:" + cr.height + "px;margin:0;"; tpl.appendChild(sp);
+      } else {
+        ch.querySelectorAll("canvas").forEach((c) => srcCanv.push(c));
+        tpl.appendChild(ch.cloneNode(true));
+      }
+    });
+    tpl.querySelectorAll("canvas").forEach((c) => c.removeAttribute("id"));
+    tpl.style.cssText += ";position:absolute;margin:0;width:" + r.width + "px;min-height:0;pointer-events:none;transform:none;filter:none;opacity:1;";
+    const tw = W / cols, th = H / rows, tiles = [];
+    const frag = document.createDocumentFragment();
+    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+      const tile = document.createElement("div");
+      tile.style.cssText = "position:absolute;left:" + (x * tw) + "px;top:" + (y * th) + "px;width:" + (Math.ceil(tw) + 1) + "px;height:" + (Math.ceil(th) + 1) + "px;overflow:hidden;will-change:transform,opacity,filter;backface-visibility:hidden;background:#101014;";
+      const c = tpl.cloneNode(true);
+      c.style.left = (r.left - x * tw) + "px"; c.style.top = (r.top - y * th) + "px";
+      c.querySelectorAll("canvas").forEach((d, i) => { const s = srcCanv[i]; if (s && s.width) { d.width = s.width; d.height = s.height; try { d.getContext("2d").drawImage(s, 0, 0); } catch (e) {} } });
+      const burn = document.createElement("div");
+      burn.style.cssText = "position:absolute;inset:0;opacity:0;mix-blend-mode:screen;pointer-events:none;background:radial-gradient(70% 70% at 50% 50%,rgba(255,110,40,.75),rgba(255,90,31,.25) 55%,rgba(255,90,31,0) 78%);";
+      tile.appendChild(c); tile.appendChild(burn); frag.appendChild(tile);
+      tiles.push({ el: tile, burn: burn, x: x * tw, y: y * th, w: tw, h: th, cx: x * tw + tw / 2, cy: y * th + th / 2 });
+    }
+    stage.appendChild(frag);
+    return tiles;
+  }
+
   _transport(swap) {
     const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const main0 = document.querySelector("main");
     const cv = document.getElementById("transportCv");
-    if (reduced || this._warping || !cv) { swap(); return; }
+    if (reduced || this._warping || !main0 || !main0.animate || !cv) { swap(); return; }
     this._warping = true;
-    const ctx = cv.getContext("2d");
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const self = this;
     const W = window.innerWidth, H = window.innerHeight;
+    const lp = this._lastPt;
+    const origin = lp && performance.now() - lp.t < 4000 ? lp : { x: W / 2, y: H / 2 };
+    const html = document.documentElement, prevOv = html.style.overflow; html.style.overflow = "hidden";
+    const stage = document.createElement("div");
+    stage.style.cssText = "position:fixed;inset:0;z-index:9997;pointer-events:none;perspective:1100px;perspective-origin:50% 45%;overflow:hidden;";
+    document.body.appendChild(stage);
+    const ctx = cv.getContext("2d"), DPR = Math.min(window.devicePixelRatio || 1, 2);
     cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-    cv.style.display = "block";
-    const N = Math.max(140, Math.min(560, Math.round(W * 0.5)));
-    const parts = [];
-    for (let i = 0; i < N; i++) {
-      const ember = Math.random() < 0.24;
-      parts.push({
-        x: Math.random() * W,
-        y: H * (0.5 + Math.random() * 0.65),
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: -(0.6 + Math.random() * 2.4),
-        r: ember ? (0.7 + Math.random() * 1.7) : (0.6 + Math.random() * 2.6),
-        a: 0.14 + Math.random() * 0.7,
-        seed: Math.random() * 6.283,
-        ember: ember
-      });
-    }
-    const OUT = 470, IN = 560, TOTAL = OUT + IN;
-    const ease = (x) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
-    const t0 = performance.now();
-    let swapped = false;
-    const frame = (now) => {
-      const t = now - t0;
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      ctx.clearRect(0, 0, W, H);
-      const outP = Math.min(1, t / OUT);
-      const inP = Math.max(0, Math.min(1, (t - OUT) / IN));
-      const veil = t < OUT ? outP : 1 - inP;
-      ctx.fillStyle = "rgba(9,9,11," + ease(veil).toFixed(3) + ")";
-      ctx.fillRect(0, 0, W, H);
-      // Warp the current <main> into / out of the void (nav + canvas stay crisp).
-      const m = document.querySelector("main");
-      if (m) {
-        m.style.transformOrigin = "center 42%";
-        if (t < OUT) { const k = ease(outP); m.style.transform = "scale(" + (1 - 0.06 * k).toFixed(3) + ") translateY(" + (-16 * k).toFixed(1) + "px)"; m.style.filter = "blur(" + (7 * k).toFixed(1) + "px)"; m.style.opacity = (1 - 0.9 * k).toFixed(2); }
-        else { const k = ease(inP); m.style.transform = "scale(" + (1.05 - 0.05 * k).toFixed(3) + ") translateY(" + (14 * (1 - k)).toFixed(1) + "px)"; m.style.filter = "blur(" + (7 * (1 - k)).toFixed(1) + "px)"; m.style.opacity = (0.1 + 0.9 * k).toFixed(2); }
-      }
-      if (!swapped && t >= OUT) { swapped = true; swap(); }
-      const dir = t < OUT ? 1 : -0.4;
-      const fade = t < OUT ? Math.min(1, t / 200) : Math.max(0, 1 - inP * 1.25);
-      for (let i = 0; i < parts.length; i++) {
-        const p = parts[i];
-        p.x += p.vx + Math.sin(now * 0.001 + p.seed) * 0.3;
-        p.y += p.vy * dir;
-        const fl = p.ember ? 0.55 + 0.45 * Math.sin(now * 0.02 + p.seed) : 1;
-        const alpha = p.a * fade * (p.ember ? 0.5 + 0.5 * fl : 0.85);
-        if (alpha <= 0.02) continue;
-        ctx.globalAlpha = Math.min(1, alpha);
-        if (p.ember) { ctx.fillStyle = "#ff5a1f"; ctx.shadowColor = "#ff7a3a"; ctx.shadowBlur = 9; }
-        else { ctx.fillStyle = "#cfc9bf"; ctx.shadowBlur = 0; }
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill();
-      }
-      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
-      if (t < TOTAL) { this._warpRAF = requestAnimationFrame(frame); }
-      else {
-        cv.style.display = "none";
-        const mm = document.querySelector("main");
-        if (mm) { mm.style.transform = ""; mm.style.filter = ""; mm.style.opacity = ""; mm.style.transformOrigin = ""; }
-        this._warping = false;
+    cv.style.display = "block"; cv.style.zIndex = "9998";
+    const COLS = W > 1100 ? 10 : W > 700 ? 8 : 5, ROWS = H > 760 ? 6 : 5;
+    const OUT_DELAY = 520, OUT_DUR = 880, IN_DELAY = 420, IN_DUR = 900;
+    const ash = []; let gravity = -0.012, wind = 0.35, alive = true;
+    const spawn = (t, n) => {
+      if (ash.length > 1600) return;
+      for (let i = 0; i < n; i++) {
+        const ember = Math.random() < 0.3;
+        ash.push({ x: t.x + Math.random() * t.w, y: t.y + Math.random() * t.h, vx: (Math.random() - 0.5) * 1.2, vy: -(0.3 + Math.random() * 1.5), r: ember ? 0.6 + Math.random() * 1.4 : 0.5 + Math.random() * 2.3, a: 0.25 + Math.random() * 0.7, life: 1, decay: 0.004 + Math.random() * 0.008, seed: Math.random() * 6.283, ember: ember });
       }
     };
-    this._warpRAF = requestAnimationFrame(frame);
+    const loop = (now) => {
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
+      for (let i = ash.length - 1; i >= 0; i--) {
+        const p = ash[i];
+        p.vy += gravity; p.x += p.vx + wind + Math.sin(now * 0.0012 + p.seed) * 0.35; p.y += p.vy; p.life -= p.decay;
+        if (p.life <= 0 || p.y < -30 || p.y > H + 30) { ash.splice(i, 1); continue; }
+        const fl = p.ember ? 0.5 + 0.5 * Math.sin(now * 0.02 + p.seed) : 1;
+        ctx.globalAlpha = Math.min(1, p.a * p.life * (p.ember ? 0.55 + 0.45 * fl : 0.85));
+        if (p.ember) { ctx.fillStyle = "#ff6a2a"; ctx.shadowColor = "#ff7a3a"; ctx.shadowBlur = 10; } else { ctx.fillStyle = "#cfc9bf"; ctx.shadowBlur = 0; }
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r * (0.6 + 0.4 * p.life), 0, 6.283); ctx.fill();
+      }
+      ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+      if (alive || ash.length) self._warpRAF = requestAnimationFrame(loop);
+    };
+    self._warpRAF = requestAnimationFrame(loop);
+    const finish = (main1) => {
+      alive = false;
+      if (main1) main1.style.opacity = "";
+      stage.remove(); html.style.overflow = prevOv;
+      setTimeout(() => { cv.style.display = "none"; }, 900);
+      self._warping = false;
+    };
+    // ── Phase 1: combustion, spreading from the click ──
+    let tiles; try { tiles = this._shatter(main0, stage, COLS, ROWS); } catch (e) { tiles = null; }
+    if (!tiles) { finish(null); swap(); return; }
+    main0.style.opacity = "0";
+    const maxD = Math.hypot(Math.max(origin.x, W - origin.x), Math.max(origin.y, H - origin.y)) || 1;
+    tiles.forEach((t) => {
+      const d = Math.hypot(t.cx - origin.x, t.cy - origin.y) / maxD;
+      const delay = d * OUT_DELAY + Math.random() * 90;
+      const ang = Math.atan2(t.cy - origin.y, t.cx - origin.x);
+      const dx = Math.cos(ang) * (70 + Math.random() * 160) + (Math.random() - 0.5) * 80;
+      const dy = -(140 + Math.random() * 300);
+      const dz = 160 + Math.random() * 460;
+      const rx = (Math.random() - 0.5) * 150, ry = (Math.random() - 0.5) * 170, rz = (Math.random() - 0.5) * 80;
+      t.el.animate([
+        { transform: "translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg)", opacity: 1, filter: "brightness(1)" },
+        { offset: 0.2, transform: "translate3d(0,-5px,34px) rotateX(" + (rx * 0.08).toFixed(1) + "deg) rotateY(" + (ry * 0.08).toFixed(1) + "deg)", opacity: 1, filter: "brightness(1.4) contrast(1.2)" },
+        { offset: 0.5, opacity: 0.9, filter: "brightness(.8) sepia(.85) saturate(5) hue-rotate(-22deg) contrast(1.3)" },
+        { transform: "translate3d(" + dx.toFixed(0) + "px," + dy.toFixed(0) + "px," + dz.toFixed(0) + "px) rotateX(" + rx.toFixed(0) + "deg) rotateY(" + ry.toFixed(0) + "deg) rotateZ(" + rz.toFixed(0) + "deg)", opacity: 0, filter: "brightness(.1) blur(3px)" }
+      ], { duration: OUT_DUR, delay: delay, easing: "cubic-bezier(.5,.02,.75,.35)", fill: "forwards" });
+      t.burn.animate([{ opacity: 0 }, { offset: 0.18, opacity: 0 }, { offset: 0.42, opacity: 1 }, { offset: 0.7, opacity: 0.5 }, { opacity: 0 }], { duration: OUT_DUR, delay: delay, fill: "forwards" });
+      setTimeout(() => spawn(t, 34), delay + OUT_DUR * 0.3);
+      setTimeout(() => spawn(t, 14), delay + OUT_DUR * 0.55);
+    });
+    // ── Phase 2: swap under cover, then the new room reassembles ──
+    setTimeout(() => {
+      swap();
+      let tries = 0;
+      const waitNew = () => {
+        const m1 = document.querySelector("main");
+        if ((!m1 || m1 === main0) && tries++ < 30) { requestAnimationFrame(waitNew); return; }
+        if (!m1) { finish(null); return; }
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          tiles.forEach((t) => t.el.remove());
+          let t2; try { t2 = self._shatter(m1, stage, COLS, ROWS); } catch (e) { t2 = null; }
+          if (!t2) { finish(m1); return; }
+          m1.style.opacity = "0";
+          gravity = 0.03; wind = 0.15;
+          const cx0 = W / 2, cy0 = H * 0.45, maxD2 = Math.hypot(cx0, cy0) || 1;
+          t2.forEach((t) => {
+            const d = Math.hypot(t.cx - cx0, t.cy - cy0) / maxD2;
+            const delay = d * IN_DELAY + Math.random() * 70;
+            const ang = Math.atan2(t.cy - cy0, t.cx - cx0);
+            const sx = Math.cos(ang) * (90 + Math.random() * 160), sy = 120 + Math.random() * 260, sz = -(200 + Math.random() * 420);
+            const rx = (Math.random() - 0.5) * 120, ry = (Math.random() - 0.5) * 140, rz = (Math.random() - 0.5) * 60;
+            t.el.animate([
+              { transform: "translate3d(" + sx.toFixed(0) + "px," + sy.toFixed(0) + "px," + sz.toFixed(0) + "px) rotateX(" + rx.toFixed(0) + "deg) rotateY(" + ry.toFixed(0) + "deg) rotateZ(" + rz.toFixed(0) + "deg)", opacity: 0, filter: "brightness(.1) blur(3px)" },
+              { offset: 0.45, opacity: 0.9, filter: "brightness(.9) sepia(.8) saturate(5) hue-rotate(-22deg) contrast(1.25)" },
+              { offset: 0.8, transform: "translate3d(0,3px,22px) rotateX(" + (rx * 0.05).toFixed(1) + "deg) rotateY(" + (ry * 0.05).toFixed(1) + "deg)", opacity: 1, filter: "brightness(1.25) contrast(1.1)" },
+              { transform: "translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg)", opacity: 1, filter: "brightness(1)" }
+            ], { duration: IN_DUR, delay: delay, easing: "cubic-bezier(.2,.75,.25,1)", fill: "forwards" });
+            t.burn.animate([{ opacity: 0.9 }, { offset: 0.5, opacity: 0.6 }, { opacity: 0 }], { duration: IN_DUR, delay: delay, fill: "forwards" });
+            setTimeout(() => spawn(t, 8), delay + IN_DUR * 0.25);
+          });
+          setTimeout(() => finish(m1), IN_DELAY + IN_DUR + 120);
+        }));
+      };
+      requestAnimationFrame(waitNew);
+    }, OUT_DELAY + OUT_DUR * 0.62);
   }
 
   data() {
