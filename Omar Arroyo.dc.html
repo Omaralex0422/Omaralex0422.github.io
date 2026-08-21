@@ -31,6 +31,15 @@
   @keyframes hazeDrift { 0%{transform:translate(0,0) scale(1);} 50%{transform:translate(4%,-3%) scale(1.06);} 100%{transform:translate(0,0) scale(1);} }
   @keyframes filmFlicker { 0%,100%{opacity:1;} 47%{opacity:.9;} 49%{opacity:1;} 62%{opacity:.94;} 80%{opacity:.985;} }
   @keyframes emberPulse { 0%,100%{opacity:.45;} 50%{opacity:1;} }
+  /* Light in a dark room: an ember horizon that breathes, film light-leaks
+     that drift across the top corner of each room, and pencil-pressure
+     gradient ink on the display type. */
+  @keyframes emberBreathe { 0%,100%{opacity:.7;transform:scaleX(1) translateY(0);} 50%{opacity:1;transform:scaleX(1.08) translateY(-2%);} }
+  @keyframes leakDrift { 0%,100%{transform:translate(0,0) rotate(0deg);opacity:.8;} 50%{transform:translate(-6%,5%) rotate(-4deg);opacity:1;} }
+  .ink-grad { background-image:linear-gradient(180deg,#f1eee6 0%,#e9e5dc 42%,#8a877f 100%); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; }
+  .ink-grad > span { -webkit-text-fill-color:#ff5a1f; color:#ff5a1f; }
+  .ember-horizon { position:absolute; left:-10%; right:-10%; bottom:-8%; height:58%; z-index:-1; pointer-events:none; transform-origin:50% 100%; background:radial-gradient(60% 55% at 50% 100%, rgba(255,90,31,.36), rgba(210,62,10,.14) 38%, rgba(210,62,10,0) 72%); animation:emberBreathe 9s ease-in-out infinite; }
+  .light-leak { position:absolute; top:-22%; right:-12%; width:58%; height:76%; z-index:-1; pointer-events:none; background:linear-gradient(215deg, rgba(255,90,31,.17) 0%, rgba(255,90,31,.06) 34%, rgba(255,90,31,0) 60%); filter:blur(28px); animation:leakDrift 19s ease-in-out infinite; }
 </style>
 <script src="./image-slot.js"></script>
 </helmet>
@@ -44,6 +53,8 @@
   <div data-no-capture style="position:fixed;inset:0;z-index:995;pointer-events:none;opacity:0.05;mix-blend-mode:overlay;background-size:520px 520px;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22520%22 height=%22520%22><filter id=%22c%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.012%22 numOctaves=%223%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23c)%22/></svg>');"></div>
   <!-- Drifting haze: orange-tinged fog + cold light, slowly moving like a projector beam through dust. -->
   <div data-no-capture style="position:fixed;inset:-30%;z-index:996;pointer-events:none;opacity:0.6;background:radial-gradient(38% 34% at 28% 30%, rgba(255,90,31,0.06), transparent 60%),radial-gradient(46% 42% at 76% 72%, rgba(150,160,180,0.06), transparent 62%);animation:hazeDrift 26s ease-in-out infinite;"></div>
+  <!-- Projector: a soft beam that tracks your scroll down the page, like a torch through the museum. -->
+  <div id="projector" data-no-capture style="position:fixed;inset:0;z-index:994;pointer-events:none;mix-blend-mode:screen;--px:50%;--py:22%;background:radial-gradient(44% 40% at var(--px) var(--py), rgba(255,232,205,0.085), rgba(255,150,80,0.035) 42%, rgba(0,0,0,0) 70%);will-change:background;"></div>
   <!-- Vignette: the lonely dark museum edges, with a faint film flicker. -->
   <div data-no-capture style="position:fixed;inset:0;z-index:997;pointer-events:none;background:radial-gradient(125% 125% at 50% 40%, transparent 50%, rgba(0,0,0,0.6) 100%);animation:filmFlicker 6s steps(1) infinite;"></div>
 
@@ -69,7 +80,11 @@
   <main data-screen-label="Home" style="display:block;">
 
     <!-- HERO — EDITORIAL COVER -->
-    <section id="intro" data-screen-label="Hero" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:104px 6vw 0;box-sizing:border-box;overflow:hidden;background:radial-gradient(120% 70% at 80% -8%, rgba(255,255,255,0.07), rgba(26,27,32,0) 56%);">
+    <section id="intro" data-screen-label="Hero" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:104px 6vw 0;box-sizing:border-box;overflow:hidden;isolation:isolate;background:radial-gradient(120% 70% at 80% -8%, rgba(255,255,255,0.07), rgba(26,27,32,0) 56%);">
+
+      <!-- ember horizon: the city burning just past the skyline -->
+      <div class="ember-horizon" aria-hidden="true"></div>
+      <div class="light-leak" aria-hidden="true" style="animation-delay:-7s;"></div>
 
       <!-- graphite backdrop: procedural hatched brutalist skyline, drifts with the cursor -->
       <canvas id="heroGraphite" data-graphite="7" data-kind="hero" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none;z-index:0;will-change:transform;-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);"></canvas>
@@ -104,12 +119,13 @@
         <div style="display:flex;justify-content:flex-end;align-items:flex-end;padding-bottom:6px;">
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;text-align:right;line-height:1.9;">Scroll <span style="display:inline-block;margin-left:6px;animation:drift 2.4s ease-in-out infinite;">↓</span><br>Est. 2022 — Richibucto, NB</div>
         </div>
-        <div aria-hidden="true" style="font-family:'Archivo',sans-serif;font-weight:900;font-size:17vw;line-height:0.72;letter-spacing:-0.05em;color:#e8e6e1;margin:0 0 -0.135em -0.015em;white-space:nowrap;">developer<span style="color:#ff5a1f;">.</span></div>
+        <div aria-hidden="true" style="font-family:'Archivo',sans-serif;font-weight:900;font-size:17vw;line-height:0.72;letter-spacing:-0.05em;color:#e8e6e1;margin:0 0 -0.135em -0.015em;white-space:nowrap;" class="ink-grad">developer<span style="color:#ff5a1f;">.</span></div>
       </div>
     </section>
 
     <!-- ABOUT -->
-    <section id="about" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);">
+    <section id="about" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);position:relative;isolation:isolate;overflow:hidden;">
+      <div class="light-leak" aria-hidden="true"></div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#ff5a1f;text-transform:uppercase;margin-bottom:64px;">FIG. 01 — Statement</div>
       <div style="display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:8vw;align-items:start;">
         <div>
@@ -133,11 +149,12 @@
     </div>
 
     <!-- SKILLS -->
-    <section id="skills" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);">
+    <section id="skills" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);position:relative;isolation:isolate;overflow:hidden;">
+      <div class="light-leak" aria-hidden="true"></div>
       <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:20px;margin-bottom:70px;">
         <div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#ff5a1f;text-transform:uppercase;margin-bottom:22px;">FIG. 02 — Capabilities</div>
-          <h2 style="margin:0;font-weight:900;font-size:clamp(44px,6.5vw,108px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;">The Collection</h2>
+          <h2 style="margin:0;font-weight:900;font-size:clamp(44px,6.5vw,108px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;" class="ink-grad">The Collection</h2>
         </div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#56544f;text-transform:uppercase;max-width:240px;text-align:right;line-height:1.8;">Five rooms — from raw language to the business that runs on it.</div>
       </div>
@@ -168,9 +185,10 @@
     </div>
 
     <!-- EXPERIENCE -->
-    <section id="work" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);">
+    <section id="work" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);position:relative;isolation:isolate;overflow:hidden;">
+      <div class="light-leak" aria-hidden="true"></div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#ff5a1f;text-transform:uppercase;margin-bottom:22px;">FIG. 03 — Provenance</div>
-      <h2 style="margin:0 0 64px;font-weight:900;font-size:clamp(44px,6.5vw,108px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;">Experience</h2>
+      <h2 style="margin:0 0 64px;font-weight:900;font-size:clamp(44px,6.5vw,108px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;" class="ink-grad">Experience</h2>
       <div style="border-top:1px solid rgba(232,230,225,0.16);">
         <sc-for list="{{ experience }}" as="job" hint-placeholder-count="4">
           <div data-hover style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:5vw;padding:42px 8px;border-bottom:1px solid rgba(232,230,225,0.12);transition:background .4s,padding-left .4s;cursor:default;" style-hover="background:#23242c;padding-left:22px;">
@@ -275,9 +293,10 @@
     </div>
 
     <!-- CONTACT -->
-    <section id="contact" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:150px 6vw 70px;border-top:1px solid rgba(232,230,225,0.12);">
+    <section id="contact" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:150px 6vw 70px;border-top:1px solid rgba(232,230,225,0.12);position:relative;isolation:isolate;overflow:hidden;">
+      <div class="ember-horizon" aria-hidden="true" style="animation-delay:-4s;"></div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#ff5a1f;text-transform:uppercase;margin-bottom:40px;">FIG. 05 — Closing</div>
-      <h2 style="margin:0;font-weight:900;font-size:clamp(44px,9vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;">Let's build<br>something</h2>
+      <h2 style="margin:0;font-weight:900;font-size:clamp(44px,9vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;" class="ink-grad">Let's build<br>something</h2>
       <div style="margin-top:60px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;align-items:flex-end;">
         <div style="display:flex;gap:14px;flex-wrap:wrap;">
           <a data-hover href="mailto:omaralex0422@gmail.com" style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid rgba(232,230,225,0.25);padding:14px 22px;transition:background .3s,color .3s;" style-hover="background:#ff5a1f;color:#101014;">Email →</a>
@@ -299,7 +318,7 @@
       <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.16em;color:#ff5a1f;">{{ detail.num }} / 05</span>
       <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#8d8a84;text-transform:uppercase;border:1px solid rgba(232,230,225,0.18);padding:6px 12px;">{{ detail.status }}</span>
     </div>
-    <h1 style="margin:26px 0 0;font-weight:900;font-size:clamp(44px,8.5vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;text-wrap:balance;">{{ detail.title }}</h1>
+    <h1 style="margin:26px 0 0;font-weight:900;font-size:clamp(44px,8.5vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;text-wrap:balance;" class="ink-grad">{{ detail.title }}</h1>
     <p style="margin:30px 0 0;max-width:680px;font-size:clamp(18px,1.8vw,24px);line-height:1.5;color:#cfccc6;text-wrap:pretty;">{{ detail.overview }}</p>
 
     <sc-if value="{{ detail.web }}" hint-placeholder-val="{{ true }}">
@@ -822,6 +841,9 @@ class Component extends DCLogic {
       const max = h.scrollHeight - h.clientHeight;
       const p = max > 0 ? h.scrollTop / max : 0;
       if (bar) bar.style.transform = "scaleX(" + p + ")";
+      // Projector beam: descends with scroll progress and sways slowly side to side.
+      const pj = document.getElementById("projector");
+      if (pj) { pj.style.setProperty("--py", (16 + p * 68).toFixed(1) + "%"); pj.style.setProperty("--px", (50 + Math.sin(h.scrollTop / 1100) * 24).toFixed(1) + "%"); }
       if (nav) {
         if (h.scrollTop > 36) { nav.style.background = "rgba(26,27,32,0.86)"; nav.style.borderBottomColor = "rgba(232,230,225,0.12)"; }
         else { nav.style.background = "transparent"; nav.style.borderBottomColor = "transparent"; }
@@ -889,13 +911,21 @@ class Component extends DCLogic {
       ov.appendChild(e);
     });
     document.body.appendChild(ov);
+    // Gradient-clipped type doesn't rasterize reliably — flatten it to solid
+    // ink for the photo, then restore.
+    const grads = Array.from(document.querySelectorAll(".ink-grad")).map((el) => {
+      const prev = el.getAttribute("style") || "";
+      el.style.backgroundImage = "none"; el.style.color = "#e9e5dc"; el.style.webkitTextFillColor = "#e9e5dc";
+      return { el: el, prev: prev };
+    });
+    const restore = () => grads.forEach((g) => g.el.setAttribute("style", g.prev));
     const W = window.innerWidth;
     const scale = Math.min(1, 1100 / W);
     return window.html2canvas(document.body, {
       x: window.scrollX, y: window.scrollY, width: W, height: H, scrollX: 0, scrollY: 0,
       windowWidth: W, windowHeight: H, scale: scale, useCORS: true, backgroundColor: "#101014", logging: false,
       ignoreElements: (el) => !!(el.getAttribute && el.hasAttribute("data-no-capture"))
-    }).then((c) => { ov.remove(); return c; }).catch(() => { ov.remove(); return null; });
+    }).then((c) => { ov.remove(); restore(); return c; }).catch(() => { ov.remove(); restore(); return null; });
   }
 
   _dust(canvas, stage, origin, L) {
