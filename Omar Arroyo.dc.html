@@ -245,7 +245,7 @@
           <h2 style="margin:18px 0 0;font-weight:900;font-size:clamp(54px,9.5vw,158px);line-height:0.82;letter-spacing:-0.04em;text-transform:uppercase;">Selected<br>Work</h2>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-start;gap:20px;max-width:340px;">
-          <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.85;letter-spacing:0.06em;color:#56544f;text-transform:uppercase;text-wrap:pretty;">Five plates of software, built in production and set in glass. Drop your own screens into the devices.</p>
+          <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.85;letter-spacing:0.06em;color:#56544f;text-transform:uppercase;text-wrap:pretty;">Five plates of software, built in production and set in glass. Open a plate to enter its room.</p>
           <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;">
             <sc-for list="{{ filters }}" as="flt" hint-placeholder-count="7">
               <button data-hover onClick="{{ flt.onClick }}" style="{{ flt.style }}">{{ flt.label }}</button>
@@ -366,7 +366,11 @@
       </div>
     </div>
 
-    <div class="detail-plate" style="margin-top:56px;background:#e7e5e0;color:#1a1b20;padding:clamp(38px,5vw,68px) clamp(26px,4vw,58px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(34px,5vw,72px);align-items:center;">
+    <!-- EXHIBIT WALL — the device under a spotlight on a concrete wall, with its museum label -->
+    <div class="detail-plate" style="margin-top:56px;position:relative;isolation:isolate;overflow:hidden;background:#121217;border:1px solid rgba(232,230,225,0.14);color:#e9e5dc;padding:clamp(44px,6vw,84px) clamp(26px,4vw,58px) clamp(54px,7vw,96px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(34px,5vw,72px);align-items:center;">
+      <canvas data-graphite="53" data-kind="wall" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.42;z-index:-1;pointer-events:none;"></canvas>
+      <div aria-hidden="true" style="position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(48% 78% at 27% -6%, rgba(255,214,170,0.17), rgba(255,120,60,0.05) 48%, rgba(0,0,0,0) 72%);"></div>
+      <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:32%;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,0.5));"></div>
       <div style="display:flex;justify-content:center;">
         <sc-if value="{{ detail.isMac }}" hint-placeholder-val="{{ true }}">
           <div data-lens style="perspective:1700px;width:100%;max-width:620px;">
@@ -398,16 +402,22 @@
         </sc-if>
       </div>
 
-      <div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#56544f;text-transform:uppercase;border-bottom:1px solid rgba(26,27,32,0.2);padding-bottom:12px;">
+      <!-- wall label -->
+      <div style="border:1px solid rgba(232,230,225,0.2);background:rgba(12,12,16,0.62);backdrop-filter:blur(5px);padding:clamp(22px,2.4vw,32px) clamp(22px,2.6vw,34px);box-shadow:0 40px 60px -40px rgba(0,0,0,0.9);">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;">
+          <span style="color:#ff5a1f;">Plate {{ detail.num }} / 05</span><span style="color:#8d8a84;">{{ detail.status }}</span>
+        </div>
+        <div style="margin-top:16px;font-weight:700;font-size:clamp(20px,1.8vw,26px);letter-spacing:-0.01em;line-height:1.15;">{{ detail.title }}</div>
+        <div style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:#8d8a84;text-transform:uppercase;line-height:1.9;">{{ detail.kind }} · {{ detail.year }}<br><span style="color:#56544f;">Medium —</span> {{ detail.stack }}</div>
+        <div style="margin-top:22px;display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#56544f;text-transform:uppercase;border-top:1px solid rgba(232,230,225,0.14);padding-top:14px;">
           <span>{{ detail.graph.caption }}</span><span style="color:#8a8882;">{{ detail.graph.axis }}</span>
         </div>
         <svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;display:block;margin-top:18px;overflow:visible;">
-          <sc-for list="{{ detail.graph.lines }}" as="l" hint-placeholder-count="0"><line x1="{{ l.x1 }}" y1="{{ l.y1 }}" x2="{{ l.x2 }}" y2="{{ l.y2 }}" stroke="#1a1b20" stroke-width="{{ l.w }}" stroke-opacity="{{ l.o }}" stroke-linecap="round"></line></sc-for>
-          <sc-for list="{{ detail.graph.rects }}" as="r" hint-placeholder-count="0"><rect x="{{ r.x }}" y="{{ r.y }}" width="{{ r.w }}" height="{{ r.h }}" fill="#1a1b20" fill-opacity="{{ r.o }}"></rect></sc-for>
-          <sc-for list="{{ detail.graph.circles }}" as="c" hint-placeholder-count="0"><circle cx="{{ c.x }}" cy="{{ c.y }}" r="{{ c.r }}" fill="#1a1b20" fill-opacity="{{ c.o }}"></circle></sc-for>
+          <sc-for list="{{ detail.graph.lines }}" as="l" hint-placeholder-count="0"><line x1="{{ l.x1 }}" y1="{{ l.y1 }}" x2="{{ l.x2 }}" y2="{{ l.y2 }}" stroke="#e9e5dc" stroke-width="{{ l.w }}" stroke-opacity="{{ l.o }}" stroke-linecap="round"></line></sc-for>
+          <sc-for list="{{ detail.graph.rects }}" as="r" hint-placeholder-count="0"><rect x="{{ r.x }}" y="{{ r.y }}" width="{{ r.w }}" height="{{ r.h }}" fill="#e9e5dc" fill-opacity="{{ r.o }}"></rect></sc-for>
+          <sc-for list="{{ detail.graph.circles }}" as="c" hint-placeholder-count="0"><circle cx="{{ c.x }}" cy="{{ c.y }}" r="{{ c.r }}" fill="#e9e5dc" fill-opacity="{{ c.o }}"></circle></sc-for>
         </svg>
-        <div style="margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#6a6862;text-transform:uppercase;text-wrap:pretty;">Figure derived from the build — structure over precision. Drop a real screen into the device at left.</div>
+        <div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7a7872;text-transform:uppercase;text-wrap:pretty;">Figure derived from the build — structure over precision.</div>
       </div>
     </div>
 
@@ -429,16 +439,19 @@
         <h2 style="margin:0;font-weight:900;font-size:clamp(34px,5vw,72px);line-height:0.85;letter-spacing:-0.04em;text-transform:uppercase;">Gallery</h2>
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#8a8882;text-transform:uppercase;">{{ detail.title }} — Index of plates · Click to enlarge</span>
       </div>
-      <div style="margin-top:30px;border-top:1px solid rgba(232,230,225,0.16);border-left:1px solid rgba(232,230,225,0.16);display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));">
+      <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,540px),1fr));gap:clamp(22px,3vw,40px);">
         <sc-for list="{{ detail.gallery }}" as="cell" hint-placeholder-count="6">
-          <figure data-lens style="margin:0;border-right:1px solid rgba(232,230,225,0.16);border-bottom:1px solid rgba(232,230,225,0.16);">
-            <figcaption style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(232,230,225,0.12);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.22em;color:#8a8882;text-transform:uppercase;">
-              <span>{{ cell.n }}</span>
-              <button data-hover onClick="{{ cell.onView }}" style="appearance:none;cursor:pointer;background:none;border:1px solid rgba(232,230,225,0.28);color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;padding:6px 11px;transition:background .25s,color .25s;" style-hover="background:#ff5a1f;color:#101014;">View ⤢</button>
-            </figcaption>
-            <div style="position:relative;aspect-ratio:4/3;background:#0b0c0f;">
+          <!-- one lit, framed plate on the wall -->
+          <figure data-hover data-lens style="position:relative;isolation:isolate;margin:0;background:#121217;border:1px solid rgba(232,230,225,0.14);padding:clamp(16px,2vw,24px) clamp(16px,2vw,24px) 14px;transition:transform .55s cubic-bezier(.2,.7,.2,1),border-color .4s,box-shadow .55s;box-shadow:0 30px 50px -36px rgba(0,0,0,0.9);" style-hover="transform:translateY(-7px);border-color:rgba(255,90,31,0.55);box-shadow:0 50px 70px -36px rgba(0,0,0,1),0 0 60px -20px rgba(255,90,31,0.25);">
+            <div aria-hidden="true" style="position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(72% 62% at 50% -12%, rgba(255,214,170,0.15), rgba(255,120,60,0.04) 46%, rgba(0,0,0,0) 72%);"></div>
+            <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:38%;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,0.45));"></div>
+            <div style="position:relative;aspect-ratio:4/3;background:#0b0c0f;border:1px solid rgba(232,230,225,0.1);box-shadow:inset 0 0 0 1px rgba(0,0,0,0.6),0 24px 40px -28px rgba(0,0,0,0.95);">
               <image-slot id="{{ cell.id }}" src="images/{{ cell.id }}" fit="contain" shape="rect" res="2800" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ cell.ph }}"></image-slot>
             </div>
+            <figcaption style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;">
+              <span style="display:flex;gap:14px;align-items:baseline;min-width:0;"><span style="color:#ff5a1f;">Plate {{ cell.n }}</span><span style="color:#6a6862;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ detail.title }}</span></span>
+              <button data-hover onClick="{{ cell.onView }}" style="appearance:none;cursor:pointer;background:none;border:1px solid rgba(232,230,225,0.28);color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;padding:6px 11px;transition:background .25s,color .25s;flex:none;" style-hover="background:#ff5a1f;color:#101014;">View ⤢</button>
+            </figcaption>
           </figure>
         </sc-for>
       </div>
@@ -840,7 +853,9 @@ class Component extends DCLogic {
       c.width = Math.round(W * DPR); c.height = Math.round(H * DPR);
       const ctx = c.getContext("2d"); ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
       const seed = parseInt(c.getAttribute("data-graphite"), 10) || 1;
-      if (c.getAttribute("data-kind") === "hero") this._graphiteScene(ctx, W, H, { seed: seed, baseline: H * 0.93, maxH: H * 0.6, count: Math.max(5, Math.round(W / 175)), ground: true, birds: 30, ember: true, figures: 3, figH: H * 0.05, figInk: "236,232,224", figGlow: true, figAlpha: 0.85 });
+      const kind = c.getAttribute("data-kind");
+      if (kind === "wall") { this._graphiteScene(ctx, W, H, { seed: seed, baseline: H - 8, maxH: H * 0.5, scale: 0.5, count: Math.max(6, Math.round(W / 110)), ember: true, figures: 1, figH: 22, figInk: "236,232,224", figGlow: true, figAlpha: 0.8 }); return; }
+      if (kind === "hero") this._graphiteScene(ctx, W, H, { seed: seed, baseline: H * 0.93, maxH: H * 0.6, count: Math.max(5, Math.round(W / 175)), ground: true, birds: 30, ember: true, figures: 3, figH: H * 0.05, figInk: "236,232,224", figGlow: true, figAlpha: 0.85 });
       else this._graphiteScene(ctx, W, H, { seed: seed, baseline: H - 14, maxH: H * 0.92, scale: 0.62, count: Math.max(5, Math.round(W / 150)), birds: 12, ember: true, figures: 2, figH: H * 0.16, figInk: "236,232,224", figGlow: true, figAlpha: 0.85 });
     });
   }
