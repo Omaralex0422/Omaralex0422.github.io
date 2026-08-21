@@ -38,7 +38,7 @@
   @keyframes leakDrift { 0%,100%{transform:translate(0,0) rotate(0deg);opacity:.8;} 50%{transform:translate(-6%,5%) rotate(-4deg);opacity:1;} }
   .ink-grad { background-image:linear-gradient(180deg,#f1eee6 0%,#e9e5dc 42%,#8a877f 100%); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent; }
   .ink-grad > span { -webkit-text-fill-color:#ff5a1f; color:#ff5a1f; }
-  .ember-horizon { position:absolute; left:-10%; right:-10%; bottom:-8%; height:58%; z-index:-1; pointer-events:none; transform-origin:50% 100%; background:radial-gradient(60% 55% at 50% 100%, rgba(255,90,31,.36), rgba(210,62,10,.14) 38%, rgba(210,62,10,0) 72%); animation:emberBreathe 9s ease-in-out infinite; }
+  .ember-horizon { position:absolute; left:-10%; right:-10%; bottom:-8%; height:58%; z-index:-1; pointer-events:none; transform-origin:50% 100%; background:radial-gradient(60% 55% at 50% 100%, rgba(255,90,31,.36), rgba(210,62,10,.14) 38%, rgba(210,62,10,0) 72%); animation:emberBreathe 18s ease-in-out infinite; }
   /* Mobile pass — the museum on a phone. Inline styles need !important here. */
   @media (max-width:760px){
     #nav{padding:0 5vw !important;height:58px !important;}
@@ -64,7 +64,7 @@
   @media (max-width:520px){
     .nav-links button:nth-child(2),.nav-links button:nth-child(4){display:none !important;}
   }
-  .light-leak { position:absolute; top:-22%; right:-12%; width:58%; height:76%; z-index:-1; pointer-events:none; background:linear-gradient(215deg, rgba(255,90,31,.17) 0%, rgba(255,90,31,.06) 34%, rgba(255,90,31,0) 60%); filter:blur(28px); animation:leakDrift 19s ease-in-out infinite; }
+  .light-leak { position:absolute; top:-22%; right:-12%; width:58%; height:76%; z-index:-1; pointer-events:none; background:linear-gradient(215deg, rgba(255,90,31,.17) 0%, rgba(255,90,31,.06) 34%, rgba(255,90,31,0) 60%); filter:blur(28px); animation:leakDrift 38s ease-in-out infinite; }
 </style>
 <script src="./image-slot.js"></script>
 </helmet>
@@ -80,11 +80,11 @@
   <!-- Concrete: large soft blotches of procedural noise. -->
   <div data-no-capture style="position:fixed;inset:0;z-index:995;pointer-events:none;opacity:0.05;mix-blend-mode:overlay;background-size:520px 520px;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22520%22 height=%22520%22><filter id=%22c%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.012%22 numOctaves=%223%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23c)%22/></svg>');"></div>
   <!-- Drifting haze: orange-tinged fog + cold light, slowly moving like a projector beam through dust. -->
-  <div data-no-capture style="position:fixed;inset:-30%;z-index:996;pointer-events:none;opacity:0.6;background:radial-gradient(38% 34% at 28% 30%, rgba(255,90,31,0.06), transparent 60%),radial-gradient(46% 42% at 76% 72%, rgba(150,160,180,0.06), transparent 62%);animation:hazeDrift 26s ease-in-out infinite;"></div>
+  <div data-no-capture style="position:fixed;inset:-30%;z-index:996;pointer-events:none;opacity:0.6;background:radial-gradient(38% 34% at 28% 30%, rgba(255,90,31,0.06), transparent 60%),radial-gradient(46% 42% at 76% 72%, rgba(150,160,180,0.06), transparent 62%);animation:hazeDrift 52s ease-in-out infinite;"></div>
   <!-- Projector: a soft beam that tracks your scroll down the page, like a torch through the museum. -->
   <div id="projector" data-no-capture style="position:fixed;inset:0;z-index:994;pointer-events:none;mix-blend-mode:screen;--px:50%;--py:22%;background:radial-gradient(44% 40% at var(--px) var(--py), rgba(255,232,205,0.085), rgba(255,150,80,0.035) 42%, rgba(0,0,0,0) 70%);will-change:background;"></div>
   <!-- Vignette: the lonely dark museum edges, with a faint film flicker. -->
-  <div data-no-capture style="position:fixed;inset:0;z-index:997;pointer-events:none;background:radial-gradient(125% 125% at 50% 40%, transparent 50%, rgba(0,0,0,0.6) 100%);animation:filmFlicker 6s steps(1) infinite;"></div>
+  <div data-no-capture style="position:fixed;inset:0;z-index:997;pointer-events:none;background:radial-gradient(125% 125% at 50% 40%, transparent 50%, rgba(0,0,0,0.6) 100%);animation:filmFlicker 12s steps(1) infinite;"></div>
 
   <sc-if value="{{ showGrain }}" hint-placeholder-val="{{ true }}">
     <div data-no-capture style="position:fixed;inset:-50%;z-index:998;pointer-events:none;opacity:0.08;mix-blend-mode:screen;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');animation:grainShift 1.2s steps(3) infinite;"></div>
@@ -113,7 +113,7 @@
 
       <!-- ember horizon: the city burning just past the skyline -->
       <div class="ember-horizon" aria-hidden="true"></div>
-      <div class="light-leak" aria-hidden="true" style="animation-delay:-7s;"></div>
+      <div class="light-leak" aria-hidden="true" style="animation-delay:-14s;"></div>
 
       <!-- graphite backdrop: procedural hatched brutalist skyline, drifts with the cursor -->
       <canvas id="heroGraphite" data-graphite="7" data-kind="hero" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.68;pointer-events:none;z-index:0;will-change:transform;-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);"></canvas>
@@ -146,7 +146,7 @@
       <!-- bottom: giant bleeding word -->
       <div style="position:relative;z-index:1;">
         <div style="display:flex;justify-content:flex-end;align-items:flex-end;padding-bottom:6px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;text-align:right;line-height:1.9;">Scroll <span style="display:inline-block;margin-left:6px;animation:drift 2.4s ease-in-out infinite;">↓</span><br>Est. 2022 — Richibucto, NB</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;text-align:right;line-height:1.9;">Scroll <span style="display:inline-block;margin-left:6px;animation:drift 4.8s ease-in-out infinite;">↓</span><br>Est. 2022 — Richibucto, NB</div>
         </div>
         <div aria-hidden="true" style="font-family:'Archivo',sans-serif;font-weight:900;font-size:17vw;line-height:0.72;letter-spacing:-0.05em;color:#e8e6e1;margin:0 0 -0.135em -0.015em;white-space:nowrap;" class="ink-grad">developer<span style="color:#ff5a1f;">.</span></div>
       </div>
@@ -323,7 +323,7 @@
 
     <!-- CONTACT -->
     <section id="contact" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:150px 6vw 70px;border-top:1px solid rgba(232,230,225,0.12);position:relative;isolation:isolate;overflow:hidden;">
-      <div class="ember-horizon" aria-hidden="true" style="animation-delay:-4s;"></div>
+      <div class="ember-horizon" aria-hidden="true" style="animation-delay:-8s;"></div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#ff5a1f;text-transform:uppercase;margin-bottom:40px;">FIG. 05 — Closing</div>
       <h2 style="margin:0;font-weight:900;font-size:clamp(44px,9vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;" class="ink-grad">Let's build<br>something</h2>
       <div style="margin-top:60px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;align-items:flex-end;">
@@ -709,8 +709,10 @@ class Component extends DCLogic {
       if (cv.clientWidth !== W || cv.clientHeight !== H) resize();
       frame++;
       // slow fade wash — old marks sink back into the wall over ~15s
-      if (frame % 14 === 0) { ctx.fillStyle = "rgba(16,16,20,0.014)"; ctx.fillRect(0, 0, W, H); }
-      for (let k = 0; k < 4; k++) pens.forEach(step);
+      // Half-rate drawing: two steps a frame, and the fade wash halved to
+      // match so the wall settles at the same density, just slower.
+      if (frame % 28 === 0) { ctx.fillStyle = "rgba(16,16,20,0.014)"; ctx.fillRect(0, 0, W, H); }
+      for (let k = 0; k < 2; k++) pens.forEach(step);
       if (!reduced && document.visibilityState !== "hidden") requestAnimationFrame(tick);
       else if (!reduced) setTimeout(tick, 500);
     };
@@ -963,7 +965,7 @@ class Component extends DCLogic {
     const build = () => {
       W = cv.clientWidth; H = cv.clientHeight; if (!W || !H) return;
       cv.width = W; cv.height = H;
-      layers = [[0.46, 0.035, 9, 0.06], [0.6, 0.055, 17, 0.12], [0.8, 0.08, 30, 0.2]].map((L, i) => {
+      layers = [[0.46, 0.035, 4.5, 0.06], [0.6, 0.055, 8.5, 0.12], [0.8, 0.08, 15, 0.2]].map((L, i) => {
         const lw = W * 2, lh = Math.round(H * L[0]);
         const oc = document.createElement("canvas"); oc.width = lw; oc.height = lh;
         self._graphiteScene(oc.getContext("2d"), lw, lh, { seed: 101 + i * 17, mode: "silhouette", ink: "26,27,32", alpha: L[1], baseline: lh, maxH: lh * 0.95, count: Math.round(lw / (170 - i * 30)), scale: 0.7 + i * 0.25 });
@@ -980,7 +982,7 @@ class Component extends DCLogic {
         const depth = i / Math.max(1, n - 1);
         const h = H * (0.045 + depth * 0.055);
         const spr = document.createElement("canvas"); spr.width = Math.ceil(h * 0.7); spr.height = Math.ceil(h * 1.15);
-        figs.push({ id: i + 1, depth: depth, h: h, x: Math.random() * W, dir: Math.random() < 0.5 ? -1 : 1, speed: (6 + depth * 14) * (0.8 + Math.random() * 0.4), idle: i === 1, phase: Math.random(), spr: spr, last: -1 });
+        figs.push({ id: i + 1, depth: depth, h: h, x: Math.random() * W, dir: Math.random() < 0.5 ? -1 : 1, speed: (3 + depth * 7) * (0.8 + Math.random() * 0.4), idle: i === 1, phase: Math.random(), spr: spr, last: -1 });
       }
     };
     const frame = (now) => {
@@ -990,13 +992,13 @@ class Component extends DCLogic {
       const t = (now - t0) / 1000;
       ctx.clearRect(0, 0, W, H);
       const sr = sec.getBoundingClientRect();
-      const bx = ((t * 22) % (W + 600)) - 300;
+      const bx = ((t * 11) % (W + 600)) - 300;
       const g = ctx.createLinearGradient(bx - 260, 0, bx + 260, 0);
       g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(0.5, "rgba(255,255,255,0.35)"); g.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       layers.forEach((L) => {
         const off = (t * L.spd) % L.lw;
-        const y = H - L.lh + 40 + sr.top * L.par + Math.sin(t * 1.7 + L.spd) * 1.2;
+        const y = H - L.lh + 40 + sr.top * L.par + Math.sin(t * 0.85 + L.spd) * 1.2;
         ctx.drawImage(L.oc, -off, y); ctx.drawImage(L.oc, L.lw - off, y);
       });
       // Walkers — stop-motion at 12fps.
@@ -1004,7 +1006,7 @@ class Component extends DCLogic {
       figs.forEach((f) => {
         if (fi !== f.last) {
           f.last = fi;
-          if (!f.idle) { f.x += f.dir * f.speed / 12; f.phase = (f.phase + 0.085) % 1; }
+          if (!f.idle) { f.x += f.dir * f.speed / 12; f.phase = (f.phase + 0.0425) % 1; }
           if (f.x < -f.h) { f.x = W + f.h * 0.5; } else if (f.x > W + f.h) { f.x = -f.h * 0.5; }
           const sc = f.spr.getContext("2d"); sc.clearRect(0, 0, f.spr.width, f.spr.height);
           if (f.dir < 0) { sc.save(); sc.translate(f.spr.width, 0); sc.scale(-1, 1); }
@@ -1016,9 +1018,9 @@ class Component extends DCLogic {
         ctx.drawImage(f.spr, f.x - f.spr.width / 2, gy - f.spr.height + 2);
       });
       motes.forEach((m) => {
-        m.x += m.s * 0.008; m.y += Math.sin(t * 0.6 + m.seed) * 0.15 - 0.05;
+        m.x += m.s * 0.004; m.y += Math.sin(t * 0.3 + m.seed) * 0.075 - 0.025;
         if (m.x > W + 5) m.x = -5; if (m.y < -5) m.y = H + 5;
-        ctx.globalAlpha = m.a * (0.6 + 0.4 * Math.sin(t * 2 + m.seed)); ctx.fillStyle = "#1a1b20";
+        ctx.globalAlpha = m.a * (0.6 + 0.4 * Math.sin(t * 1 + m.seed)); ctx.fillStyle = "#1a1b20";
         ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, 6.283); ctx.fill();
       });
       ctx.globalAlpha = 1;
