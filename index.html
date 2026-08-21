@@ -71,6 +71,9 @@
     <!-- HERO — EDITORIAL COVER -->
     <section id="intro" data-screen-label="Hero" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:104px 6vw 0;box-sizing:border-box;overflow:hidden;background:radial-gradient(120% 70% at 80% -8%, rgba(255,255,255,0.07), rgba(26,27,32,0) 56%);">
 
+      <!-- graphite backdrop: procedural hatched brutalist skyline, drifts with the cursor -->
+      <canvas id="heroGraphite" data-graphite="7" data-kind="hero" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.5;pointer-events:none;z-index:0;will-change:transform;"></canvas>
+
       <!-- top meta bar -->
       <div style="display:flex;justify-content:space-between;align-items:flex-start;z-index:2;">
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#8d8a84;text-transform:uppercase;line-height:1.9;"><span style="color:#ff5a1f;">FIG. 00</span> — Cover<br><span style="color:#56544f;">Omar Arroyo / A dystopian museum of work</span></div>
@@ -123,6 +126,12 @@
       </div>
     </section>
 
+    <!-- GRAPHITE PLATE I -->
+    <div aria-hidden="true" style="position:relative;height:180px;overflow:hidden;border-top:1px solid rgba(232,230,225,0.12);">
+      <canvas data-graphite="11" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.6;pointer-events:none;"></canvas>
+      <div style="position:absolute;left:6vw;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;color:#56544f;text-transform:uppercase;">Plate — Graphite / I</div>
+    </div>
+
     <!-- SKILLS -->
     <section id="skills" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);">
       <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:20px;margin-bottom:70px;">
@@ -152,6 +161,12 @@
       </div>
     </section>
 
+    <!-- GRAPHITE PLATE II -->
+    <div aria-hidden="true" style="position:relative;height:180px;overflow:hidden;border-top:1px solid rgba(232,230,225,0.12);">
+      <canvas data-graphite="23" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.6;pointer-events:none;"></canvas>
+      <div style="position:absolute;left:6vw;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;color:#56544f;text-transform:uppercase;">Plate — Graphite / II</div>
+    </div>
+
     <!-- EXPERIENCE -->
     <section id="work" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:130px 6vw;border-top:1px solid rgba(232,230,225,0.12);">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#ff5a1f;text-transform:uppercase;margin-bottom:22px;">FIG. 03 — Provenance</div>
@@ -175,8 +190,12 @@
     </section>
 
     <!-- PROJECTS — LIGHT GALLERY -->
-    <section id="projects" data-screen-label="Selected Work" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);background:#e7e5e0;color:#1a1b20;padding:128px 6vw 40px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:40px;">
+    <section id="projects" data-screen-label="Selected Work" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);background:#e7e5e0;color:#1a1b20;padding:128px 6vw 40px;position:relative;overflow:hidden;">
+      <!-- ambient hall: slow parallax graphite silhouettes + drifting projector light + dust motes -->
+      <div aria-hidden="true" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;">
+        <canvas id="exhibitAmbient" style="position:sticky;top:0;display:block;width:100%;height:100vh;"></canvas>
+      </div>
+      <div style="position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:40px;">
         <div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#ff5a1f;text-transform:uppercase;">FIG. 04 — Exhibition</div>
           <h2 style="margin:18px 0 0;font-weight:900;font-size:clamp(54px,9.5vw,158px);line-height:0.82;letter-spacing:-0.04em;text-transform:uppercase;">Selected<br>Work</h2>
@@ -191,7 +210,7 @@
         </div>
       </div>
 
-      <div style="margin-top:70px;border-top:1px solid rgba(26,27,32,0.2);">
+      <div style="position:relative;z-index:1;margin-top:70px;border-top:1px solid rgba(26,27,32,0.2);">
         <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
           <article style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,6vw,92px);align-items:center;padding:clamp(60px,8vw,112px) 0;border-bottom:1px solid rgba(26,27,32,0.16);">
 
@@ -249,6 +268,12 @@
       </div>
     </section>
 
+    <!-- GRAPHITE PLATE III -->
+    <div aria-hidden="true" style="position:relative;height:180px;overflow:hidden;border-top:1px solid rgba(232,230,225,0.12);">
+      <canvas data-graphite="37" data-kind="divider" style="position:absolute;inset:0;width:100%;height:100%;opacity:.6;pointer-events:none;"></canvas>
+      <div style="position:absolute;left:6vw;bottom:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.28em;color:#56544f;text-transform:uppercase;">Plate — Graphite / III</div>
+    </div>
+
     <!-- CONTACT -->
     <section id="contact" data-reveal style="transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1);padding:150px 6vw 70px;border-top:1px solid rgba(232,230,225,0.12);">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:#ff5a1f;text-transform:uppercase;margin-bottom:40px;">FIG. 05 — Closing</div>
@@ -304,6 +329,7 @@
               <div style="background:#0b0c0f;border:1px solid rgba(26,27,32,0.35);border-radius:16px 16px 4px 4px;padding:10px 10px 0;box-shadow:0 50px 70px -34px rgba(0,0,0,0.55);">
                 <div style="position:relative;border-radius:8px;overflow:hidden;background:#15161b;aspect-ratio:16/10;">
                   <image-slot id="shot-{{ detail.id }}" src="images/shot-{{ detail.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ detail.shotLabel }}"></image-slot>
+                  <canvas data-sketch aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;"></canvas>
                 </div>
               </div>
               <div style="position:relative;height:14px;width:110%;margin-left:-5%;background:linear-gradient(180deg,#cbc9c3,#a7a59f);border-radius:0 0 13px 13px;">
@@ -318,6 +344,7 @@
               <div style="background:#0b0c0f;border-radius:50px;padding:12px;box-shadow:0 50px 70px -34px rgba(0,0,0,0.55);">
                 <div style="position:relative;border-radius:39px;overflow:hidden;background:#15161b;aspect-ratio:9/19.5;">
                   <image-slot id="shot-{{ detail.id }}" src="images/shot-{{ detail.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ detail.shotLabel }}"></image-slot>
+                  <canvas data-sketch aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;"></canvas>
                   <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);width:33%;height:22px;background:#0b0c0f;border-radius:14px;z-index:3;"></div>
                 </div>
               </div>
@@ -408,6 +435,7 @@ class Component extends DCLogic {
     this.setupScroll();
     this.setupHeroEvents();
     this.initHero();
+    this.initGraphite(); this.initAmbient(); this.initSketch();
     this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
     document.addEventListener("keydown", this._esc);
     // Transport ignition point — combustion spreads outward from the last click.
@@ -415,7 +443,7 @@ class Component extends DCLogic {
     document.addEventListener("pointerdown", this._onPt, true);
   }
   componentWillUnmount() { if (this._esc) document.removeEventListener("keydown", this._esc); if (this._onPt) document.removeEventListener("pointerdown", this._onPt, true); if (this._warpRAF) cancelAnimationFrame(this._warpRAF); }
-  componentDidUpdate() { this.setupReveal(); this.initHero(); }
+  componentDidUpdate() { this.setupReveal(); this.initHero(); this.initGraphite(); this.initAmbient(); this.initSketch(); }
 
   setupHeroEvents() {
     if (this._heroEvt) return;
@@ -435,6 +463,7 @@ class Component extends DCLogic {
     window.addEventListener("resize", () => {
       clearTimeout(self._heroRT);
       self._heroRT = setTimeout(() => {
+        self.initGraphite();
         const c = document.getElementById("heroName");
         if (c) { c.__init = false; if (self._heroRAF) { cancelAnimationFrame(self._heroRAF); self._heroRAF = null; } self.initHero(); }
       }, 180);
@@ -531,6 +560,9 @@ class Component extends DCLogic {
         self._tiltCur.ry += (self._tiltTarget.ry - self._tiltCur.ry) * 0.08;
         tilt.style.transform = "rotateX(" + self._tiltCur.rx.toFixed(2) + "deg) rotateY(" + self._tiltCur.ry.toFixed(2) + "deg)";
       }
+      // Graphite skyline drifts against the cursor — a slow parallax behind the name.
+      const gph = document.getElementById("heroGraphite");
+      if (gph) gph.style.transform = "translate(" + (-self._tiltCur.ry * 1.6).toFixed(1) + "px," + (self._tiltCur.rx * 1.3).toFixed(1) + "px) scale(1.03)";
       self._heroRAF = requestAnimationFrame(frame);
     };
 
@@ -540,6 +572,199 @@ class Component extends DCLogic {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { if (document.getElementById("heroName") === cv) { build(); if (reduced) drawStatic(); } });
     }
+  }
+
+  // ── Graphite: procedural hatched-line brutalist skylines ────────────────
+  // Everything below is drawn from a seed — towers as stacked cantilevered
+  // blocks, lit/shadow faces in single and cross hatch, window dashes, a
+  // ploughed-field ground and a scatter of birds. Strokes are wobbled so
+  // they read as pencil, not vector.
+  _rng(seed) {
+    let a = (seed * 1013904223 + 12345) >>> 0;
+    return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+
+  _graphiteScene(ctx, W, H, o) {
+    const R = this._rng(o.seed || 1);
+    const ink = o.ink || "207,201,191";
+    const sil = o.mode === "silhouette";
+    const line = (x1, y1, x2, y2, a, w) => {
+      ctx.beginPath(); ctx.lineWidth = w || 1; ctx.strokeStyle = "rgba(" + ink + "," + a.toFixed(3) + ")";
+      const n = Math.max(2, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / 16));
+      for (let i = 0; i <= n; i++) { const t = i / n; const x = x1 + (x2 - x1) * t + (R() - 0.5) * 1.1, y = y1 + (y2 - y1) * t + (R() - 0.5) * 1.1; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
+      ctx.stroke();
+    };
+    const hatch = (x, y, w, h, ang, gap, a, lw) => {
+      ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+      const d = Math.hypot(w, h), cx = x + w / 2, cy = y + h / 2, ca = Math.cos(ang), sa = Math.sin(ang);
+      for (let s = -d / 2; s <= d / 2; s += gap * (0.8 + R() * 0.4)) { const px = cx - sa * s, py = cy + ca * s; line(px - ca * d, py - sa * d, px + ca * d, py + sa * d, a * (0.6 + R() * 0.7), lw); }
+      ctx.restore();
+    };
+    const base = o.baseline != null ? o.baseline : H;
+    const count = o.count || Math.max(3, Math.round(W / 240));
+    const sc = o.scale || 1;
+    for (let i = 0; i < count; i++) {
+      const tw = (44 + R() * 96) * sc;
+      let tx = (i + 0.5) * (W / count) - tw / 2 + (R() - 0.5) * 70;
+      tx = Math.max(12, Math.min(W - tw - 12, tx));
+      const th = (0.35 + R() * 0.62) * (o.maxH || H);
+      let y = base, bw = tw, bx = tx;
+      const blocks = 3 + Math.floor(R() * 5);
+      for (let b = 0; b < blocks && y > base - th + 8; b++) {
+        const bh = Math.min(y - (base - th), (26 + R() * 84) * sc);
+        const nb = Math.max(10 * sc, bw * (0.62 + R() * 0.8)), nx = bx + (bw - nb) / 2 + (R() - 0.5) * bw * 0.55;
+        y -= bh;
+        if (sil) {
+          ctx.fillStyle = "rgba(" + ink + "," + (o.alpha || 0.1) + ")"; ctx.fillRect(nx, y, nb, bh);
+          if (R() < 0.5) hatch(nx, y, nb, bh, 1.1, 7, (o.alpha || 0.1) * 1.6, 0.7);
+        } else {
+          const split = nb * (0.5 + R() * 0.25);
+          hatch(nx, y, split, bh, 1.12, 4.4 * sc, 0.2, 0.8);
+          hatch(nx + split, y, nb - split, bh, 1.12, 3 * sc, 0.3, 0.8);
+          hatch(nx + split, y, nb - split, bh, 2.25, 4.6 * sc, 0.22, 0.7);
+          line(nx, y, nx + nb, y, 0.6, 1); line(nx, y, nx, y + bh, 0.5, 1); line(nx + nb, y, nx + nb, y + bh, 0.55, 1);
+          const rows = Math.floor(bh / (9 * sc)), cols = Math.floor(nb / (8 * sc));
+          for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+            if (R() < 0.4) continue;
+            const wx = nx + 4 * sc + c * 8 * sc, wy = y + 5 * sc + r * 9 * sc;
+            ctx.fillStyle = R() < 0.14 ? "rgba(" + ink + ",0.7)" : "rgba(16,16,20,0.9)";
+            ctx.fillRect(wx, wy, 4 * sc, 2.5 * sc);
+            if (o.ember && R() < 0.004) { ctx.fillStyle = "#ff5a1f"; ctx.shadowColor = "#ff5a1f"; ctx.shadowBlur = 8; ctx.fillRect(wx, wy, 4 * sc, 2.5 * sc); ctx.shadowBlur = 0; }
+          }
+        }
+        bx = nx; bw = nb;
+      }
+    }
+    if (o.ground) {
+      for (let k = 0; k < 16; k++) { const yy = base + Math.pow(k / 16, 1.5) * (H - base); line(-10, yy + (R() - 0.5) * 4, W + 10, yy + (R() - 0.5) * 4, 0.12 + R() * 0.2, 1); }
+    }
+    if (o.birds) {
+      for (let k = 0; k < o.birds; k++) {
+        const x = R() * W, y = R() * base * 0.7, s = 2 + R() * 4;
+        ctx.beginPath(); ctx.lineWidth = 1; ctx.strokeStyle = "rgba(" + ink + "," + (0.45 + R() * 0.45) + ")";
+        ctx.moveTo(x - s, y - s * 0.4); ctx.quadraticCurveTo(x, y + s * 0.35, x + s, y - s * 0.4); ctx.stroke();
+      }
+    }
+  }
+
+  // Static graphite canvases (hero backdrop + divider plates). Redrawn only
+  // when their CSS size changes.
+  initGraphite() {
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    document.querySelectorAll("canvas[data-graphite]").forEach((c) => {
+      const W = c.clientWidth, H = c.clientHeight;
+      if (!W || !H || (c.__g && c.__gw === W && c.__gh === H)) return;
+      c.__g = true; c.__gw = W; c.__gh = H;
+      c.width = Math.round(W * DPR); c.height = Math.round(H * DPR);
+      const ctx = c.getContext("2d"); ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
+      const seed = parseInt(c.getAttribute("data-graphite"), 10) || 1;
+      if (c.getAttribute("data-kind") === "hero") this._graphiteScene(ctx, W, H, { seed: seed, baseline: H * 0.86, maxH: H * 0.72, count: Math.max(4, Math.round(W / 210)), ground: true, birds: 34, ember: true });
+      else this._graphiteScene(ctx, W, H, { seed: seed, baseline: H - 14, maxH: H * 0.92, scale: 0.62, count: Math.max(5, Math.round(W / 150)), birds: 12, ember: true });
+    });
+  }
+
+  // Ambient hall behind the Exhibition: three depths of graphite silhouette
+  // drifting at different speeds with scroll parallax and film-gate weave,
+  // a projector beam sweeping the wall, and dust motes. Runs only while the
+  // section is on screen.
+  initAmbient() {
+    const cv = document.getElementById("exhibitAmbient");
+    if (!cv || cv.__amb) return;
+    cv.__amb = true;
+    const self = this, sec = cv.closest("section"), ctx = cv.getContext("2d");
+    let W = 0, H = 0, layers = [], motes = [], visible = false;
+    const t0 = performance.now();
+    const build = () => {
+      W = cv.clientWidth; H = cv.clientHeight; if (!W || !H) return;
+      cv.width = W; cv.height = H;
+      layers = [[0.46, 0.05, 9, 0.06], [0.6, 0.08, 17, 0.12], [0.8, 0.12, 30, 0.2]].map((L, i) => {
+        const lw = W * 2, lh = Math.round(H * L[0]);
+        const oc = document.createElement("canvas"); oc.width = lw; oc.height = lh;
+        self._graphiteScene(oc.getContext("2d"), lw, lh, { seed: 101 + i * 17, mode: "silhouette", ink: "26,27,32", alpha: L[1], baseline: lh, maxH: lh * 0.95, count: Math.round(lw / (170 - i * 30)), scale: 0.7 + i * 0.25 });
+        return { oc: oc, lw: lw, lh: lh, spd: L[2], par: L[3] };
+      });
+      motes = [];
+      for (let i = 0; i < 70; i++) motes.push({ x: Math.random() * W, y: Math.random() * H, r: 0.5 + Math.random() * 1.6, s: 4 + Math.random() * 12, a: 0.08 + Math.random() * 0.2, seed: Math.random() * 6.283 });
+    };
+    const frame = (now) => {
+      if (!cv.isConnected) { io.disconnect(); return; }
+      if (!visible) return;
+      if (cv.clientWidth !== W || cv.clientHeight !== H) build();
+      const t = (now - t0) / 1000;
+      ctx.clearRect(0, 0, W, H);
+      const sr = sec.getBoundingClientRect();
+      const bx = ((t * 22) % (W + 600)) - 300;
+      const g = ctx.createLinearGradient(bx - 260, 0, bx + 260, 0);
+      g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(0.5, "rgba(255,255,255,0.35)"); g.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      layers.forEach((L) => {
+        const off = (t * L.spd) % L.lw;
+        const y = H - L.lh + 40 + sr.top * L.par + Math.sin(t * 1.7 + L.spd) * 1.2;
+        ctx.drawImage(L.oc, -off, y); ctx.drawImage(L.oc, L.lw - off, y);
+      });
+      motes.forEach((m) => {
+        m.x += m.s * 0.008; m.y += Math.sin(t * 0.6 + m.seed) * 0.15 - 0.05;
+        if (m.x > W + 5) m.x = -5; if (m.y < -5) m.y = H + 5;
+        ctx.globalAlpha = m.a * (0.6 + 0.4 * Math.sin(t * 2 + m.seed)); ctx.fillStyle = "#1a1b20";
+        ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, 6.283); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    };
+    const io = new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible) requestAnimationFrame(frame); }, { threshold: 0 });
+    io.observe(sec);
+    build();
+  }
+
+  // Reveal-from-graphite: a detail-page device screen sketches itself in —
+  // three hatch passes then the frame lines, drawn stroke by stroke — and
+  // the drawing dissolves to reveal the real screenshot beneath. Waits for
+  // the dust transport to settle before it starts.
+  initSketch() {
+    const self = this;
+    document.querySelectorAll("canvas[data-sketch]").forEach((c) => {
+      if (c.__sk) return; c.__sk = true;
+      const DPR = Math.min(window.devicePixelRatio || 1, 2);
+      const W = c.clientWidth || 300, H = c.clientHeight || 200;
+      c.width = Math.round(W * DPR); c.height = Math.round(H * DPR);
+      const ctx = c.getContext("2d"); ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.fillStyle = "#15161b"; ctx.fillRect(0, 0, W, H);
+      const R = self._rng(W * 7 + H);
+      const strokes = [], d = Math.hypot(W, H), cx = W / 2, cy = H / 2;
+      const pass = (ang, gap, a, lw) => {
+        const ca = Math.cos(ang), sa = Math.sin(ang);
+        for (let s = -d / 2; s <= d / 2; s += gap * (0.8 + R() * 0.4)) {
+          const px = cx - sa * s, py = cy + ca * s, L = d * (0.35 + R() * 0.65), o = (R() - 0.5) * d * 0.3;
+          strokes.push({ x1: px - ca * (L / 2) + ca * o, y1: py - sa * (L / 2) + sa * o, x2: px + ca * (L / 2) + ca * o, y2: py + sa * (L / 2) + sa * o, a: a, lw: lw });
+        }
+      };
+      pass(1.1, 7, 0.28, 0.8); pass(2.3, 11, 0.2, 0.7); pass(0.25, 15, 0.14, 0.7);
+      [[4, 4, W - 8, H - 8], [W * 0.08, H * 0.1, W * 0.84, H * 0.78]].forEach((r) => {
+        const x = r[0], y = r[1], w = r[2], h = r[3];
+        strokes.push({ x1: x, y1: y, x2: x + w, y2: y, a: 0.6, lw: 1 }, { x1: x + w, y1: y, x2: x + w, y2: y + h, a: 0.6, lw: 1 }, { x1: x + w, y1: y + h, x2: x, y2: y + h, a: 0.6, lw: 1 }, { x1: x, y1: y + h, x2: x, y2: y, a: 0.6, lw: 1 });
+      });
+      const N = strokes.length, DUR = 1500; let drawn = 0;
+      const draw = (s) => {
+        ctx.beginPath(); ctx.lineWidth = s.lw; ctx.strokeStyle = "rgba(207,201,191," + s.a + ")";
+        const n = Math.max(2, Math.ceil(Math.hypot(s.x2 - s.x1, s.y2 - s.y1) / 14));
+        for (let i = 0; i <= n; i++) { const t = i / n; const x = s.x1 + (s.x2 - s.x1) * t + (R() - 0.5) * 1.2, y = s.y1 + (s.y2 - s.y1) * t + (R() - 0.5) * 1.2; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
+        ctx.stroke();
+      };
+      const start = () => {
+        if (!c.isConnected) return;
+        if (self._warping) { setTimeout(start, 120); return; }
+        const t0 = performance.now();
+        const tick = (now) => {
+          if (!c.isConnected) return;
+          const p = Math.min(1, (now - t0) / DUR), e = 1 - Math.pow(1 - p, 2.2), target = Math.floor(N * e);
+          while (drawn < target) draw(strokes[drawn++]);
+          if (p < 1) requestAnimationFrame(tick);
+          else { c.style.transition = "opacity .9s ease"; c.style.opacity = "0"; setTimeout(() => { c.style.display = "none"; }, 950); }
+        };
+        requestAnimationFrame(tick);
+      };
+      setTimeout(start, 60);
+    });
   }
 
   _show(el) { el.style.opacity = "1"; el.style.transform = "none"; if (this._io) this._io.unobserve(el); }
