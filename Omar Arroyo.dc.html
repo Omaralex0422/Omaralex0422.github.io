@@ -71,6 +71,9 @@
 
 <div id="appRoot" style="min-height:100vh;background-color:#101014;position:relative;overflow-x:hidden;">
 
+  <!-- Scribble wall: graphite pens drawing abstract nonsense behind the dark rooms, forever. -->
+  <canvas id="scribble" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
   <div id="scrollbar" data-no-capture style="position:fixed;top:0;left:0;height:2px;width:100%;background:#ff5a1f;transform:scaleX(0);transform-origin:0 50%;z-index:1000;will-change:transform;box-shadow:0 0 10px rgba(255,90,31,0.7);"></div>
 
   <!-- ===== DYSTOPIAN-MUSEUM ATMOSPHERE (procedural, no external assets) ===== -->
@@ -103,7 +106,7 @@
 
   <!-- ============ HOME ============ -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-  <main data-screen-label="Home" style="display:block;">
+  <main data-screen-label="Home" style="display:block;position:relative;z-index:1;">
 
     <!-- HERO — EDITORIAL COVER -->
     <section id="intro" data-screen-label="Hero" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:104px 6vw 0;box-sizing:border-box;overflow:hidden;isolation:isolate;background:radial-gradient(120% 70% at 80% -8%, rgba(255,255,255,0.07), rgba(26,27,32,0) 56%);">
@@ -337,7 +340,7 @@
 
   <!-- ============ DETAIL ============ -->
   <sc-if value="{{ detail }}" hint-placeholder-val="{{ true }}">
-  <main data-screen-label="Project Detail" style="padding:120px 6vw 70px;min-height:100vh;box-sizing:border-box;">
+  <main data-screen-label="Project Detail" style="padding:120px 6vw 70px;min-height:100vh;box-sizing:border-box;position:relative;z-index:1;">
     <button data-hover onClick="{{ close }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;padding:0;margin-bottom:60px;transition:color .3s;" style-hover="color:#ff5a1f;">← Back to index</button>
 
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;">
@@ -493,7 +496,7 @@ class Component extends DCLogic {
     this.setupScroll();
     this.setupHeroEvents();
     this.initHero();
-    this.initGraphite(); this.initAmbient(); this.initSketch();
+    this.initGraphite(); this.initAmbient(); this.initSketch(); this.initScribble();
     this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
     document.addEventListener("keydown", this._esc);
     // Transport ignition point — combustion spreads outward from the last click.
@@ -630,6 +633,92 @@ class Component extends DCLogic {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { if (document.getElementById("heroName") === cv) { build(); if (reduced) drawStatic(); } });
     }
+  }
+
+  // ── Scribble wall ───────────────────────────────────────────────────────
+  // A few graphite "pens" draw on a fixed layer behind the dark rooms. Each
+  // pen wanders on a noise-driven heading and drifts between three moods —
+  // wander, spiral, hatch (tight back-and-forth) — lifting now and then to
+  // land somewhere new. Pressure breathes, grain flicks off the line, and a
+  // slow fade wash keeps the wall from ever clogging. Nothing is a shape.
+  initScribble() {
+    const cv = document.getElementById("scribble");
+    if (!cv || cv.__sc) return;
+    cv.__sc = true;
+    const self = this, ctx = cv.getContext("2d");
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W = 0, H = 0, DPR = 1, pens = [], frame = 0;
+    const ink = "207,201,191";
+    const mkPen = (i) => ({
+      x: Math.random() * W, y: Math.random() * H, h: Math.random() * 6.283,
+      s1: Math.random() * 100, s2: Math.random() * 100, s3: Math.random() * 100,
+      speed: 1.5 + Math.random() * 1.6, base: i % 3 === 1 ? 4.2 : 1.4 + Math.random() * 1.1,
+      alpha: i % 3 === 1 ? 0.16 : 0.34 + Math.random() * 0.14,
+      mode: "wander", modeT: 0, turn: 0, lift: 0, t: Math.random() * 1000, hatchDir: 1
+    });
+    const resize = () => {
+      DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+      W = window.innerWidth; H = window.innerHeight;
+      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      pens = [0, 1, 2, 3, 4, 5, 6].map(mkPen);
+    };
+    const liftTo = (p) => { p.x = Math.random() * W; p.y = Math.random() * H; p.h = Math.random() * 6.283; p.lift = 26; };
+    const step = (p) => {
+      p.t += 0.016;
+      // mood changes
+      if (--p.modeT <= 0) {
+        const r = Math.random();
+        p.mode = r < 0.5 ? "wander" : r < 0.78 ? "spiral" : "hatch";
+        p.modeT = p.mode === "spiral" ? 90 + Math.random() * 160 : p.mode === "hatch" ? 40 + Math.random() * 70 : 120 + Math.random() * 260;
+        p.turn = (Math.random() < 0.5 ? -1 : 1) * (0.09 + Math.random() * 0.1);
+        if (Math.random() < 0.3) liftTo(p);
+      }
+      const n = Math.sin(p.t * 0.9 + p.s1) + Math.sin(p.t * 1.7 + p.s2) * 0.6 + Math.sin(p.t * 3.1 + p.s3) * 0.3;
+      let dx, dy;
+      if (p.mode === "spiral") {
+        // a coil that loosens as it goes — tight at the centre, opening outward
+        p.turn *= 0.994; p.h += p.turn + n * 0.015;
+        dx = Math.cos(p.h) * p.speed * 1.2; dy = Math.sin(p.h) * p.speed * 1.2;
+      }
+      else if (p.mode === "hatch") {
+        // strokes back and forth across a drifting axis
+        if (p.modeT % 9 === 0) p.hatchDir = -p.hatchDir;
+        const ax = p.h + 1.35 * p.hatchDir + n * 0.12;
+        dx = Math.cos(ax) * p.speed * 2.6 + Math.cos(p.h) * 0.7; dy = Math.sin(ax) * p.speed * 2.6 + Math.sin(p.h) * 0.7;
+      }
+      else { p.h += n * 0.05; dx = Math.cos(p.h) * p.speed; dy = Math.sin(p.h) * p.speed; }
+      // steer back toward the wall when drifting off it
+      if (p.x < -20 || p.x > W + 20 || p.y < -20 || p.y > H + 20) { p.h = Math.atan2(H / 2 - p.y, W / 2 - p.x) + (Math.random() - 0.5) * 0.8; }
+      const nx = p.x + dx, ny = p.y + dy;
+      const press = 0.55 + 0.45 * Math.sin(p.t * 2.3 + p.s2);
+      const a = p.alpha * press * (p.lift > 0 ? (1 - p.lift / 26) : 1);
+      if (p.lift > 0) p.lift--;
+      ctx.strokeStyle = "rgba(" + ink + "," + a.toFixed(3) + ")";
+      ctx.lineWidth = p.base * (0.6 + 0.5 * press);
+      ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(nx, ny); ctx.stroke();
+      // graphite grain flicking off the line
+      if (Math.random() < 0.45) { ctx.fillStyle = "rgba(" + ink + "," + (a * 0.9).toFixed(3) + ")"; ctx.fillRect(nx + (Math.random() - 0.5) * 8, ny + (Math.random() - 0.5) * 8, 1 + Math.random(), 1 + Math.random()); }
+      // now and then the side of the charcoal drags — a wide, faint smear
+      if (Math.random() < 0.012) { ctx.strokeStyle = "rgba(" + ink + "," + (a * 0.22).toFixed(3) + ")"; ctx.lineWidth = 10 + Math.random() * 16; ctx.beginPath(); ctx.moveTo(nx, ny); ctx.lineTo(nx + dx * (8 + Math.random() * 14), ny + dy * (8 + Math.random() * 14)); ctx.stroke(); }
+      p.x = nx; p.y = ny;
+    };
+    const tick = () => {
+      if (!cv.isConnected) return;
+      if (cv.clientWidth !== W || cv.clientHeight !== H) resize();
+      frame++;
+      // slow fade wash — old marks sink back into the wall over ~15s
+      if (frame % 14 === 0) { ctx.fillStyle = "rgba(16,16,20,0.014)"; ctx.fillRect(0, 0, W, H); }
+      for (let k = 0; k < 4; k++) pens.forEach(step);
+      if (!reduced && document.visibilityState !== "hidden") requestAnimationFrame(tick);
+      else if (!reduced) setTimeout(tick, 500);
+    };
+    resize();
+    // Pre-warm so the wall already carries marks on first paint.
+    for (let k = 0; k < 6000; k++) { if (k % 56 === 0) { ctx.fillStyle = "rgba(16,16,20,0.014)"; ctx.fillRect(0, 0, W, H); } pens.forEach(step); }
+    if (reduced) return;
+    requestAnimationFrame(tick);
   }
 
   // ── Sound: procedural room tone, projector hum, ash on transport ────────
