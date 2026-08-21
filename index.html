@@ -35,7 +35,7 @@
 <script src="./image-slot.js"></script>
 </helmet>
 
-<div id="appRoot" style="min-height:100vh;background-color:#101014;background-image:repeating-linear-gradient(0deg,rgba(236,235,230,0.02) 0 1px,transparent 1px 6px);position:relative;overflow-x:hidden;">
+<div id="appRoot" style="min-height:100vh;background-color:#101014;position:relative;overflow-x:hidden;">
 
   <div id="scrollbar" data-no-capture style="position:fixed;top:0;left:0;height:2px;width:100%;background:#ff5a1f;transform:scaleX(0);transform-origin:0 50%;z-index:1000;will-change:transform;box-shadow:0 0 10px rgba(255,90,31,0.7);"></div>
 
@@ -72,7 +72,7 @@
     <section id="intro" data-screen-label="Hero" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:104px 6vw 0;box-sizing:border-box;overflow:hidden;background:radial-gradient(120% 70% at 80% -8%, rgba(255,255,255,0.07), rgba(26,27,32,0) 56%);">
 
       <!-- graphite backdrop: procedural hatched brutalist skyline, drifts with the cursor -->
-      <canvas id="heroGraphite" data-graphite="7" data-kind="hero" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.5;pointer-events:none;z-index:0;will-change:transform;"></canvas>
+      <canvas id="heroGraphite" data-graphite="7" data-kind="hero" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none;z-index:0;will-change:transform;-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);mask-image:linear-gradient(to top,rgba(0,0,0,1) 0%,rgba(0,0,0,.85) 38%,rgba(0,0,0,0) 78%);"></canvas>
 
       <!-- top meta bar -->
       <div style="display:flex;justify-content:space-between;align-items:flex-start;z-index:2;">
@@ -619,6 +619,10 @@ class Component extends DCLogic {
           if (R() < 0.5) hatch(nx, y, nb, bh, 1.1, 7, (o.alpha || 0.1) * 1.6, 0.7);
         } else {
           const split = nb * (0.5 + R() * 0.25);
+          // Tonal graphite underlay — a soft smudge before the hatch so the
+          // faces read as shaded pencil, not wireframe.
+          ctx.fillStyle = "rgba(" + ink + ",0.045)"; ctx.fillRect(nx, y, split, bh);
+          ctx.fillStyle = "rgba(" + ink + ",0.1)"; ctx.fillRect(nx + split, y, nb - split, bh);
           hatch(nx, y, split, bh, 1.12, 4.4 * sc, 0.2, 0.8);
           hatch(nx + split, y, nb - split, bh, 1.12, 3 * sc, 0.3, 0.8);
           hatch(nx + split, y, nb - split, bh, 2.25, 4.6 * sc, 0.22, 0.7);
@@ -627,9 +631,11 @@ class Component extends DCLogic {
           for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
             if (R() < 0.4) continue;
             const wx = nx + 4 * sc + c * 8 * sc, wy = y + 5 * sc + r * 9 * sc;
-            ctx.fillStyle = R() < 0.14 ? "rgba(" + ink + ",0.7)" : "rgba(16,16,20,0.9)";
-            ctx.fillRect(wx, wy, 4 * sc, 2.5 * sc);
-            if (o.ember && R() < 0.004) { ctx.fillStyle = "#ff5a1f"; ctx.shadowColor = "#ff5a1f"; ctx.shadowBlur = 8; ctx.fillRect(wx, wy, 4 * sc, 2.5 * sc); ctx.shadowBlur = 0; }
+            // Windows as short pencil dashes: mostly dark graphite, a few
+            // lit with a soft smudge — never bright "LED" dots.
+            ctx.fillStyle = R() < 0.07 ? "rgba(" + ink + ",0.42)" : "rgba(16,16,20,0.85)";
+            ctx.fillRect(wx, wy, 5 * sc, 1.6 * sc);
+            if (o.ember && R() < 0.003) { ctx.fillStyle = "rgba(255,90,31,0.9)"; ctx.shadowColor = "#ff5a1f"; ctx.shadowBlur = 7; ctx.fillRect(wx, wy, 5 * sc, 1.6 * sc); ctx.shadowBlur = 0; }
           }
         }
         bx = nx; bw = nb;
@@ -658,7 +664,7 @@ class Component extends DCLogic {
       c.width = Math.round(W * DPR); c.height = Math.round(H * DPR);
       const ctx = c.getContext("2d"); ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
       const seed = parseInt(c.getAttribute("data-graphite"), 10) || 1;
-      if (c.getAttribute("data-kind") === "hero") this._graphiteScene(ctx, W, H, { seed: seed, baseline: H * 0.86, maxH: H * 0.72, count: Math.max(4, Math.round(W / 210)), ground: true, birds: 34, ember: true });
+      if (c.getAttribute("data-kind") === "hero") this._graphiteScene(ctx, W, H, { seed: seed, baseline: H * 0.93, maxH: H * 0.6, count: Math.max(5, Math.round(W / 175)), ground: true, birds: 30, ember: true });
       else this._graphiteScene(ctx, W, H, { seed: seed, baseline: H - 14, maxH: H * 0.92, scale: 0.62, count: Math.max(5, Math.round(W / 150)), birds: 12, ember: true });
     });
   }
