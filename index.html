@@ -660,7 +660,7 @@ class Component extends DCLogic {
       for (let i = 0; i < n; i++) {
         const z = 0.25 + Math.pow(Math.random(), 1.6) * 0.75;   // most dots far, a few near
         dots.push({ x: Math.random() * W, y: Math.random() * H, z: z, r: 0.45 + z * 1.05, a: 0.07 + z * 0.28,
-          ang: Math.random() * 6.283, orb: 3 + Math.random() * 9, spin: (Math.random() < 0.5 ? -1 : 1) * (0.25 + Math.random() * 0.45),
+          ang: Math.random() * 6.283, orb: 2 + Math.random() * 5, spin: (Math.random() < 0.5 ? -1 : 1) * (0.06 + Math.random() * 0.12),
           cx: 0, cy: 0, s: Math.random() * 6.283 });
       }
     };
@@ -675,20 +675,20 @@ class Component extends DCLogic {
       const t = now * 0.001;
       const pt = self._pointer && self._pointer.x > -9000 ? self._pointer : null;
       if (pt) {
-        ease.x += ((pt.x - W / 2) / W - ease.x) * 0.04; ease.y += ((pt.y - H / 2) / H - ease.y) * 0.04;
-        if (lastPt) { vel.x += ((pt.x - lastPt.x) - vel.x) * 0.12; vel.y += ((pt.y - lastPt.y) - vel.y) * 0.12; }
+        ease.x += ((pt.x - W / 2) / W - ease.x) * 0.018; ease.y += ((pt.y - H / 2) / H - ease.y) * 0.018;
+        if (lastPt) { vel.x += ((pt.x - lastPt.x) - vel.x) * 0.06; vel.y += ((pt.y - lastPt.y) - vel.y) * 0.06; }
         lastPt = { x: pt.x, y: pt.y };
       } else { vel.x *= 0.9; vel.y *= 0.9; }
-      const speed = Math.min(1, Math.hypot(vel.x, vel.y) / 28);
+      const speed = Math.min(1, Math.hypot(vel.x, vel.y) / 40);
       const scroll = window.scrollY || 0;
       ctx.clearRect(0, 0, W, H);
       ctx.fillStyle = "#e9e5dc";
       for (let i = 0; i < dots.length; i++) {
         const d = dots[i];
         // slow swirling current, stronger for near dots
-        const fx = Math.sin(d.y * 0.0045 + t * 0.13) + Math.cos(d.x * 0.003 - t * 0.09);
-        const fy = Math.cos(d.x * 0.0042 + t * 0.11) - Math.sin(d.y * 0.0031 + t * 0.07);
-        d.x += fx * 6 * d.z * dt; d.y += (fy * 6 * d.z - 2.5 * d.z) * dt;
+        const fx = Math.sin(d.y * 0.0045 + t * 0.05) + Math.cos(d.x * 0.003 - t * 0.035);
+        const fy = Math.cos(d.x * 0.0042 + t * 0.045) - Math.sin(d.y * 0.0031 + t * 0.03);
+        d.x += fx * 2 * d.z * dt; d.y += (fy * 2 * d.z - 0.8 * d.z) * dt;
         if (d.x < -10) d.x += W + 20; else if (d.x > W + 10) d.x -= W + 20;
         if (d.y < -10) d.y += H + 20; else if (d.y > H + 10) d.y -= H + 20;
         // its own twirl
@@ -706,12 +706,12 @@ class Component extends DCLogic {
             const dist = Math.sqrt(dist2) || 1, f = (1 - dist / R); const g = f * f;
             const nx = dx / dist, ny = dy / dist;
             const side = (nx * vel.y - ny * vel.x) >= 0 ? 1 : -1;       // which way round
-            tx = (-ny * side * 9 * speed + vel.x * 0.18) * g * d.z;
-            ty = ( nx * side * 9 * speed + vel.y * 0.18) * g * d.z;
+            tx = (-ny * side * 5 * speed + vel.x * 0.1) * g * d.z;
+            ty = ( nx * side * 5 * speed + vel.y * 0.1) * g * d.z;
           }
         }
-        d.cx += (tx - d.cx) * 0.08; d.cy += (ty - d.cy) * 0.08;
-        ctx.globalAlpha = d.a * (0.78 + 0.22 * Math.sin(t * 0.4 + d.s));
+        d.cx += (tx - d.cx) * 0.035; d.cy += (ty - d.cy) * 0.035;
+        ctx.globalAlpha = d.a * (0.8 + 0.2 * Math.sin(t * 0.15 + d.s));
         ctx.beginPath(); ctx.arc(bx + d.cx, by + d.cy, d.r, 0, 6.283); ctx.fill();
       }
       ctx.globalAlpha = 1;
@@ -739,7 +739,7 @@ class Component extends DCLogic {
     const mkPen = (i) => ({
       x: Math.random() * W, y: Math.random() * H, h: Math.random() * 6.283,
       s1: Math.random() * 100, s2: Math.random() * 100, s3: Math.random() * 100,
-      speed: 1.5 + Math.random() * 1.6, base: i % 3 === 1 ? 4.2 : 1.4 + Math.random() * 1.1,
+      speed: 0.7 + Math.random() * 0.8, base: i % 3 === 1 ? 4.2 : 1.4 + Math.random() * 1.1,
       alpha: i % 3 === 1 ? 0.16 : 0.34 + Math.random() * 0.14,
       mode: "wander", modeT: 0, turn: 0, lift: 0, t: Math.random() * 1000, hatchDir: 1
     });
@@ -748,7 +748,7 @@ class Component extends DCLogic {
       W = window.innerWidth; H = window.innerHeight;
       cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      pens = [0, 1, 2, 3, 4, 5, 6].map(mkPen);
+      pens = [0, 1, 2, 3, 4].map(mkPen);
     };
     const liftTo = (p) => { p.x = Math.random() * W; p.y = Math.random() * H; p.h = Math.random() * 6.283; p.lift = 26; };
     const step = (p) => {
@@ -799,8 +799,8 @@ class Component extends DCLogic {
       // Half-rate drawing: two steps a frame, and the fade wash halved to
       // match so the wall settles at the same density, just slower.
       // The wash erases rather than paints, so the paper beneath stays visible.
-      if (frame % 28 === 0) { ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = "rgba(0,0,0,0.014)"; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = "source-over"; }
-      for (let k = 0; k < 2; k++) pens.forEach(step);
+      if (frame % 40 === 0) { ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = "rgba(0,0,0,0.014)"; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = "source-over"; }
+      pens.forEach(step);
       if (!reduced && document.visibilityState !== "hidden") requestAnimationFrame(tick);
       else if (!reduced) setTimeout(tick, 500);
     };
