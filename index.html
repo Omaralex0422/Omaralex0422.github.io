@@ -77,6 +77,73 @@
   html[data-room] ::-webkit-scrollbar-thumb { background:var(--room-accent,#547e75); }
   html[data-room="mtm"], html[data-room="mtm"] body, html[data-room="mtm"] #appRoot { background:#f6f7f5 !important; }
 
+  html[data-room="mmg"], html[data-room="mmg"] body, html[data-room="mmg"] #appRoot { background:#F5F0E8 !important; }
+
+  /* ── ROOM: MMG OPERATIONS ───────────────────────────────────────────
+     The app's own editorial language, lifted from DesignSystem.swift:
+     warm paper, two typefaces (New York serif — ui-serif resolves to it
+     on Apple platforms — and SF Pro), one oxblood accent used sparingly,
+     and the Eyebrow with its 18pt rule. Radii stay restrained. */
+  .mmg { --paper:#F5F0E8; --paperEl:#FAF7F0; --paperSunk:#ECE5D5;
+    --ink:#1F1B15; --ink2:#6B5F4E; --inkMuted:#968874;
+    --oxblood:#7B2D26; --divider:#E5DECE; --ornament:#C9B896;
+    background:var(--paper); color:var(--ink);
+    font-family:-apple-system,'SF Pro Text',system-ui,'Helvetica Neue',sans-serif;
+    font-size:14px; line-height:1.62; letter-spacing:.1px; }
+  .mmg .serif { font-family:ui-serif,'New York','Iowan Old Style',Georgia,serif; }
+  .mmg h1,.mmg h2,.mmg h3 { font-family:ui-serif,'New York','Iowan Old Style',Georgia,serif;
+    font-weight:500; margin:0; }
+  .mmg h1 { font-size:clamp(42px,6.6vw,90px); line-height:1.02; letter-spacing:-1.5px; font-weight:400; }
+  .mmg h2 { font-size:clamp(26px,3.2vw,38px); line-height:1.14; letter-spacing:-.5px; }
+  .mmg h3 { font-size:18px; line-height:1.3; letter-spacing:-.3px; }
+  /* the Eyebrow — 11pt, 1.8 tracking, with an 18pt oxblood rule 4pt below */
+  .mmg .eb { font-size:11px; font-weight:500; letter-spacing:1.8px; text-transform:uppercase;
+    color:var(--ink2); }
+  .mmg .eb::after { content:""; display:block; width:18px; height:1px; background:var(--oxblood); margin-top:4px; }
+  .mmg .eb.clear::after { background:transparent; }
+  .mmg .bodyserif { font-family:ui-serif,'New York',Georgia,serif; font-size:15px; line-height:1.72; }
+  .mmg .cap { font-size:11px; letter-spacing:.2px; color:var(--inkMuted); }
+  .mmg .num { font-family:ui-serif,'New York',Georgia,serif; font-variant-numeric:tabular-nums;
+    font-size:28px; font-style:italic; font-weight:400; color:var(--ink); }
+  .mmg .rule { height:1px; background:var(--divider); border:0; margin:0; }
+  .mmg .orn { width:18px; height:1px; background:var(--oxblood); border:0; margin:0; }
+  .mmg .wrap { max-width:1180px; margin:0 auto; padding:0 clamp(24px,4vw,48px); }
+  .mmg .measure { max-width:720px; }
+  .mmg .btn { display:inline-flex; align-items:center; gap:9px; border-radius:8px; padding:13px 24px;
+    font-size:14px; font-weight:500; letter-spacing:.3px; text-decoration:none; cursor:pointer;
+    border:1px solid transparent; transition:transform .22s cubic-bezier(.2,.7,.2,1), background .22s; }
+  .mmg .btn:active { transform:scale(.97); }
+  .mmg .btn-primary { background:var(--oxblood); color:#FAF7F0; }
+  .mmg .btn-secondary { background:var(--paperEl); border-color:var(--oxblood); color:var(--oxblood); }
+  .mmg .btn-ghost { background:none; color:var(--ink2); padding-left:0; padding-right:0; }
+  /* sidebar-style index rows, with the oxblood selection rail */
+  .mmg .destrow { position:relative; display:grid; grid-template-columns:34px 150px minmax(0,1fr);
+    gap:18px; align-items:baseline; padding:17px 0 17px 16px; border-bottom:1px solid var(--divider);
+    transition:background .3s ease; }
+  .mmg .destrow::before { content:""; position:absolute; left:0; top:0; bottom:0; width:0;
+    background:var(--oxblood); transition:width .28s cubic-bezier(.2,.7,.2,1); }
+  .mmg .destrow:hover::before { width:3px; }
+  .mmg .destrow:hover { background:rgba(250,247,240,.7); }
+  .mmg .destrow .idx { font-family:ui-serif,'New York',Georgia,serif; font-size:12px; color:var(--inkMuted); font-variant-numeric:tabular-nums; }
+  .mmg .destrow .nm { font-size:11px; font-weight:500; letter-spacing:1.8px; text-transform:uppercase; }
+  .mmg .destrow .ds { font-size:13.5px; color:var(--ink2); }
+  .mmg .pill { display:inline-block; border-radius:999px; padding:4px 11px; font-size:11px;
+    font-weight:500; letter-spacing:1.8px; text-transform:uppercase; }
+  .mmg .card { background:var(--paperEl); border:1px solid var(--divider); border-radius:4px; padding:22px 24px; }
+  .mmg .night { background:#1A1612; color:#F0EAE0; }
+  .mmg .night .eb { color:#A89B85; }
+  .mmg .night .eb::after { background:#B85C4F; }
+  .mmg .night h2, .mmg .night h3 { color:#F0EAE0; }
+  .mmg .night .cap { color:#7A6F5E; }
+  .mmg .night .rule { background:#3A332A; }
+  @keyframes mmgIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  .mmg [data-mmg-in] { animation:mmgIn .28s ease-out both; }
+  @media (max-width:760px){
+    .mmg .m-stack { grid-template-columns:1fr !important; }
+    .mmg .destrow { grid-template-columns:28px minmax(0,1fr); gap:6px 12px; }
+    .mmg .destrow .ds { grid-column:2; }
+  }
+
   /* ── ROOM: A MIND TO MIND — Denis Hachey ────────────────────────────
      His own Squarespace language: soft off-white ground, warm dark ink,
      Playfair Display at regular weight, Almarai for reading, sage pills. */
@@ -390,6 +457,170 @@
   <!-- ============ DETAIL ============ -->
   <sc-if value="{{ detail }}" hint-placeholder-val="{{ true }}">
   <main data-screen-label="Project Detail" style="--pa:{{ detail.accent }};padding:120px 6vw 70px;min-height:100vh;box-sizing:border-box;position:relative;z-index:1;">
+    <!-- ══ ROOM: MMG OPERATIONS ══ the app's own editorial language ══ -->
+    <sc-if value="{{ detail.isMMG }}" hint-placeholder-val="{{ false }}">
+    <div class="mmg" style="margin:-120px -6vw -70px;">
+
+      <!-- masthead -->
+      <header style="border-bottom:1px solid var(--divider);background:rgba(245,240,232,.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:20;">
+        <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:20px;height:60px;">
+          <div class="serif" style="font-weight:500;font-size:13px;letter-spacing:3px;">MMG&#8194;&#183;&#8194;OPERATIONS</div>
+          <button class="btn btn-ghost" data-hover onClick="{{ close }}" style="font-size:11px;letter-spacing:1.8px;text-transform:uppercase;">← Omar Arroyo</button>
+        </div>
+      </header>
+
+      <!-- nameplate -->
+      <section class="wrap" style="padding:clamp(54px,7vw,96px) clamp(24px,4vw,48px) clamp(34px,4vw,56px);">
+        <div class="m-stack" style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.9fr);gap:clamp(32px,5vw,70px);align-items:center;">
+          <div>
+            <div class="eb">Native macOS &amp; iOS — 2024 →</div>
+            <h1 style="margin-top:26px;">MMG<br>Operations</h1>
+            <p class="bodyserif" style="margin:28px 0 0;max-width:54ch;color:var(--ink2);">An instrument, not a product. Two marine companies ran on scattered inboxes, spreadsheets and memory — this is the single surface that holds all of it, built to be lived in eight hours a day.</p>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:34px;">
+              <span class="pill" style="background:rgba(123,45,38,.13);color:var(--oxblood);">In Production</span>
+              <span class="pill" style="background:rgba(107,95,78,.12);color:var(--ink2);">Swift 6 · SwiftUI</span>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:center;">
+            <canvas data-spiral width="400" height="400" aria-hidden="true" style="width:min(100%,340px);height:auto;"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- editorial stats -->
+      <section class="wrap" style="padding-bottom:clamp(40px,5vw,64px);">
+        <hr class="rule">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:28px;padding-top:28px;">
+          <sc-for list="{{ detail.stats }}" as="st" hint-placeholder-count="4">
+            <div>
+              <div class="eb clear" style="color:var(--inkMuted);">{{ st.l }}</div>
+              <div class="num" style="margin-top:8px;">{{ st.v }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- the index -->
+      <section class="wrap" style="padding:clamp(46px,6vw,80px) clamp(24px,4vw,48px);">
+        <div class="eb">The index</div>
+        <h2 style="margin-top:18px;">Ten rooms on the Mac.</h2>
+        <p class="bodyserif measure" style="margin:20px 0 34px;color:var(--ink2);">A fixed sidebar, small caps, tracked out. The selection affordance is a three-point oxblood rail flush to the left edge — it slides into view rather than snapping.</p>
+        <div style="border-top:1px solid var(--divider);">
+          <sc-for list="{{ detail.dests }}" as="d" hint-placeholder-count="10">
+            <div class="destrow" data-hover>
+              <div class="idx">{{ d.i }}</div>
+              <div class="nm">{{ d.n }}</div>
+              <div class="ds">{{ d.d }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- the spiral, explained -->
+      <section class="night" style="padding:clamp(56px,7vw,100px) 0;">
+        <div class="wrap m-stack" style="display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center;">
+          <div style="display:flex;justify-content:center;">
+            <canvas data-spiral data-night width="400" height="400" aria-hidden="true" style="width:min(100%,320px);height:auto;"></canvas>
+          </div>
+          <div>
+            <div class="eb">The loader</div>
+            <h2 style="margin-top:18px;">571 dots that never move.</h2>
+            <p class="bodyserif" style="margin:20px 0 0;color:#A89B85;max-width:52ch;">A phyllotaxis spiral on the golden angle. Nothing travels — instead a soft oxblood breath materialises at the centre, spirals outward along the Fibonacci path, and dissolves at the rim before the next breath begins. It reads as <em>the app is taking its time</em>, not <em>the app is working hard</em>.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:22px;margin-top:32px;">
+              <div><div class="eb clear" style="color:#7A6F5E;">Dots</div><div class="num" style="color:#F0EAE0;margin-top:6px;">571</div></div>
+              <div><div class="eb clear" style="color:#7A6F5E;">Golden angle</div><div class="num" style="color:#F0EAE0;margin-top:6px;">137.5°</div></div>
+              <div><div class="eb clear" style="color:#7A6F5E;">Breath</div><div class="num" style="color:#F0EAE0;margin-top:6px;">8s</div></div>
+              <div><div class="eb clear" style="color:#7A6F5E;">Lit at once</div><div class="num" style="color:#F0EAE0;margin-top:6px;">6%</div></div>
+            </div>
+            <p class="cap" style="margin-top:26px;color:#7A6F5E;">It only appears after a 400ms delay, so a cached briefing never flashes a spinner.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- design language -->
+      <section class="wrap" style="padding:clamp(56px,7vw,96px) clamp(24px,4vw,48px);">
+        <div class="eb">The language</div>
+        <h2 style="margin-top:18px;">Paper and ink.</h2>
+        <p class="bodyserif measure" style="margin:20px 0 44px;color:var(--ink2);">Two typefaces, no more. One accent, used sparingly — ornaments, the selection rail, the primary button, the live-crew ring; never body text, never a fill larger than a button. The dark mode stays warm: the ambition is <em>aged paper at night</em>, never the cool blue-grey the system would pick for us.</p>
+
+        <div class="m-stack" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(30px,4vw,60px);">
+          <div>
+            <div class="eb clear" style="color:var(--inkMuted);">Palette</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:12px;margin-top:16px;">
+              <sc-for list="{{ detail.brand.palette }}" as="c" hint-placeholder-count="8">
+                <div>
+                  <div style="height:70px;background:{{ c.h }};border:1px solid var(--divider);border-radius:4px;"></div>
+                  <div style="margin-top:8px;font-size:11px;letter-spacing:.2px;">{{ c.h }}</div>
+                  <div class="cap">{{ c.n }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div class="eb clear" style="color:var(--inkMuted);">Typefaces</div>
+            <div style="margin-top:16px;border-top:1px solid var(--divider);padding-top:20px;">
+              <div class="serif" style="font-size:clamp(38px,4.4vw,58px);line-height:1;letter-spacing:-1.5px;">New York</div>
+              <div class="cap" style="margin-top:8px;">Display, titles and numerals — italic for editorial numbers</div>
+            </div>
+            <div style="margin-top:26px;border-top:1px solid var(--divider);padding-top:20px;">
+              <div style="font-size:clamp(30px,3.4vw,44px);line-height:1.05;font-weight:500;letter-spacing:-.6px;">SF Pro</div>
+              <div class="cap" style="margin-top:8px;">Interface and body — 14pt, the working size</div>
+            </div>
+            <div class="card" style="margin-top:26px;">
+              <div class="eb">The eyebrow</div>
+              <p class="cap" style="margin:12px 0 0;">Eleven point, uppercase, 1.8 tracking, with an eighteen-point oxblood rule four points below. The secret weapon of the design language — it appears above nearly every section in the app, and above every section on this page.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="rule">
+
+      <!-- field -->
+      <section class="wrap" style="padding:clamp(56px,7vw,96px) clamp(24px,4vw,48px);">
+        <div class="eb">The companion</div>
+        <h2 style="margin-top:18px;">MMG Field.</h2>
+        <p class="bodyserif measure" style="margin:20px 0 36px;color:var(--ink2);">The same business on a phone, read at arm's length, in sun, with gloves on — so every size goes up a point or two. The tab bar changes with your role. On iOS the accent spends oxblood rather than system blue, so the field app stays recognisably part of the same company.</p>
+        <div class="m-stack" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px;">
+          <sc-for list="{{ detail.field }}" as="f" hint-placeholder-count="2">
+            <div class="card">
+              <div class="eb">{{ f.r }}</div>
+              <h3 style="margin-top:14px;">{{ f.t }}</h3>
+              <p style="margin:12px 0 0;font-size:13.5px;color:var(--ink2);">{{ f.d }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- under the hood -->
+      <section style="background:var(--paperSunk);padding:clamp(56px,7vw,96px) 0;">
+        <div class="wrap">
+          <div class="eb">Under the hood</div>
+          <h2 style="margin-top:18px;">What it is wired to.</h2>
+          <div style="border-top:1px solid var(--ornament);margin-top:32px;">
+            <sc-for list="{{ detail.integ }}" as="g" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:20px;padding:16px 0;border-bottom:1px solid var(--divider);align-items:baseline;">
+                <div style="font-size:11px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;">{{ g.n }}</div>
+                <div style="font-size:13.5px;color:var(--ink2);">{{ g.d }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <p class="cap" style="margin-top:26px;max-width:60ch;">⌘K opens the palette — or double-tap the space bar. The briefing takes eight to fifteen seconds cold, three to five once the prompt cache is warm, and is held for thirty minutes. Overtime splits at forty-four hours, the New Brunswick threshold.</p>
+        </div>
+      </section>
+
+      <footer class="night" style="padding:clamp(56px,7vw,96px) 0;">
+        <div class="wrap" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:28px;">
+          <div>
+            <div class="serif" style="font-size:13px;letter-spacing:3px;color:#A89B85;">MMG&#8194;&#183;&#8194;OPERATIONS</div>
+            <h2 style="margin-top:16px;font-size:clamp(26px,3.4vw,44px);">Built in production,<br>not in theory.</h2>
+          </div>
+          <button class="btn btn-secondary" data-hover onClick="{{ close }}" style="background:transparent;border-color:#B85C4F;color:#B85C4F;">← Back to the index</button>
+        </div>
+      </footer>
+    </div>
+    </sc-if>
+
     <!-- ══ ROOM: A MIND TO MIND ══ his own language, not the museum's ══ -->
     <sc-if value="{{ detail.isMTM }}" hint-placeholder-val="{{ false }}">
     <div class="mtm" style="margin:-120px -6vw -70px;">
@@ -770,7 +1001,7 @@ class Component extends DCLogic {
     this.setupScroll();
     this.setupHeroEvents();
     this.initHero();
-    this.setRoom(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser();
+    this.setRoom(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser(); this.initSpiral();
     this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
     document.addEventListener("keydown", this._esc);
     // Transport ignition point — combustion spreads outward from the last click.
@@ -778,7 +1009,7 @@ class Component extends DCLogic {
     document.addEventListener("pointerdown", this._onPt, true);
   }
   componentWillUnmount() { document.documentElement.removeAttribute("data-room"); if (this._esc) document.removeEventListener("keydown", this._esc); if (this._onPt) document.removeEventListener("pointerdown", this._onPt, true); if (this._warpRAF) cancelAnimationFrame(this._warpRAF); }
-  componentDidUpdate() { this.setupReveal(); this.initHero(); this.setRoom(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser(); }
+  componentDidUpdate() { this.setupReveal(); this.initHero(); this.setRoom(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser(); this.initSpiral(); }
 
   setupHeroEvents() {
     if (this._heroEvt) return;
@@ -917,6 +1148,57 @@ class Component extends DCLogic {
     const el = document.documentElement;
     if (r) { if (el.getAttribute("data-room") !== r) el.setAttribute("data-room", r); }
     else if (el.hasAttribute("data-room")) el.removeAttribute("data-room");
+  }
+
+  // ── Spiral loader ───────────────────────────────────────────────────────
+  // A faithful port of MMG Operations' SpiralLoader.swift. 571 dots placed
+  // on the golden angle at r = maxRadius·√(i/n); none of them ever move.
+  // A breath of oxblood materialises at the centre, travels outward along
+  // the Fibonacci path over eight seconds, and dissolves at the rim.
+  initSpiral() {
+    document.querySelectorAll("canvas[data-spiral]").forEach((cv) => {
+      if (cv.__sp) return;
+      cv.__sp = true;
+      const ctx = cv.getContext("2d");
+      const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const night = cv.hasAttribute("data-night");
+      const N = 571, DOT = 4, MAXR = 180, GOLDEN = 137.5 * Math.PI / 180;
+      const WAVE = 0.06, BREATH = 8, BASE = 0.18, PEAK = 0.95;
+      const base = night ? [122, 111, 94] : [150, 136, 116];      // inkMuted
+      const ox = night ? [184, 92, 79] : [123, 45, 38];           // oxblood
+      const S = 400, cx = S / 2, cy = S / 2;
+      const DPR = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = S * DPR; cv.height = S * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      const pts = [];
+      for (let i = 0; i < N; i++) {
+        const norm = i / (N - 1);
+        const r = MAXR * Math.sqrt(norm), a = i * GOLDEN;
+        pts.push({ x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r, norm: norm });
+      }
+      const draw = (t) => {
+        ctx.clearRect(0, 0, S, S);
+        const ambient = 0.92 + 0.08 * Math.sin(t * 2 * Math.PI / 4);
+        const wavePos = (t % BREATH) / BREATH;
+        const envelope = Math.sin(wavePos * Math.PI);
+        for (let i = 0; i < N; i++) {
+          const p = pts[i];
+          let o = BASE, prox = 0;
+          const d = Math.abs(p.norm - wavePos);
+          if (d < WAVE) { const nd = d / WAVE; prox = (1 - nd) * (1 - nd); o = BASE + (PEAK - BASE) * prox * envelope; }
+          o *= ambient;
+          const c = [0, 1, 2].map((k) => Math.round(base[k] + (ox[k] - base[k]) * prox * envelope));
+          ctx.globalAlpha = Math.min(1, o);
+          ctx.fillStyle = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+          ctx.beginPath(); ctx.arc(p.x, p.y, DOT / 2, 0, 6.283); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+      };
+      if (reduced) { draw(2); return; }
+      const t0 = performance.now();
+      const tick = (now) => { if (!cv.isConnected) return; draw((now - t0) / 1000); requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+    });
   }
 
   // ── Live browser ────────────────────────────────────────────────────────
@@ -1626,12 +1908,41 @@ class Component extends DCLogic {
     return [
       { id: "mmg", num: "01", title: "MMG Operations", kind: "macOS App", year: "2024 — Present", status: "In Production", tags: ["MACOS", "AI"],
         stack: "Swift 6 · SwiftUI · Supabase + PostGIS · Microsoft Graph API · Claude API",
-        accent: "#b4503c",
+        accent: "#7B2D26",
+        room: "mmg",
+        dests: [
+          { i: "01", n: "Today", d: "An AI-written briefing for the day — headline, subheadline, cards — with a composer for follow-up questions." },
+          { i: "02", n: "Mail", d: "Outlook rendered natively from a local cache. Threads, priority, muted, scoped search, compose and reply." },
+          { i: "03", n: "Map", d: "Job sites across thirteen New Brunswick service areas, with live crew pins, weather and tide overlays." },
+          { i: "04", n: "Clients", d: "Client directory as split list and detail, drilling down into individual sites." },
+          { i: "05", n: "Jobs", d: "A kanban board by status — pending, scheduled, in progress, complete — filtered by season." },
+          { i: "06", n: "Products", d: "Catalog with a new/used stock lens, CSV and PDF invoice import, and a landed-cost calculator." },
+          { i: "07", n: "Tasks", d: "Work-list board with realtime alerts when a task comes back done or delayed." },
+          { i: "08", n: "Warehouse", d: "An append-only inventory movement ledger, live over Realtime, across today to ninety days." },
+          { i: "09", n: "Shipments", d: "Inbound container tracking read out of email rather than from any carrier API." },
+          { i: "10", n: "Domains", d: "Registrar data — expiries, renewals and DNS records." }
+        ],
+        field: [
+          { r: "Crew", t: "Today · Scan · Tasks · Activity · Hours", d: "Scan a QR label, a count sheet slides up, confirm, keep scanning. Works with no signal. Every movement is undoable for ten minutes." },
+          { r: "Admin", t: "+ Mail · Inventory · Ask", d: "The phone's answer to ⌘K, with streamed replies and tool calls shown as they finish. Crew never see cost, dealer or margin." }
+        ],
+        stats: [
+          { v: "53,279", l: "Lines of Swift" }, { v: "218", l: "Source files" },
+          { v: "10", l: "Rooms on the Mac" }, { v: "14", l: "Tools the model can call" }
+        ],
+        integ: [
+          { n: "Supabase", d: "Postgres · PostGIS · Realtime · Edge Functions · magic-link auth against an allowlist" },
+          { n: "Microsoft Graph", d: "PKCE OAuth, Keychain tokens, resumable full-mailbox backfill" },
+          { n: "Anthropic", d: "claude-sonnet-4-6 behind an edge function — no API key ever reaches the device" },
+          { n: "Open-Meteo", d: "Weather including marine wave height, SI throughout" },
+          { n: "CHS", d: "Canadian Hydrographic Service tides, cached six hours" },
+          { n: "GoDaddy", d: "Domains, DNS records and renewal dates" }
+        ],
         brand: {
-          purpose: "Not a product with customers — an instrument with operators. Two marine companies ran on scattered inboxes, spreadsheets and memory; this is the single surface that holds all of it. It is designed to be lived in eight hours a day, which is why it is dark, dense and quiet: nothing decorative competes with the work.",
+          purpose: "Not a product with customers — an instrument with operators. Two marine companies ran on scattered inboxes, spreadsheets and memory. This is the single surface that holds all of it, and it is designed to be lived in eight hours a day: warm paper rather than cold chrome, one accent used sparingly, and nothing decorative competing with the work.",
           positioning: "An internal intelligence layer, built with the restraint of a native Mac citizen rather than the noise of a dashboard.",
-          palette: [{ h: "#0e0f13", n: "Void", r: "Canvas" }, { h: "#141821", n: "Slate", r: "Panels" }, { h: "#b4503c", n: "Ember", r: "Action · selection" }, { h: "#1c6f6f", n: "Deep Teal", r: "Geospatial" }, { h: "#2a3a78", n: "Signal", r: "Links · sync" }, { h: "#e9e5dc", n: "Bone", r: "Type" }],
-          fonts: [{ n: "SF Pro Display", r: "Interface", f: "-apple-system,'SF Pro Display',system-ui,sans-serif", w: "600" }, { n: "New York", r: "Editorial reading view", f: "'New York','Iowan Old Style',Georgia,serif", w: "500" }, { n: "SF Mono", r: "Data · timestamps", f: "ui-monospace,'SF Mono',Menlo,monospace", w: "400" }]
+          palette: [{ h: "#F5F0E8", n: "Paper", r: "What it is printed on" }, { h: "#FAF7F0", n: "Paper Elevated", r: "Cards · sheets" }, { h: "#ECE5D5", n: "Paper Sunken", r: "Wells" }, { h: "#7B2D26", n: "Oxblood", r: "The one accent" }, { h: "#1F1B15", n: "Ink", r: "Type" }, { h: "#6B5F4E", n: "Ink Secondary", r: "Meta" }, { h: "#E5DECE", n: "Divider", r: "Hairlines" }, { h: "#C9B896", n: "Ornament", r: "Decorative rules" }],
+          fonts: [{ n: "New York", r: "Display · titles · numerals", f: "ui-serif,'New York',Georgia,serif", w: "500" }, { n: "SF Pro", r: "Interface · body", f: "-apple-system,'SF Pro Text',system-ui,sans-serif", w: "500" }]
         },
         blurb: "A native macOS operations platform built from scratch — the central intelligence layer for two marine companies.",
         overview: "The most technically complex thing I have built: a full production software project, not a prototype. It fuses Microsoft Outlook, geospatial data and the Claude API into a single command surface for Modern Marine Group and Dock Marine Canada.",
@@ -1878,7 +2189,7 @@ class Component extends DCLogic {
         const label = p.title.toUpperCase() + " \u2014 PLATE " + nn;
         gallery.push({ id: gid, n: nn, ph: "PLATE " + nn, onView: () => this.openLightbox(gid, label) });
       }
-      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, isMTM: p.room === "mtm", isGeneric: !p.room, blog: p.blog || [], process: p.process || [], gallery: gallery };
+      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, isMTM: p.room === "mtm", isMMG: p.room === "mmg", isGeneric: !p.room, dests: p.dests || [], field: p.field || [], stats: p.stats || [], integ: p.integ || [], blog: p.blog || [], process: p.process || [], gallery: gallery };
     }
 
     return {
