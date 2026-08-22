@@ -71,8 +71,8 @@
 
 <div id="appRoot" style="min-height:100vh;background-color:#101014;position:relative;overflow-x:hidden;">
 
-  <!-- Crumpled dark paper: the sheet everything is drawn on. -->
-  <canvas id="paper" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+  <!-- Motes: a quiet field of dust that eases away from the cursor. -->
+  <canvas id="motes" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
   <!-- Scribble wall: graphite pens drawing abstract nonsense behind the dark rooms, forever. -->
   <canvas id="scribble" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
@@ -499,7 +499,7 @@ class Component extends DCLogic {
     this.setupScroll();
     this.setupHeroEvents();
     this.initHero();
-    this.initPaper(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initScribble();
+    this.initMotes(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initScribble();
     this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
     document.addEventListener("keydown", this._esc);
     // Transport ignition point — combustion spreads outward from the last click.
@@ -527,7 +527,7 @@ class Component extends DCLogic {
     window.addEventListener("resize", () => {
       clearTimeout(self._heroRT);
       self._heroRT = setTimeout(() => {
-        self.initPaper(); self.initGraphite();
+        self.initGraphite();
         const c = document.getElementById("heroName");
         if (c) { c.__init = false; if (self._heroRAF) { cancelAnimationFrame(self._heroRAF); self._heroRAF = null; } self.initHero(); }
       }, 180);
@@ -638,92 +638,51 @@ class Component extends DCLogic {
     }
   }
 
-  // ── Crumpled paper ──────────────────────────────────────────────────────
-  // A sheet that was balled up and smoothed back out. Drawn once: a warm
-  // dark base, broad unevenness, then a network of folds — each crease gets
-  // a lit ridge and a shadow valley offset along one consistent light
-  // direction (top-left), which is what makes flat pixels read as creased
-  // paper. Flat facets between the folds catch that same light, the crease
-  // tops carry abrasion where the fold caught, and fibre speckle gives the
-  // sheet its tooth.
-  initPaper() {
-    const cv = document.getElementById("paper");
-    if (!cv) return;
-    const W = cv.clientWidth, H = cv.clientHeight;
-    if (!W || !H || (cv.__pw === W && cv.__ph === H)) return;
-    cv.__pw = W; cv.__ph = H;
-    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
-    cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-    const ctx = cv.getContext("2d");
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-    const R = Math.random;
-    // Warm the void so the sheet reads as paper stock, not screen black.
-    ctx.fillStyle = "rgba(74,58,42,0.11)"; ctx.fillRect(0, 0, W, H);
-    // Broad unevenness — where the sheet sat, absorbed, discoloured.
-    for (let i = 0; i < 26; i++) {
-      const x = R() * W, y = R() * H, r = 140 + R() * 460;
-      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-      const dark = R() < 0.55;
-      g.addColorStop(0, dark ? "rgba(0,0,0,0.05)" : "rgba(255,240,220,0.026)");
-      g.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
-    }
-    // Fold network. Creases run in straight-ish runs that kink at junctions.
-    const chain = (pts, ox, oy, style, lw) => {
-      ctx.beginPath(); ctx.strokeStyle = style; ctx.lineWidth = lw; ctx.lineCap = "round"; ctx.lineJoin = "round";
-      for (let i = 0; i < pts.length; i++) { const p = pts[i]; if (i === 0) ctx.moveTo(p[0] + ox, p[1] + oy); else ctx.lineTo(p[0] + ox, p[1] + oy); }
-      ctx.stroke();
+  // ── Motes ───────────────────────────────────────────────────────────────
+  // A still field of tiny dust specks behind the dark rooms. They breathe
+  // very slowly in place, and within a small radius of the cursor they ease
+  // away a few pixels and settle back. Deliberately quiet.
+  initMotes() {
+    const cv = document.getElementById("motes");
+    if (!cv || cv.__m) return;
+    cv.__m = true;
+    const self = this, ctx = cv.getContext("2d");
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W = 0, H = 0, DPR = 1, dots = [];
+    const resize = () => {
+      DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+      W = window.innerWidth; H = window.innerHeight;
+      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      const n = Math.round(W * H / 1100);
+      dots = [];
+      for (let i = 0; i < n; i++) dots.push({ x: Math.random() * W, y: Math.random() * H, ox: 0, oy: 0, r: 0.5 + Math.random() * 0.8, a: 0.1 + Math.random() * 0.24, s: Math.random() * 6.283 });
     };
-    const folds = Math.round((W + H) / 22);
-    for (let i = 0; i < folds; i++) {
-      let x = R() * W, y = R() * H, a = R() * 6.283;
-      const pts = [[x, y]];
-      const segs = 2 + Math.floor(R() * 4);
-      for (let s = 0; s < segs; s++) {
-        a += (R() - 0.5) * 1.15;
-        const len = 70 + R() * 300;
-        x += Math.cos(a) * len; y += Math.sin(a) * len;
-        pts.push([x, y]);
+    const R = 150, PUSH = 7;
+    const draw = (now) => {
+      if (!cv.isConnected) return;
+      if (cv.clientWidth !== W || cv.clientHeight !== H) resize();
+      ctx.clearRect(0, 0, W, H);
+      const pt = self._pointer || { x: -9999, y: -9999 };
+      const t = now * 0.001;
+      ctx.fillStyle = "#e9e5dc";
+      for (let i = 0; i < dots.length; i++) {
+        const d = dots[i];
+        // gentle push away from the cursor, eased by distance
+        const dx = d.x - pt.x, dy = d.y - pt.y, dist2 = dx * dx + dy * dy;
+        let tx = 0, ty = 0;
+        if (dist2 < R * R) { const dist = Math.sqrt(dist2) || 1, f = 1 - dist / R; tx = dx / dist * f * f * PUSH; ty = dy / dist * f * f * PUSH; }
+        d.ox += (tx - d.ox) * 0.06; d.oy += (ty - d.oy) * 0.06;
+        const br = 0.75 + 0.25 * Math.sin(t * 0.35 + d.s);
+        ctx.globalAlpha = d.a * br;
+        ctx.beginPath(); ctx.arc(d.x + d.ox + Math.sin(t * 0.12 + d.s) * 0.6, d.y + d.oy + Math.cos(t * 0.1 + d.s) * 0.6, d.r, 0, 6.283); ctx.fill();
       }
-      const k = 0.5 + R() * 0.9;
-      // shadow falls down-right, highlight sits up-left: one light source.
-      chain(pts, 1.1, 1.1, "rgba(0,0,0," + (0.06 * k).toFixed(3) + ")", 1.4);
-      chain(pts, -1, -1, "rgba(255,244,226," + (0.05 * k).toFixed(3) + ")", 1.1);
-      chain(pts, 0, 0, "rgba(0,0,0," + (0.022 * k).toFixed(3) + ")", 2.6);
-      // abrasion: the fold top rubbed lighter where it was crushed
-      if (R() < 0.6) {
-        for (let s = 0; s < pts.length - 1; s++) {
-          const [x1, y1] = pts[s], [x2, y2] = pts[s + 1];
-          const n = 2 + Math.floor(R() * 4);
-          for (let d = 0; d < n; d++) {
-            const t0 = R(), t1 = Math.min(1, t0 + 0.04 + R() * 0.1);
-            chain([[x1 + (x2 - x1) * t0, y1 + (y2 - y1) * t0], [x1 + (x2 - x1) * t1, y1 + (y2 - y1) * t1]],
-              -1, -1, "rgba(255,246,232," + (0.05 + R() * 0.06).toFixed(3) + ")", 0.9);
-          }
-        }
-      }
-    }
-    // Facets — flat panels between folds, each tilted a little into the light.
-    for (let i = 0; i < 44; i++) {
-      const cx = R() * W, cy = R() * H, rad = 90 + R() * 260, n = 3 + Math.floor(R() * 3);
-      ctx.beginPath();
-      for (let v = 0; v < n; v++) {
-        const ang = (v / n) * 6.283 + R() * 0.9, rr = rad * (0.5 + R() * 0.8);
-        const px = cx + Math.cos(ang) * rr, py = cy + Math.sin(ang) * rr;
-        if (v === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-      }
-      ctx.closePath();
-      ctx.fillStyle = R() < 0.5 ? "rgba(255,240,222,0.016)" : "rgba(0,0,0,0.028)";
-      ctx.fill();
-    }
-    // Fibre tooth.
-    const fib = Math.round(W * H / 260);
-    for (let i = 0; i < fib; i++) {
-      const light = R() < 0.5;
-      ctx.fillStyle = light ? "rgba(255,246,232," + (0.02 + R() * 0.05).toFixed(3) + ")" : "rgba(0,0,0," + (0.02 + R() * 0.05).toFixed(3) + ")";
-      ctx.fillRect(R() * W, R() * H, 1, R() < 0.25 ? 2 : 1);
-    }
+      ctx.globalAlpha = 1;
+      if (!reduced && document.visibilityState !== "hidden") requestAnimationFrame(draw);
+      else if (!reduced) setTimeout(() => draw(performance.now()), 500);
+    };
+    resize();
+    draw(performance.now());
   }
 
   // ── Scribble wall ───────────────────────────────────────────────────────
