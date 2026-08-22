@@ -71,9 +71,6 @@
 
 <div id="appRoot" style="min-height:100vh;background-color:#101014;position:relative;overflow-x:hidden;">
 
-  <!-- Motes: a quiet field of dust that eases away from the cursor. -->
-  <canvas id="motes" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
-
 
   <div id="scrollbar" data-no-capture style="position:fixed;top:0;left:0;height:2px;width:100%;background:#ff5a1f;transform:scaleX(0);transform-origin:0 50%;z-index:1000;will-change:transform;box-shadow:0 0 10px rgba(255,90,31,0.7);"></div>
 
@@ -497,7 +494,7 @@ class Component extends DCLogic {
     this.setupScroll();
     this.setupHeroEvents();
     this.initHero();
-    this.initMotes(); this.initGraphite(); this.initAmbient(); this.initSketch();
+    this.initGraphite(); this.initAmbient(); this.initSketch();
     this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
     document.addEventListener("keydown", this._esc);
     // Transport ignition point — combustion spreads outward from the last click.
@@ -634,66 +631,6 @@ class Component extends DCLogic {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { if (document.getElementById("heroName") === cv) { build(); if (reduced) drawStatic(); } });
     }
-  }
-
-  // ── Motes ───────────────────────────────────────────────────────────────
-  // Particles hanging in space: few, soft, always there. They barely move
-  // on their own — a slow bob — and lean toward the cursor like filings to a
-  // weak magnet, then settle back when it leaves.
-  initMotes() {
-    const cv = document.getElementById("motes");
-    if (!cv || cv.__m) return;
-    cv.__m = true;
-    const self = this, ctx = cv.getContext("2d");
-    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let W = 0, H = 0, DPR = 1, dots = [];
-    const resize = () => {
-      DPR = Math.min(window.devicePixelRatio || 1, 2);
-      W = window.innerWidth; H = window.innerHeight;
-      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      const n = Math.round(W * H / 9000);
-      dots = [];
-      for (let i = 0; i < n; i++) {
-        const z = 0.3 + Math.pow(Math.random(), 1.4) * 0.7;
-        dots.push({ x: Math.random() * W, y: Math.random() * H, z: z, r: 0.7 + z * 1.6, a: 0.16 + z * 0.36, s: Math.random() * 6.283, px: 0, py: 0 });
-      }
-    };
-    const ease = { x: 0, y: 0 };
-    const R = 280, PULL = 14;
-    const draw = (now) => {
-      if (!cv.isConnected) return;
-      if (cv.clientWidth !== W || cv.clientHeight !== H) resize();
-      const t = now * 0.001;
-      const pt = self._pointer && self._pointer.x > -9000 ? self._pointer : null;
-      if (pt) { ease.x += ((pt.x - W / 2) / W - ease.x) * 0.015; ease.y += ((pt.y - H / 2) / H - ease.y) * 0.015; }
-      ctx.clearRect(0, 0, W, H);
-      for (let i = 0; i < dots.length; i++) {
-        const d = dots[i];
-        // a slow bob, and a faint depth parallax against the cursor
-        const bx = d.x + Math.sin(t * 0.09 + d.s) * 2.2 * d.z - ease.x * 14 * d.z;
-        const by = d.y + Math.cos(t * 0.07 + d.s) * 1.8 * d.z - ease.y * 10 * d.z;
-        // magnet: lean toward the cursor, more the closer it is
-        let tx = 0, ty = 0;
-        if (pt) {
-          const dx = pt.x - bx, dy = pt.y - by, dist2 = dx * dx + dy * dy;
-          if (dist2 < R * R) { const dist = Math.sqrt(dist2) || 1, f = 1 - dist / R; tx = dx / dist * f * f * PULL * d.z; ty = dy / dist * f * f * PULL * d.z; }
-        }
-        d.px += (tx - d.px) * 0.03; d.py += (ty - d.py) * 0.03;
-        const x = bx + d.px, y = by + d.py;
-        // soft glow then a crisp core
-        ctx.globalAlpha = d.a * 0.35;
-        ctx.fillStyle = "#e9e5dc";
-        ctx.beginPath(); ctx.arc(x, y, d.r * 2.6, 0, 6.283); ctx.fill();
-        ctx.globalAlpha = d.a;
-        ctx.beginPath(); ctx.arc(x, y, d.r, 0, 6.283); ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-      if (!reduced && document.visibilityState !== "hidden") requestAnimationFrame(draw);
-      else if (!reduced) setTimeout(() => draw(performance.now()), 500);
-    };
-    resize();
-    draw(performance.now());
   }
 
   // ── Sound: procedural room tone, projector hum, ash on transport ────────
