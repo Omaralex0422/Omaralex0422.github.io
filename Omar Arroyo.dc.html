@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Typefaces belonging to the projects, so each specimen is set in its own face. -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Almarai:wght@400;700&family=Montserrat:wght@400;700&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Almarai:wght@300;400;700&family=Montserrat:wght@400;700&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{ --ink:#e9e5dc; --void:#101014; --orange:#ff5a1f; --orange-deep:#d23e0a; }
   html { background:#101014; }
@@ -66,6 +66,55 @@
   @media (max-width:520px){
     .nav-links button:nth-child(2),.nav-links button:nth-child(4){display:none !important;}
   }
+  /* ── PROJECT ROOMS ──────────────────────────────────────────────────
+     A project page leaves the museum entirely: its own ground, its own
+     type, its own light. The shared chrome steps aside. */
+  html[data-room] .atmos { display:none !important; }
+  html[data-room] #nav { display:none !important; }
+  html[data-room] #scrollbar { background:var(--room-accent,#547e75) !important; box-shadow:none !important; }
+  html[data-room] ::selection { background:var(--room-accent,#547e75); color:#fff; }
+  html[data-room] ::-webkit-scrollbar-track { background:var(--room-bg,#f6f7f5); }
+  html[data-room] ::-webkit-scrollbar-thumb { background:var(--room-accent,#547e75); }
+  html[data-room="mtm"], html[data-room="mtm"] body, html[data-room="mtm"] #appRoot { background:#f6f7f5 !important; }
+
+  /* ── ROOM: A MIND TO MIND — Denis Hachey ────────────────────────────
+     His own Squarespace language: soft off-white ground, warm dark ink,
+     Playfair Display at regular weight, Almarai for reading, sage pills. */
+  .mtm { --bg:#f6f7f5; --ink:#33312e; --sage:#547e75; --mist:#a2b29f; --paper:#fff;
+    background:var(--bg); color:var(--ink); font-family:'Almarai',system-ui,sans-serif;
+    font-size:17px; line-height:1.75; letter-spacing:0; }
+  .mtm h1,.mtm h2,.mtm h3 { font-family:'Playfair Display',Georgia,serif; font-weight:400; letter-spacing:-0.01em; margin:0; }
+  .mtm .lede { font-size:clamp(19px,1.7vw,23px); line-height:1.7; color:#4a4844; font-weight:300; }
+  .mtm .eyebrow { font-family:'Almarai',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.26em; text-transform:uppercase; color:var(--sage); }
+  .mtm .pill { display:inline-flex; align-items:center; gap:10px; background:var(--sage); color:#fff;
+    border-radius:300px; padding:15px 30px; font-size:14px; font-weight:700; text-decoration:none;
+    border:none; cursor:pointer; transition:background .35s ease, transform .35s cubic-bezier(.2,.7,.2,1); }
+  .mtm .pill:hover { background:#41655e; transform:translateY(-2px); }
+  .mtm .pill-ghost { background:transparent; color:var(--sage); border:1px solid #cfd6cc; }
+  .mtm .pill-ghost:hover { background:var(--sage); color:#fff; }
+  .mtm .rule { height:1px; background:#e2e4df; border:0; margin:0; }
+  /* reflection cards — the square, quiet look of his social posts */
+  .mtm .igcard { position:relative; aspect-ratio:1/1; display:flex; flex-direction:column;
+    justify-content:space-between; padding:clamp(20px,2.3vw,30px); background:var(--paper);
+    border:1px solid #e6e8e3; overflow:hidden; text-decoration:none; color:inherit;
+    transition:transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease, border-color .4s; }
+  .mtm .igcard:hover { transform:translateY(-6px); box-shadow:0 26px 44px -30px rgba(51,49,46,.4); border-color:#cfd6cc; }
+  .mtm .igcard.tint { background:#eef1ec; }
+  .mtm .igcard.deep { background:var(--sage); color:#fff; border-color:var(--sage); }
+  .mtm .igcard .no { font-family:'Playfair Display',serif; font-size:13px; letter-spacing:0.1em; opacity:.55; }
+  .mtm .igcard h3 { font-size:clamp(19px,1.75vw,26px); line-height:1.24; }
+  .mtm .igcard p { margin:10px 0 0; font-size:13.5px; line-height:1.62; color:#6a6862; font-weight:300;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .mtm .igcard.deep p { color:rgba(255,255,255,.82); }
+  .mtm .step { display:grid; grid-template-columns:56px minmax(0,1fr); gap:22px; padding:30px 0; border-top:1px solid #e2e4df; }
+  .mtm .step .n { font-family:'Playfair Display',serif; font-size:30px; color:var(--mist); line-height:1; }
+  .mtm .sw { height:104px; border-radius:3px; }
+  @keyframes mtmRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+  .mtm [data-mtm-rise] { animation:mtmRise .95s cubic-bezier(.2,.7,.2,1) both; }
+  @media (max-width:760px){
+    .mtm .m-stack { grid-template-columns:1fr !important; }
+    .mtm .step { grid-template-columns:38px minmax(0,1fr); gap:14px; }
+  }
   .light-leak { position:absolute; top:-22%; right:-12%; width:58%; height:76%; z-index:-1; pointer-events:none; background:linear-gradient(215deg, rgba(255,90,31,.17) 0%, rgba(255,90,31,.06) 34%, rgba(255,90,31,0) 60%); filter:blur(28px); animation:leakDrift 38s ease-in-out infinite; }
 </style>
 <script src="./image-slot.js"></script>
@@ -78,16 +127,16 @@
 
   <!-- ===== DYSTOPIAN-MUSEUM ATMOSPHERE (procedural, no external assets) ===== -->
   <!-- Concrete: large soft blotches of procedural noise. -->
-  <div data-no-capture style="position:fixed;inset:0;z-index:995;pointer-events:none;opacity:0.05;mix-blend-mode:overlay;background-size:520px 520px;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22520%22 height=%22520%22><filter id=%22c%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.012%22 numOctaves=%223%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23c)%22/></svg>');"></div>
+  <div data-no-capture class="atmos" style="position:fixed;inset:0;z-index:995;pointer-events:none;opacity:0.05;mix-blend-mode:overlay;background-size:520px 520px;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22520%22 height=%22520%22><filter id=%22c%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.012%22 numOctaves=%223%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23c)%22/></svg>');"></div>
   <!-- Drifting haze: orange-tinged fog + cold light, slowly moving like a projector beam through dust. -->
-  <div data-no-capture style="position:fixed;inset:-30%;z-index:996;pointer-events:none;opacity:0.6;background:radial-gradient(38% 34% at 28% 30%, rgba(255,90,31,0.06), transparent 60%),radial-gradient(46% 42% at 76% 72%, rgba(150,160,180,0.06), transparent 62%);animation:hazeDrift 52s ease-in-out infinite;"></div>
+  <div data-no-capture class="atmos" style="position:fixed;inset:-30%;z-index:996;pointer-events:none;opacity:0.6;background:radial-gradient(38% 34% at 28% 30%, rgba(255,90,31,0.06), transparent 60%),radial-gradient(46% 42% at 76% 72%, rgba(150,160,180,0.06), transparent 62%);animation:hazeDrift 52s ease-in-out infinite;"></div>
   <!-- Projector: a soft beam that tracks your scroll down the page, like a torch through the museum. -->
-  <div id="projector" data-no-capture style="position:fixed;inset:0;z-index:994;pointer-events:none;mix-blend-mode:screen;--px:50%;--py:22%;background:radial-gradient(44% 40% at var(--px) var(--py), rgba(255,232,205,0.085), rgba(255,150,80,0.035) 42%, rgba(0,0,0,0) 70%);will-change:background;"></div>
+  <div id="projector" data-no-capture class="atmos" style="position:fixed;inset:0;z-index:994;pointer-events:none;mix-blend-mode:screen;--px:50%;--py:22%;background:radial-gradient(44% 40% at var(--px) var(--py), rgba(255,232,205,0.085), rgba(255,150,80,0.035) 42%, rgba(0,0,0,0) 70%);will-change:background;"></div>
   <!-- Vignette: the lonely dark museum edges, with a faint film flicker. -->
-  <div data-no-capture style="position:fixed;inset:0;z-index:997;pointer-events:none;background:radial-gradient(125% 125% at 50% 40%, transparent 50%, rgba(0,0,0,0.6) 100%);animation:filmFlicker 12s steps(1) infinite;"></div>
+  <div data-no-capture class="atmos" style="position:fixed;inset:0;z-index:997;pointer-events:none;background:radial-gradient(125% 125% at 50% 40%, transparent 50%, rgba(0,0,0,0.6) 100%);animation:filmFlicker 12s steps(1) infinite;"></div>
 
   <sc-if value="{{ showGrain }}" hint-placeholder-val="{{ true }}">
-    <div data-no-capture style="position:fixed;inset:-50%;z-index:998;pointer-events:none;opacity:0.08;mix-blend-mode:screen;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');animation:grainShift 1.2s steps(3) infinite;"></div>
+    <div data-no-capture class="atmos" style="position:fixed;inset:-50%;z-index:998;pointer-events:none;opacity:0.08;mix-blend-mode:screen;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/></filter><rect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/></svg>');animation:grainShift 1.2s steps(3) infinite;"></div>
   </sc-if>
 
   <!-- Transport canvas: combust-to-ash / reform-from-embers wipe on navigation. -->
@@ -341,6 +390,141 @@
   <!-- ============ DETAIL ============ -->
   <sc-if value="{{ detail }}" hint-placeholder-val="{{ true }}">
   <main data-screen-label="Project Detail" style="--pa:{{ detail.accent }};padding:120px 6vw 70px;min-height:100vh;box-sizing:border-box;position:relative;z-index:1;">
+    <!-- ══ ROOM: A MIND TO MIND ══ his own language, not the museum's ══ -->
+    <sc-if value="{{ detail.isMTM }}" hint-placeholder-val="{{ false }}">
+    <div class="mtm" style="margin:-120px -6vw -70px;">
+
+      <header style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px clamp(24px,6vw,80px);border-bottom:1px solid #e2e4df;position:sticky;top:0;background:rgba(246,247,245,.9);backdrop-filter:blur(10px);z-index:20;">
+        <div style="font-family:'Playfair Display',serif;font-size:17px;letter-spacing:.02em;">A Mind to Mind</div>
+        <button data-hover onClick="{{ close }}" style="appearance:none;border:none;background:none;cursor:pointer;font-family:'Almarai',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#8a8781;padding:0;transition:color .3s;" style-hover="color:#547e75;">← Omar Arroyo</button>
+      </header>
+
+      <section style="padding:clamp(64px,10vw,140px) clamp(24px,6vw,80px) clamp(40px,5vw,72px);max-width:1180px;">
+        <div class="eyebrow" data-mtm-rise>Brand · Web · Content — 2025 →</div>
+        <h1 data-mtm-rise style="margin-top:26px;font-size:clamp(44px,7.4vw,104px);line-height:1.03;max-width:15ch;">A Mind to Mind Conversation</h1>
+        <p class="lede" data-mtm-rise style="margin:34px 0 0;max-width:56ch;">A single book, rebuilt into a place people come back to every week. Positioning, identity, the site, and a writing engine that has run to thirty-five essays and counting.</p>
+        <div data-mtm-rise style="display:flex;gap:14px;flex-wrap:wrap;margin-top:44px;">
+          <a class="pill" data-hover href="{{ detail.site.url }}" target="_blank" rel="noopener">Visit denishachey.com →</a>
+          <button class="pill pill-ghost" data-hover onClick="{{ close }}">Back to the index</button>
+        </div>
+      </section>
+
+      <!-- the site, scrolling -->
+      <section style="padding:0 clamp(24px,6vw,80px) clamp(60px,8vw,110px);">
+        <div data-browser style="max-width:1180px;">
+          <div style="border:1px solid #e0e2dd;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 40px 70px -46px rgba(51,49,46,.45);">
+            <div style="display:flex;align-items:center;gap:11px;padding:0 14px;height:38px;background:#f1f2ef;border-bottom:1px solid #e6e8e3;">
+              <span style="display:flex;gap:6px;"><i style="width:9px;height:9px;border-radius:50%;background:#dcdfd9;display:block;"></i><i style="width:9px;height:9px;border-radius:50%;background:#dcdfd9;display:block;"></i><i style="width:9px;height:9px;border-radius:50%;background:#dcdfd9;display:block;"></i></span>
+              <span style="flex:1;background:#fff;border:1px solid #e6e8e3;border-radius:300px;padding:4px 13px;font-size:10.5px;color:#8a8781;letter-spacing:.04em;">denishachey.com</span>
+            </div>
+            <div data-bvp style="position:relative;aspect-ratio:16/10;overflow:hidden;background:#fff;">
+              <img data-bimg src="images/site-mindtomind.jpg" alt="" style="position:absolute;top:0;left:0;width:100%;display:block;will-change:transform;">
+            </div>
+          </div>
+          <div style="margin-top:14px;font-size:12px;color:#9a9791;letter-spacing:.02em;">Hover the screen to browse it.</div>
+        </div>
+      </section>
+
+      <hr class="rule">
+
+      <!-- brand -->
+      <section style="padding:clamp(56px,7vw,96px) clamp(24px,6vw,80px);max-width:1180px;">
+        <div class="eyebrow">The system</div>
+        <h2 style="margin-top:20px;font-size:clamp(30px,4vw,54px);line-height:1.12;max-width:20ch;">Literary, not clinical.</h2>
+        <p style="margin:24px 0 0;max-width:60ch;color:#5a5853;font-weight:300;">Wellness design drifts to two extremes: sterile clinic or pastel affirmation. Denis writes like a person thinking aloud, so the page is set like a book — a high-contrast serif at regular weight for his voice, a plain humanist sans for everything else, and one sage that only ever means “go here next.”</p>
+
+        <div class="m-stack" style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);margin-top:56px;align-items:start;">
+          <div>
+            <div class="eyebrow" style="color:#9a9791;">Palette</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:14px;margin-top:18px;">
+              <sc-for list="{{ detail.brand.palette }}" as="c" hint-placeholder-count="5">
+                <div>
+                  <div class="sw" style="background:{{ c.h }};border:1px solid #e2e4df;"></div>
+                  <div style="margin-top:10px;font-size:12px;letter-spacing:.04em;color:#33312e;">{{ c.h }}</div>
+                  <div style="font-size:12px;color:#8a8781;font-weight:300;">{{ c.n }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div class="eyebrow" style="color:#9a9791;">Typefaces</div>
+            <div style="margin-top:18px;border-top:1px solid #e2e4df;padding-top:22px;">
+              <div style="font-family:'Playfair Display',serif;font-size:clamp(44px,5vw,68px);line-height:1;">Playfair Display</div>
+              <div style="margin-top:10px;font-size:12.5px;color:#8a8781;font-weight:300;">Regular, never bold — the author's voice</div>
+            </div>
+            <div style="margin-top:30px;border-top:1px solid #e2e4df;padding-top:22px;">
+              <div style="font-family:'Almarai',sans-serif;font-size:clamp(30px,3.4vw,44px);line-height:1.1;font-weight:300;">Almarai</div>
+              <div style="margin-top:10px;font-size:12.5px;color:#8a8781;font-weight:300;">Light and regular — everything you actually read</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- voice -->
+      <section style="padding:clamp(56px,8vw,110px) clamp(24px,6vw,80px);background:#eef1ec;">
+        <blockquote style="margin:0 auto;max-width:900px;text-align:center;">
+          <p style="margin:0;font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(26px,3.6vw,48px);line-height:1.32;color:#547e75;">“Welcome to a space where ancient wisdom meets the questions you are actually carrying.”</p>
+          <cite style="display:block;margin-top:26px;font-style:normal;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#8a8781;">The line the whole platform hangs from</cite>
+        </blockquote>
+      </section>
+
+      <!-- the writing -->
+      <section style="padding:clamp(56px,7vw,96px) clamp(24px,6vw,80px);max-width:1180px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;">
+          <div>
+            <div class="eyebrow">The writing</div>
+            <h2 style="margin-top:20px;font-size:clamp(30px,4vw,54px);line-height:1.12;">Thirty-five essays,<br>one structure.</h2>
+          </div>
+          <a class="pill pill-ghost" data-hover href="https://www.denishachey.com/blog" target="_blank" rel="noopener">Read the blog →</a>
+        </div>
+        <p style="margin:22px 0 0;max-width:58ch;color:#5a5853;font-weight:300;">Every post is cut for the page and for the feed at the same time: an observation, a turn, and a question you carry out with you. The square format below is how they travel on Instagram.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:clamp(14px,1.6vw,22px);margin-top:44px;">
+          <sc-for list="{{ detail.blog }}" as="b" hint-placeholder-count="6">
+            <a class="igcard" data-hover href="https://www.denishachey.com/blog" target="_blank" rel="noopener">
+              <div class="no">№ {{ b.n }}</div>
+              <div>
+                <h3>{{ b.t }}</h3>
+                <p>{{ b.x }}</p>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+
+      <hr class="rule">
+
+      <!-- how -->
+      <section style="padding:clamp(56px,7vw,96px) clamp(24px,6vw,80px);max-width:900px;">
+        <div class="eyebrow">How it was made</div>
+        <h2 style="margin-top:20px;font-size:clamp(30px,4vw,54px);line-height:1.12;">Built to be handed over.</h2>
+        <p style="margin:22px 0 40px;max-width:58ch;color:#5a5853;font-weight:300;">The point was never a site I have to maintain. Everything was made in tools Denis already owns, so the platform keeps moving whether or not I am in the room.</p>
+        <sc-for list="{{ detail.process }}" as="st" hint-placeholder-count="5">
+          <div class="step">
+            <div class="n">{{ st.n }}</div>
+            <div>
+              <h3 style="font-size:clamp(19px,1.9vw,25px);line-height:1.25;">{{ st.t }}</h3>
+              <p style="margin:10px 0 0;color:#5a5853;font-weight:300;font-size:15.5px;">{{ st.d }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+
+      <footer style="padding:clamp(56px,7vw,96px) clamp(24px,6vw,80px);background:#547e75;color:#fff;">
+        <div style="max-width:1180px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px;">
+          <div>
+            <h2 style="font-size:clamp(28px,3.6vw,48px);line-height:1.14;color:#fff;">A Mind to Mind<br>Conversation</h2>
+            <div style="margin-top:16px;font-size:13px;color:rgba(255,255,255,.72);font-weight:300;">Brand strategy · WordPress → Squarespace · SEO · Content · Meta Ads</div>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a class="pill" data-hover href="{{ detail.site.url }}" target="_blank" rel="noopener" style="background:#fff;color:#547e75;">Visit the site →</a>
+            <button class="pill" data-hover onClick="{{ close }}" style="background:transparent;border:1px solid rgba(255,255,255,.45);color:#fff;">← Back to the index</button>
+          </div>
+        </div>
+      </footer>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ detail.isGeneric }}" hint-placeholder-val="{{ true }}">
     <button data-hover onClick="{{ close }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;padding:0;margin-bottom:60px;transition:color .3s;" style-hover="color:#ff5a1f;">← Back to index</button>
 
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;">
@@ -557,6 +741,8 @@
         <span style="font-family:'JetBrains Mono',monospace;font-size:clamp(20px,3vw,40px);color:#e8e6e1;">→</span>
       </button>
     </sc-if>
+    </sc-if>
+
   </main>
   </sc-if>
 
@@ -584,15 +770,15 @@ class Component extends DCLogic {
     this.setupScroll();
     this.setupHeroEvents();
     this.initHero();
-    this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser();
+    this.setRoom(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser();
     this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
     document.addEventListener("keydown", this._esc);
     // Transport ignition point — combustion spreads outward from the last click.
     this._onPt = (e) => { this._lastPt = { x: e.clientX, y: e.clientY, t: performance.now() }; };
     document.addEventListener("pointerdown", this._onPt, true);
   }
-  componentWillUnmount() { if (this._esc) document.removeEventListener("keydown", this._esc); if (this._onPt) document.removeEventListener("pointerdown", this._onPt, true); if (this._warpRAF) cancelAnimationFrame(this._warpRAF); }
-  componentDidUpdate() { this.setupReveal(); this.initHero(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser(); }
+  componentWillUnmount() { document.documentElement.removeAttribute("data-room"); if (this._esc) document.removeEventListener("keydown", this._esc); if (this._onPt) document.removeEventListener("pointerdown", this._onPt, true); if (this._warpRAF) cancelAnimationFrame(this._warpRAF); }
+  componentDidUpdate() { this.setupReveal(); this.initHero(); this.setRoom(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser(); }
 
   setupHeroEvents() {
     if (this._heroEvt) return;
@@ -721,6 +907,16 @@ class Component extends DCLogic {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { if (document.getElementById("heroName") === cv) { build(); if (reduced) drawStatic(); } });
     }
+  }
+
+  // A project with its own design language takes the whole page over: the
+  // museum's atmosphere, nav and ground step aside for the duration.
+  setRoom() {
+    const p = this.state.view === "detail" ? this.state.project : null;
+    const r = p && p.room ? p.room : null;
+    const el = document.documentElement;
+    if (r) { if (el.getAttribute("data-room") !== r) el.setAttribute("data-room", r); }
+    else if (el.hasAttribute("data-room")) el.removeAttribute("data-room");
   }
 
   // ── Live browser ────────────────────────────────────────────────────────
@@ -1500,12 +1696,28 @@ class Component extends DCLogic {
             "Ran the Seatown Marine PEI dealer partnership pitch" ] } ] },
       { id: "mindtomind", num: "04", title: "A Mind to Mind", kind: "Brand · Web · Content", year: "2025 — Present", status: "Live Client", tags: ["WEB", "BRANDING"], web: true, link: "https://www.denishachey.com",
         stack: "Brand Strategy · WordPress · SEO · Content · Meta Ads",
-        accent: "#5c8a70",
+        accent: "#547e75",
+        room: "mtm",
         site: { url: "https://www.denishachey.com", label: "denishachey.com", shot: "images/site-mindtomind.jpg" },
+        blog: [
+          { n: "35", t: "The Cave You Fear to Enter", x: "The breakthrough you are searching for is hidden inside the exact task you are actively putting off." },
+          { n: "34", t: "The Dark Cloud", x: "How mindset dictates reality — and why the same conditions produce two completely different lives." },
+          { n: "33", t: "The Invisible Toll", x: "Pausing your anger is not about saving face. It is a matter of physical health." },
+          { n: "32", t: "The Law of the Sower", x: "Success is rarely one perfect effort. It is a game of numbers, persistence and resilience." },
+          { n: "31", t: "The Mind's Portfolio", x: "In trading you never predict the market — you respect it and adjust. Life is the same market." },
+          { n: "27", t: "The Digital Mirage", x: "More connected than any generation in history, and arguably the loneliest. That part is a choice." }
+        ],
+        process: [
+          { n: "01", t: "Positioning first", d: "A book is a product; a platform is a habit. We rewrote the premise so every page invites a return visit rather than a single purchase." },
+          { n: "02", t: "Identity in Canva", d: "The whole visual system — covers, reflection cards, carousels, ad creative — is built in Canva so Denis can keep producing it himself without me in the loop." },
+          { n: "03", t: "Squarespace, restrained", d: "Playfair Display at regular weight, Almarai for reading, one sage, one pill. Almost every default was removed rather than restyled." },
+          { n: "04", t: "A weekly writing engine", d: "Thirty-five essays and counting, on a repeatable structure: an observation, a turn, a question you carry out of the page." },
+          { n: "05", t: "Reach", d: "SEO built into the architecture — metadata, internal linking, long-form built to rank — plus Meta-ready creative cut from the same content." }
+        ],
         brand: {
           purpose: "A single book had to become a place people return to weekly. The identity leans literary rather than clinical — a high-contrast serif for the voice of the author, a plain humanist sans for everything else — so reflection posts, exercises and long-form writing all feel like they came from the same hand. Sage and gold keep it warm without drifting into wellness cliché.",
           positioning: "A mindset and wellness platform that reads like a well-set book, not a self-help funnel.",
-          palette: [{ h: "#f2efe9", n: "Linen", r: "Canvas" }, { h: "#5c8a70", n: "Sage", r: "Brand primary" }, { h: "#2f5240", n: "Forest", r: "Depth" }, { h: "#e0b060", n: "Gold", r: "Action" }, { h: "#3d8ea6", n: "Still Water", r: "Accent" }, { h: "#22201d", n: "Ink", r: "Type" }],
+          palette: [{ h: "#f6f7f5", n: "Paper", r: "Canvas" }, { h: "#547e75", n: "Sage", r: "Brand · buttons" }, { h: "#a2b29f", n: "Mist", r: "Quotes · accents" }, { h: "#33312e", n: "Ink", r: "Type" }, { h: "#ffffff", n: "Card", r: "Surfaces" }],
           fonts: [{ n: "Playfair Display", r: "Display · author voice", f: "'Playfair Display',Georgia,serif", w: "700" }, { n: "Almarai", r: "Body · UI", f: "'Almarai',system-ui,sans-serif", w: "400" }]
         },
         blurb: "End-to-end digital marketing and brand strategy for a mindset and wellness platform — delivered with an AI-assisted workflow.",
@@ -1666,7 +1878,7 @@ class Component extends DCLogic {
         const label = p.title.toUpperCase() + " \u2014 PLATE " + nn;
         gallery.push({ id: gid, n: nn, ph: "PLATE " + nn, onView: () => this.openLightbox(gid, label) });
       }
-      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, gallery: gallery };
+      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, isMTM: p.room === "mtm", isGeneric: !p.room, blog: p.blog || [], process: p.process || [], gallery: gallery };
     }
 
     return {
