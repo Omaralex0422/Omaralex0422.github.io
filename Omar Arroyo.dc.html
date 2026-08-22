@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- Typefaces belonging to the projects, so each specimen is set in its own face. -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Almarai:wght@400;700&family=Montserrat:wght@400;700&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{ --ink:#e9e5dc; --void:#101014; --orange:#ff5a1f; --orange-deep:#d23e0a; }
   html { background:#101014; }
@@ -338,18 +340,18 @@
 
   <!-- ============ DETAIL ============ -->
   <sc-if value="{{ detail }}" hint-placeholder-val="{{ true }}">
-  <main data-screen-label="Project Detail" style="padding:120px 6vw 70px;min-height:100vh;box-sizing:border-box;position:relative;z-index:1;">
+  <main data-screen-label="Project Detail" style="--pa:{{ detail.accent }};padding:120px 6vw 70px;min-height:100vh;box-sizing:border-box;position:relative;z-index:1;">
     <button data-hover onClick="{{ close }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;padding:0;margin-bottom:60px;transition:color .3s;" style-hover="color:#ff5a1f;">← Back to index</button>
 
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.16em;color:#ff5a1f;">{{ detail.num }} / 05</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.16em;color:var(--pa);">{{ detail.num }} / 05</span>
       <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#8d8a84;text-transform:uppercase;border:1px solid rgba(232,230,225,0.18);padding:6px 12px;">{{ detail.status }}</span>
     </div>
     <h1 style="margin:26px 0 0;font-weight:900;font-size:clamp(44px,8.5vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;text-wrap:balance;" class="ink-grad">{{ detail.title }}</h1>
     <p style="margin:30px 0 0;max-width:680px;font-size:clamp(18px,1.8vw,24px);line-height:1.5;color:#cfccc6;text-wrap:pretty;">{{ detail.overview }}</p>
 
     <sc-if value="{{ detail.web }}" hint-placeholder-val="{{ true }}">
-      <a data-hover href="{{ detail.link }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:12px;margin-top:34px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid rgba(232,230,225,0.3);padding:14px 24px;transition:background .3s,color .3s;" style-hover="background:#ff5a1f;color:#101014;">Visit Site →</a>
+      <a data-hover href="{{ detail.link }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:12px;margin-top:34px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid var(--pa);padding:14px 24px;transition:background .3s,color .3s;" style-hover="background:#ff5a1f;color:#101014;">Visit Site →</a>
     </sc-if>
 
     <div style="margin-top:60px;border-top:1px solid rgba(232,230,225,0.12);border-left:1px solid rgba(232,230,225,0.12);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
@@ -406,7 +408,7 @@
       <!-- wall label -->
       <div style="border:1px solid rgba(232,230,225,0.2);background:rgba(12,12,16,0.62);backdrop-filter:blur(5px);padding:clamp(22px,2.4vw,32px) clamp(22px,2.6vw,34px);box-shadow:0 40px 60px -40px rgba(0,0,0,0.9);">
         <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;">
-          <span style="color:#ff5a1f;">Plate {{ detail.num }} / 05</span><span style="color:#8d8a84;">{{ detail.status }}</span>
+          <span style="color:var(--pa);">Plate {{ detail.num }} / 05</span><span style="color:#8d8a84;">{{ detail.status }}</span>
         </div>
         <div style="margin-top:16px;font-weight:700;font-size:clamp(20px,1.8vw,26px);letter-spacing:-0.01em;line-height:1.15;">{{ detail.title }}</div>
         <div style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:#8d8a84;text-transform:uppercase;line-height:1.9;">{{ detail.kind }} · {{ detail.year }}<br><span style="color:#56544f;">Medium —</span> {{ detail.stack }}</div>
@@ -421,6 +423,94 @@
         <div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7a7872;text-transform:uppercase;text-wrap:pretty;">Figure derived from the build — structure over precision.</div>
       </div>
     </div>
+
+    <!-- LIVE — the real site, running and scrollable inside the machine -->
+    <sc-if value="{{ detail.isSite }}" hint-placeholder-val="{{ true }}">
+    <section style="margin-top:96px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;border-bottom:1px solid rgba(232,230,225,0.16);padding-bottom:16px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:var(--pa);text-transform:uppercase;">FIG. 06 — Live</div>
+          <h2 style="margin:14px 0 0;font-weight:900;font-size:clamp(30px,4.4vw,62px);line-height:0.88;letter-spacing:-0.04em;text-transform:uppercase;" class="ink-grad">The site as it stands</h2>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7872;text-transform:uppercase;text-align:right;line-height:1.9;">Captured from production<br><span style="color:#56544f;">Hover the screen to browse it</span></div>
+      </div>
+
+      <div data-browser style="margin-top:38px;perspective:2000px;">
+        <div style="transform:rotateX(4deg);transform-origin:center top;">
+          <div style="background:#0b0c0f;border:1px solid rgba(232,230,225,0.16);border-radius:14px 14px 3px 3px;padding:11px 11px 0;box-shadow:0 60px 90px -50px rgba(0,0,0,1);">
+            <div style="position:relative;border-radius:7px;overflow:hidden;background:#15161b;aspect-ratio:16/10;display:flex;flex-direction:column;">
+              <!-- browser chrome -->
+              <div style="flex:none;display:flex;align-items:center;gap:12px;padding:0 14px;height:34px;background:#1b1c22;border-bottom:1px solid rgba(232,230,225,0.09);">
+                <span style="display:flex;gap:6px;flex:none;"><i style="width:9px;height:9px;border-radius:50%;background:#3a3b43;display:block;"></i><i style="width:9px;height:9px;border-radius:50%;background:#3a3b43;display:block;"></i><i style="width:9px;height:9px;border-radius:50%;background:#3a3b43;display:block;"></i></span>
+                <span style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;background:#101014;border:1px solid rgba(232,230,225,0.1);border-radius:5px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:#8d8a84;">
+                  <i style="width:5px;height:5px;border-radius:50%;background:var(--pa);display:block;flex:none;box-shadow:0 0 7px var(--pa);"></i>
+                  <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ detail.site.label }}</span>
+                </span>
+              </div>
+              <!-- the page itself -->
+              <div data-bvp style="position:relative;flex:1;overflow:hidden;background:#fff;">
+                <img data-bimg src="{{ detail.site.shot }}" alt="" style="position:absolute;top:0;left:0;width:100%;display:block;will-change:transform;filter:saturate(0.35) brightness(0.72) contrast(1.04);transition:filter .7s ease;">
+              </div>
+            </div>
+          </div>
+          <div style="position:relative;height:13px;width:108%;margin-left:-4%;background:linear-gradient(180deg,#2a2b31,#17181d);border-radius:0 0 12px 12px;">
+            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:14%;height:5px;background:rgba(0,0,0,0.4);border-radius:0 0 7px 7px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56544f;text-transform:uppercase;">Colour returns when you look closely.</div>
+        <a data-hover href="{{ detail.site.url }}" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid var(--pa);padding:13px 22px;transition:background .3s,color .3s;" style-hover="background:var(--pa);color:#101014;">Open the real thing →</a>
+      </div>
+    </section>
+    </sc-if>
+
+    <!-- IDENTITY — the brand behind the build -->
+    <section style="margin-top:96px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;border-bottom:1px solid rgba(232,230,225,0.16);padding-bottom:16px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:var(--pa);text-transform:uppercase;">FIG. 07 — Identity</div>
+          <h2 style="margin:14px 0 0;font-weight:900;font-size:clamp(30px,4.4vw,62px);line-height:0.88;letter-spacing:-0.04em;text-transform:uppercase;" class="ink-grad">Why it looks<br>like this</h2>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7872;text-transform:uppercase;text-align:right;max-width:220px;line-height:1.9;">Palette · Typography · Intent</div>
+      </div>
+
+      <div class="about-grid" style="margin-top:44px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(34px,5vw,74px);align-items:start;">
+        <div>
+          <p style="margin:0;font-size:clamp(17px,1.55vw,21px);line-height:1.62;color:#cfccc6;text-wrap:pretty;">{{ detail.brand.purpose }}</p>
+          <p style="margin:26px 0 0;padding-left:18px;border-left:2px solid var(--pa);font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.85;letter-spacing:0.05em;color:#9d9a94;text-transform:uppercase;text-wrap:pretty;">{{ detail.brand.positioning }}</p>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.24em;color:#56544f;text-transform:uppercase;margin-bottom:16px;">Typefaces</div>
+          <sc-for list="{{ detail.brand.fonts }}" as="f" hint-placeholder-count="2">
+            <div style="display:flex;align-items:baseline;gap:18px;border-top:1px solid rgba(232,230,225,0.12);padding:16px 0;">
+              <div style="font-family:{{ f.f }};font-weight:{{ f.w }};font-size:38px;line-height:1;color:#e9e5dc;flex:none;min-width:64px;">Aa</div>
+              <div style="min-width:0;">
+                <div style="font-family:{{ f.f }};font-weight:{{ f.w }};font-size:16px;color:#e9e5dc;letter-spacing:0.01em;">{{ f.n }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;color:#7a7872;text-transform:uppercase;margin-top:5px;">{{ f.r }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="margin-top:52px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.24em;color:#56544f;text-transform:uppercase;margin-bottom:18px;">Palette</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,148px),1fr));gap:1px;background:rgba(232,230,225,0.12);border:1px solid rgba(232,230,225,0.12);">
+          <sc-for list="{{ detail.brand.palette }}" as="c" hint-placeholder-count="6">
+            <div data-hover style="background:#101014;padding:0;transition:transform .45s cubic-bezier(.2,.7,.2,1);" style-hover="transform:translateY(-5px);">
+              <div style="height:96px;background:{{ c.h }};"></div>
+              <div style="padding:12px 13px 15px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#e9e5dc;text-transform:uppercase;">{{ c.h }}</div>
+                <div style="font-size:13px;color:#bdbab4;margin-top:6px;">{{ c.n }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;color:#6a6862;text-transform:uppercase;margin-top:4px;">{{ c.r }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
 
     <div style="margin-top:80px;display:flex;flex-direction:column;gap:60px;">
       <sc-for list="{{ detail.sections }}" as="sec" hint-placeholder-count="2">
@@ -443,15 +533,15 @@
       <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,540px),1fr));gap:clamp(22px,3vw,40px);">
         <sc-for list="{{ detail.gallery }}" as="cell" hint-placeholder-count="6">
           <!-- one lit, framed plate on the wall -->
-          <figure data-hover data-lens style="position:relative;isolation:isolate;margin:0;background:#121217;border:1px solid rgba(232,230,225,0.14);padding:clamp(16px,2vw,24px) clamp(16px,2vw,24px) 14px;transition:transform .55s cubic-bezier(.2,.7,.2,1),border-color .4s,box-shadow .55s;box-shadow:0 30px 50px -36px rgba(0,0,0,0.9);" style-hover="transform:translateY(-7px);border-color:rgba(255,90,31,0.55);box-shadow:0 50px 70px -36px rgba(0,0,0,1),0 0 60px -20px rgba(255,90,31,0.25);">
+          <figure data-hover data-lens style="position:relative;isolation:isolate;margin:0;background:#121217;border:1px solid rgba(232,230,225,0.14);padding:clamp(16px,2vw,24px) clamp(16px,2vw,24px) 14px;transition:transform .55s cubic-bezier(.2,.7,.2,1),border-color .4s,box-shadow .55s;box-shadow:0 30px 50px -36px rgba(0,0,0,0.9);" style-hover="transform:translateY(-7px);border-color:var(--pa);box-shadow:0 50px 70px -36px rgba(0,0,0,1),0 0 60px -20px rgba(0,0,0,0.6);">
             <div aria-hidden="true" style="position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(72% 62% at 50% -12%, rgba(255,214,170,0.15), rgba(255,120,60,0.04) 46%, rgba(0,0,0,0) 72%);"></div>
             <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:38%;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,0.45));"></div>
             <div style="position:relative;aspect-ratio:4/3;background:#0b0c0f;border:1px solid rgba(232,230,225,0.1);box-shadow:inset 0 0 0 1px rgba(0,0,0,0.6),0 24px 40px -28px rgba(0,0,0,0.95);">
               <image-slot id="{{ cell.id }}" src="images/{{ cell.id }}" fit="contain" shape="rect" res="2800" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ cell.ph }}"></image-slot>
             </div>
             <figcaption style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;">
-              <span style="display:flex;gap:14px;align-items:baseline;min-width:0;"><span style="color:#ff5a1f;">Plate {{ cell.n }}</span><span style="color:#6a6862;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ detail.title }}</span></span>
-              <button data-hover onClick="{{ cell.onView }}" style="appearance:none;cursor:pointer;background:none;border:1px solid rgba(232,230,225,0.28);color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;padding:6px 11px;transition:background .25s,color .25s;flex:none;" style-hover="background:#ff5a1f;color:#101014;">View ⤢</button>
+              <span style="display:flex;gap:14px;align-items:baseline;min-width:0;"><span style="color:var(--pa);">Plate {{ cell.n }}</span><span style="color:#6a6862;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ detail.title }}</span></span>
+              <button data-hover onClick="{{ cell.onView }}" style="appearance:none;cursor:pointer;background:none;border:1px solid rgba(232,230,225,0.28);color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;padding:6px 11px;transition:background .25s,color .25s;flex:none;" style-hover="background:var(--pa);color:#101014;">View ⤢</button>
             </figcaption>
           </figure>
         </sc-for>
@@ -494,7 +584,7 @@ class Component extends DCLogic {
     this.setupScroll();
     this.setupHeroEvents();
     this.initHero();
-    this.initGraphite(); this.initAmbient(); this.initSketch();
+    this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser();
     this._esc = (e) => { if (e.key === "Escape" && this.state.lightbox) this.setState({ lightbox: null }); };
     document.addEventListener("keydown", this._esc);
     // Transport ignition point — combustion spreads outward from the last click.
@@ -502,7 +592,7 @@ class Component extends DCLogic {
     document.addEventListener("pointerdown", this._onPt, true);
   }
   componentWillUnmount() { if (this._esc) document.removeEventListener("keydown", this._esc); if (this._onPt) document.removeEventListener("pointerdown", this._onPt, true); if (this._warpRAF) cancelAnimationFrame(this._warpRAF); }
-  componentDidUpdate() { this.setupReveal(); this.initHero(); this.initGraphite(); this.initAmbient(); this.initSketch(); }
+  componentDidUpdate() { this.setupReveal(); this.initHero(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser(); }
 
   setupHeroEvents() {
     if (this._heroEvt) return;
@@ -631,6 +721,50 @@ class Component extends DCLogic {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { if (document.getElementById("heroName") === cv) { build(); if (reduced) drawStatic(); } });
     }
+  }
+
+  // ── Live browser ────────────────────────────────────────────────────────
+  // The machine on the project page is running the real site. At rest the
+  // page drifts slowly down and back up, desaturated like a screen seen
+  // across a dark room. Put the cursor on the glass and colour returns and
+  // the scroll follows your hand.
+  initBrowser() {
+    document.querySelectorAll("[data-browser]").forEach((wrap) => {
+      if (wrap.__b) return;
+      wrap.__b = true;
+      const vp = wrap.querySelector("[data-bvp]"), img = wrap.querySelector("[data-bimg]");
+      if (!vp || !img) return;
+      const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let y = 0, target = 0, hover = false, dir = 1, range = 0;
+      const measure = () => {
+        const nw = img.naturalWidth || 1, nh = img.naturalHeight || 1;
+        range = Math.max(0, (vp.clientWidth * nh / nw) - vp.clientHeight);
+      };
+      img.addEventListener("load", measure);
+      if (img.complete) measure();
+      vp.addEventListener("pointerenter", () => { hover = true; img.style.filter = "saturate(1) brightness(1) contrast(1)"; });
+      vp.addEventListener("pointerleave", () => { hover = false; img.style.filter = "saturate(0.35) brightness(0.72) contrast(1.04)"; });
+      vp.addEventListener("pointermove", (e) => {
+        const r = vp.getBoundingClientRect();
+        target = Math.max(0, Math.min(1, (e.clientY - r.top) / (r.height || 1))) * range;
+      });
+      let last = performance.now();
+      const tick = (now) => {
+        if (!wrap.isConnected) return;
+        const dt = Math.min(0.05, (now - last) / 1000); last = now;
+        if (!range) measure();
+        if (hover) { y += (target - y) * 0.05; }
+        else {
+          // a slow pass down the page and back again, ~70s each way
+          y += dir * (range / 70) * dt;
+          if (y >= range) { y = range; dir = -1; } else if (y <= 0) { y = 0; dir = 1; }
+        }
+        img.style.transform = "translateY(" + (-y).toFixed(1) + "px)";
+        if (!reduced && document.visibilityState !== "hidden") requestAnimationFrame(tick);
+        else if (!reduced) setTimeout(() => { last = performance.now(); tick(performance.now()); }, 600);
+      };
+      requestAnimationFrame(tick);
+    });
   }
 
   // ── Sound: procedural room tone, projector hum, ash on transport ────────
@@ -1296,6 +1430,13 @@ class Component extends DCLogic {
     return [
       { id: "mmg", num: "01", title: "MMG Operations", kind: "macOS App", year: "2024 — Present", status: "In Production", tags: ["MACOS", "AI"],
         stack: "Swift 6 · SwiftUI · Supabase + PostGIS · Microsoft Graph API · Claude API",
+        accent: "#b4503c",
+        brand: {
+          purpose: "Not a product with customers — an instrument with operators. Two marine companies ran on scattered inboxes, spreadsheets and memory; this is the single surface that holds all of it. It is designed to be lived in eight hours a day, which is why it is dark, dense and quiet: nothing decorative competes with the work.",
+          positioning: "An internal intelligence layer, built with the restraint of a native Mac citizen rather than the noise of a dashboard.",
+          palette: [{ h: "#0e0f13", n: "Void", r: "Canvas" }, { h: "#141821", n: "Slate", r: "Panels" }, { h: "#b4503c", n: "Ember", r: "Action · selection" }, { h: "#1c6f6f", n: "Deep Teal", r: "Geospatial" }, { h: "#2a3a78", n: "Signal", r: "Links · sync" }, { h: "#e9e5dc", n: "Bone", r: "Type" }],
+          fonts: [{ n: "SF Pro Display", r: "Interface", f: "-apple-system,'SF Pro Display',system-ui,sans-serif", w: "600" }, { n: "New York", r: "Editorial reading view", f: "'New York','Iowan Old Style',Georgia,serif", w: "500" }, { n: "SF Mono", r: "Data · timestamps", f: "ui-monospace,'SF Mono',Menlo,monospace", w: "400" }]
+        },
         blurb: "A native macOS operations platform built from scratch — the central intelligence layer for two marine companies.",
         overview: "The most technically complex thing I have built: a full production software project, not a prototype. It fuses Microsoft Outlook, geospatial data and the Claude API into a single command surface for Modern Marine Group and Dock Marine Canada.",
         imglabel: "MMG OPERATIONS · macOS", device: "macbook", shotLabel: "DROP — MMG macOS APP",
@@ -1315,6 +1456,13 @@ class Component extends DCLogic {
             "pg_trgm trigram search" ] } ] },
       { id: "receiptflow", num: "02", title: "ReceiptFlow", kind: "iOS App", year: "In Development", status: "App Store Bound", tags: ["IOS"],
         stack: "Flutter · Dart · Firebase · Apple Vision Framework",
+        accent: "#e0a92e",
+        brand: {
+          purpose: "Built for people who photograph a receipt and never think about it again. Everything is read on the device — no server sees a receipt, and there is no API bill to pass on. The warmth is deliberate: expense tracking is a chore, so the app is made to feel like a wallet you like opening rather than an accounting tool.",
+          positioning: "A private, Canadian-first expense tracker with the tactility of Apple Wallet and none of the subscription anxiety.",
+          palette: [{ h: "#f6f4f0", n: "Paper", r: "Canvas" }, { h: "#ffffff", n: "Card", r: "Surfaces" }, { h: "#e0a92e", n: "Amber", r: "Primary action" }, { h: "#c8875a", n: "Clay", r: "Categories" }, { h: "#6f6a62", n: "Ash", r: "Secondary type" }, { h: "#1c1b19", n: "Ink", r: "Type" }],
+          fonts: [{ n: "SF Pro Text", r: "Interface", f: "-apple-system,'SF Pro Text',system-ui,sans-serif", w: "600" }, { n: "SF Pro Rounded", r: "Amounts · totals", f: "ui-rounded,'SF Pro Rounded',-apple-system,sans-serif", w: "700" }]
+        },
         blurb: "An expense tracker with fully on-device OCR receipt scanning, built for the Canadian market.",
         overview: "An expense tracking iOS app designed for App Store submission, using Apple's Vision Framework for receipt OCR entirely on-device — no API costs.",
         imglabel: "RECEIPTFLOW · iOS", device: "iphone", shotLabel: "DROP — RECEIPTFLOW / iOS",
@@ -1327,6 +1475,14 @@ class Component extends DCLogic {
             "Monthly subscription tracking with smart reminders, tuned for Canadian merchants (Co-op, Tim Hortons, local shops)" ] } ] },
       { id: "dmc", num: "03", title: "Modern Marine Group & Dock Marine Canada", kind: "Web · Brand · Wallet", year: "2024 — Present", status: "Shipped", tags: ["WEB", "BRANDING"], web: true, link: "https://modernmarinegroup.com",
         stack: "Web Development · Brand Design · Apple Wallet · YourAtlas IA",
+        accent: "#1c3a8f",
+        site: { url: "https://modernmarinegroup.com", label: "modernmarinegroup.com", shot: "images/site-dmc.jpg" },
+        brand: {
+          purpose: "Floating docks are a considered purchase sold to dealers and waterfront owners, so the brand had to read engineered rather than nautical-kitsch. No rope fonts, no weathered wood — a marine-industrial identity in navy and white with generous space, so the product photography carries the emotion and the type stays out of the way.",
+          positioning: "A serious Atlantic-Canadian marine manufacturer with the composure of an architecture practice.",
+          palette: [{ h: "#0a1a4f", n: "Deep Navy", r: "Brand primary" }, { h: "#1c3a8f", n: "Marine Blue", r: "Action" }, { h: "#8fa8c4", n: "Harbour", r: "Secondary" }, { h: "#dce6f0", n: "Sky", r: "Tints" }, { h: "#f4f4f2", n: "Salt", r: "Canvas" }, { h: "#14161a", n: "Ink", r: "Type" }],
+          fonts: [{ n: "Montserrat", r: "Interface · headings", f: "'Montserrat',sans-serif", w: "700" }, { n: "Raleway", r: "Body copy", f: "'Raleway',sans-serif", w: "400" }, { n: "Miller Banner", r: "Editorial display", f: "'Miller Banner','Playfair Display',Georgia,serif", w: "500" }]
+        },
         blurb: "Full web presence, brand identity and digital tooling for a marine distribution company — plus a real DNS rescue.",
         overview: "The complete digital footprint for Dock Marine Canada: website, configurator, brand palette and signed Apple Wallet business cards — and a real-world recovery from a DNS hijacking.",
         imglabel: "DOCK MARINE CANADA · Web", device: "macbook", shotLabel: "DROP — DOCK MARINE / WEB",
@@ -1344,6 +1500,14 @@ class Component extends DCLogic {
             "Ran the Seatown Marine PEI dealer partnership pitch" ] } ] },
       { id: "mindtomind", num: "04", title: "A Mind to Mind", kind: "Brand · Web · Content", year: "2025 — Present", status: "Live Client", tags: ["WEB", "BRANDING"], web: true, link: "https://www.denishachey.com",
         stack: "Brand Strategy · WordPress · SEO · Content · Meta Ads",
+        accent: "#5c8a70",
+        site: { url: "https://www.denishachey.com", label: "denishachey.com", shot: "images/site-mindtomind.jpg" },
+        brand: {
+          purpose: "A single book had to become a place people return to weekly. The identity leans literary rather than clinical — a high-contrast serif for the voice of the author, a plain humanist sans for everything else — so reflection posts, exercises and long-form writing all feel like they came from the same hand. Sage and gold keep it warm without drifting into wellness cliché.",
+          positioning: "A mindset and wellness platform that reads like a well-set book, not a self-help funnel.",
+          palette: [{ h: "#f2efe9", n: "Linen", r: "Canvas" }, { h: "#5c8a70", n: "Sage", r: "Brand primary" }, { h: "#2f5240", n: "Forest", r: "Depth" }, { h: "#e0b060", n: "Gold", r: "Action" }, { h: "#3d8ea6", n: "Still Water", r: "Accent" }, { h: "#22201d", n: "Ink", r: "Type" }],
+          fonts: [{ n: "Playfair Display", r: "Display · author voice", f: "'Playfair Display',Georgia,serif", w: "700" }, { n: "Almarai", r: "Body · UI", f: "'Almarai',system-ui,sans-serif", w: "400" }]
+        },
         blurb: "End-to-end digital marketing and brand strategy for a mindset and wellness platform — delivered with an AI-assisted workflow.",
         overview: "Digital Marketing Strategist, Brand Consultant and Content Director for A Mind to Mind Conversation — taking a book-centered project and rebuilding it into a full mindset, wellness and personal-development platform. Strategy, content and creative were executed end-to-end using an AI-assisted workflow (ChatGPT).",
         imglabel: "A MIND TO MIND · Web", device: "macbook", shotLabel: "DROP — MIND TO MIND / WEB",
@@ -1502,7 +1666,7 @@ class Component extends DCLogic {
         const label = p.title.toUpperCase() + " \u2014 PLATE " + nn;
         gallery.push({ id: gid, n: nn, ph: "PLATE " + nn, onView: () => this.openLightbox(gid, label) });
       }
-      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", gallery: gallery };
+      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, gallery: gallery };
     }
 
     return {
