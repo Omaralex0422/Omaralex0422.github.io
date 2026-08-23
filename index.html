@@ -56,8 +56,7 @@
     #contact{padding-top:100px !important;}
     .about-grid{grid-template-columns:1fr !important;gap:36px !important;}
     .exp-row{grid-template-columns:1fr !important;gap:8px !important;padding:30px 4px !important;}
-    .proj-article{grid-template-columns:1fr !important;gap:34px !important;}
-    .proj-article > div{order:initial !important;}
+    .proj-article{grid-template-columns:1fr !important;gap:30px !important;}
     .detail-plate{grid-template-columns:1fr !important;}
     .detail-sec{grid-template-columns:1fr !important;gap:14px !important;}
     .light-leak{width:90% !important;height:60% !important;}
@@ -66,6 +65,45 @@
   @media (max-width:520px){
     .nav-links button:nth-child(2),.nav-links button:nth-child(4){display:none !important;}
   }
+  /* ── THE DOORS ──────────────────────────────────────────────────────
+     Each project on the index is a panel painted in the room behind it —
+     its ground, its ink, its accent, its typeface. Opening one should feel
+     like walking through something you had already been looking at. */
+  .door { position:relative; display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+    gap:clamp(28px,4vw,64px); align-items:stretch; border-radius:18px; overflow:hidden;
+    padding:clamp(30px,4vw,60px) clamp(26px,3.4vw,58px);
+    box-shadow:0 2px 4px rgba(16,16,20,.14), 0 40px 70px -46px rgba(16,16,20,.85);
+    transition:transform .6s cubic-bezier(.2,.7,.2,1), box-shadow .6s ease; }
+  .door::after { content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
+    background:var(--dr); transform:scaleY(0); transform-origin:50% 100%;
+    transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+  .door:hover { transform:translateY(-6px);
+    box-shadow:0 2px 4px rgba(16,16,20,.16), 0 56px 90px -48px rgba(16,16,20,.95); }
+  .door:hover::after { transform:scaleY(1); transform-origin:50% 0; }
+  .door-in { display:flex; flex-direction:column; min-width:0; }
+  .door-vis { display:flex; align-items:center; justify-content:center; min-width:0; }
+  .door-title { position:relative; display:inline-block; align-self:flex-start; margin:22px 0 0;
+    text-align:left; appearance:none; border:none; background:none; padding:0 0 6px; cursor:pointer;
+    font-size:clamp(30px,3.9vw,58px); line-height:1.02; text-wrap:balance; }
+  .door-underline { position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--dr);
+    transform:scaleX(0); transform-origin:0 50%; transition:transform .55s cubic-bezier(.2,.7,.2,1); }
+  .door:hover .door-underline { transform:scaleX(1); }
+  .door-enter { appearance:none; cursor:pointer; background:none; border:1px solid var(--dr);
+    color:var(--dr); border-radius:4px; padding:12px 20px; font-family:inherit; font-size:11.5px;
+    font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    transition:background .35s ease, color .35s ease; }
+  .door-enter:hover { background:var(--dr); color:var(--dbg); }
+  .door-lang { font-size:11px; line-height:1.5; opacity:.85; text-align:right; max-width:24ch; }
+  @media (prefers-reduced-motion:reduce){
+    .door, .door::after, .door-underline { transition:none; }
+  }
+  @media (max-width:900px){
+    .door { grid-template-columns:1fr; padding:clamp(26px,5vw,40px) clamp(22px,5vw,34px); }
+    .door-vis { order:2 !important; }
+    .door-in { order:1 !important; }
+    .door-lang { text-align:left; }
+  }
+
   /* ── PROJECT ROOMS ──────────────────────────────────────────────────
      A project page leaves the museum entirely: its own ground, its own
      type, its own light. The shared chrome steps aside. */
@@ -565,7 +603,7 @@
           <h2 style="margin:18px 0 0;font-weight:900;font-size:clamp(54px,9.5vw,158px);line-height:0.82;letter-spacing:-0.04em;text-transform:uppercase;">Selected<br>Work</h2>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-start;gap:20px;max-width:340px;">
-          <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.85;letter-spacing:0.06em;color:#56544f;text-transform:uppercase;text-wrap:pretty;">Five plates of software, built in production and set in glass. Open a plate to enter its room.</p>
+          <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.85;letter-spacing:0.06em;color:#56544f;text-transform:uppercase;text-wrap:pretty;">Four rooms, each built in production and each set in its own language. The door is painted in what is behind it.</p>
           <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;">
             <sc-for list="{{ filters }}" as="flt" hint-placeholder-count="7">
               <button data-hover onClick="{{ flt.onClick }}" style="{{ flt.style }}">{{ flt.label }}</button>
@@ -574,36 +612,37 @@
         </div>
       </div>
 
-      <div style="position:relative;z-index:1;margin-top:70px;border-top:1px solid rgba(26,27,32,0.2);">
-        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
-          <article class="proj-article" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,6vw,92px);align-items:center;padding:clamp(60px,8vw,112px) 0;border-bottom:1px solid rgba(26,27,32,0.16);">
-
-            <!-- TYPE -->
-            <div style="order:{{ p.typeOrder }};display:flex;flex-direction:column;justify-content:center;">
-              <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px;">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.12em;color:#8a8882;">{{ p.num }} / 05</span>
-                <span style="flex:1;height:1px;background:rgba(26,27,32,0.18);"></span>
-                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#1a1b20;text-transform:uppercase;border:1px solid rgba(26,27,32,0.28);padding:5px 10px;">{{ p.status }}</span>
+      <div style="position:relative;z-index:1;margin-top:64px;display:flex;flex-direction:column;gap:clamp(26px,3.4vw,52px);">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="4">
+          <article class="door proj-article" style="--dbg:{{ p.door.bg }};--dink:{{ p.door.ink }};--dsub:{{ p.door.sub }};--dr:{{ p.door.accent }};--dline:{{ p.door.line }};background:{{ p.door.bg }};color:{{ p.door.ink }};">
+            <div class="door-in" style="order:{{ p.typeOrder }};">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <span style="font-family:{{ p.door.lface }};font-weight:{{ p.door.lweight }};font-size:11px;letter-spacing:{{ p.door.ltrack }};text-transform:uppercase;color:{{ p.door.accent }};">{{ p.num }} / {{ p.total }}</span>
+                <span style="flex:1;height:1px;background:{{ p.door.line }};"></span>
+                <span style="font-family:{{ p.door.lface }};font-weight:{{ p.door.lweight }};font-size:10px;letter-spacing:{{ p.door.ltrack }};text-transform:uppercase;color:{{ p.door.sub }};">{{ p.status }}</span>
               </div>
-              <button data-hover onClick="{{ p.onOpen }}" style="text-align:left;appearance:none;border:none;background:none;padding:0;cursor:pointer;color:#1a1b20;font-family:inherit;">
-                <h3 style="margin:0;font-weight:900;font-size:clamp(40px,5.4vw,88px);line-height:0.88;letter-spacing:-0.035em;text-transform:uppercase;text-wrap:balance;">{{ p.title }}</h3>
+              <button class="door-title" data-hover onClick="{{ p.onOpen }}" style="font-family:{{ p.door.face }};font-weight:{{ p.door.weight }};letter-spacing:{{ p.door.track }};color:{{ p.door.ink }};">
+                {{ p.title }}
+                <i class="door-underline"></i>
               </button>
-              <div style="margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.14em;color:#6a6862;text-transform:uppercase;">{{ p.kind }} · {{ p.year }}</div>
-              <p style="margin:24px 0 0;max-width:46ch;font-size:16px;line-height:1.62;color:#3c3d44;text-wrap:pretty;">{{ p.blurb }}</p>
-              <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:24px;">
+              <div style="margin-top:16px;font-family:{{ p.door.lface }};font-weight:{{ p.door.lweight }};font-size:10.5px;letter-spacing:{{ p.door.ltrack }};text-transform:uppercase;color:{{ p.door.sub }};">{{ p.kind }} &#183; {{ p.year }}</div>
+              <p style="margin:22px 0 0;max-width:46ch;font-size:15.5px;line-height:1.65;color:{{ p.door.sub }};text-wrap:pretty;">{{ p.blurb }}</p>
+              <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:22px;">
                 <sc-for list="{{ p.tags }}" as="t" hint-placeholder-count="2">
-                  <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.16em;color:#6a6862;text-transform:uppercase;border:1px solid rgba(26,27,32,0.2);padding:4px 8px;">{{ t }}</span>
+                  <span style="font-family:{{ p.door.lface }};font-weight:{{ p.door.lweight }};font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:{{ p.door.sub }};border:1px solid {{ p.door.line }};border-radius:3px;padding:4px 9px;">{{ t }}</span>
                 </sc-for>
               </div>
-              <button data-hover onClick="{{ p.onOpen }}" style="margin-top:30px;align-self:flex-start;appearance:none;cursor:pointer;border:1px solid rgba(26,27,32,0.3);background:none;color:#1a1b20;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;padding:13px 22px;transition:background .3s,color .3s;" style-hover="background:#1a1b20;color:#e7e5e0;">Open plate →</button>
+              <div style="margin-top:auto;padding-top:30px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;">
+                <button class="door-enter" data-hover onClick="{{ p.onOpen }}">Enter the room →</button>
+                <span class="door-lang" style="color:{{ p.door.sub }};">{{ p.door.lang }}</span>
+              </div>
             </div>
 
-            <!-- VISUAL -->
-            <div style="order:{{ p.visOrder }};display:flex;flex-direction:column;justify-content:center;">
+            <div class="door-vis" style="order:{{ p.visOrder }};">
               <sc-if value="{{ p.isMac }}" hint-placeholder-val="{{ true }}">
-                <div data-lens style="perspective:1600px;width:100%;max-width:560px;align-self:center;">
+                <div data-lens style="perspective:1600px;width:100%;max-width:540px;">
                   <div style="transform:rotateY(-12deg) rotateX(6deg);transform-origin:center;">
-                    <div style="background:#0b0c0f;border:1px solid rgba(26,27,32,0.35);border-radius:15px 15px 4px 4px;padding:9px 9px 0;box-shadow:0 42px 64px -32px rgba(0,0,0,0.5);">
+                    <div style="background:#0b0c0f;border-radius:15px 15px 4px 4px;padding:9px 9px 0;box-shadow:0 42px 64px -34px rgba(0,0,0,0.55);">
                       <div style="position:relative;border-radius:7px;overflow:hidden;background:#15161b;aspect-ratio:16/10;">
                         <image-slot id="shot-{{ p.id }}" src="images/shot-{{ p.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ p.shotLabel }}"></image-slot>
                       </div>
@@ -615,10 +654,10 @@
                 </div>
               </sc-if>
               <sc-if value="{{ p.isPhone }}" hint-placeholder-val="{{ true }}">
-                <div data-lens style="perspective:1600px;width:100%;max-width:268px;align-self:center;">
+                <div data-lens style="perspective:1600px;width:100%;max-width:252px;">
                   <div style="transform:rotateY(13deg) rotateX(4deg);transform-origin:center;">
-                    <div style="background:#0b0c0f;border-radius:46px;padding:11px;box-shadow:0 42px 64px -32px rgba(0,0,0,0.5);">
-                      <div style="position:relative;border-radius:36px;overflow:hidden;background:#15161b;aspect-ratio:9/19.5;">
+                    <div style="background:#0b0c0f;border-radius:44px;padding:11px;box-shadow:0 42px 64px -34px rgba(0,0,0,0.55);">
+                      <div style="position:relative;border-radius:34px;overflow:hidden;background:#15161b;aspect-ratio:9/19.5;">
                         <image-slot id="shot-{{ p.id }}" src="images/shot-{{ p.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ p.shotLabel }}"></image-slot>
                         <div style="position:absolute;top:13px;left:50%;transform:translateX(-50%);width:33%;height:21px;background:#0b0c0f;border-radius:14px;z-index:3;"></div>
                       </div>
@@ -2768,6 +2807,10 @@ class Component extends DCLogic {
   data() {
     return [
       { id: "mmg", num: "01", title: "MMG Operations", kind: "macOS App", year: "2024 — Present", status: "In Production", tags: ["MACOS", "AI"],
+        door: { bg: "#F5F0E8", ink: "#1F1B15", sub: "#6B5F4E", accent: "#7B2D26", line: "#E5DECE",
+          face: "ui-serif,'New York','Iowan Old Style',Georgia,serif", weight: "400", track: "-.025em",
+          lface: "-apple-system,'SF Pro Text',system-ui,sans-serif", lweight: "500", ltrack: ".18em",
+          lang: "Warm paper · one oxblood accent" },
         stack: "Swift 6 · SwiftUI · Supabase + PostGIS · Microsoft Graph API · Claude API",
         accent: "#7B2D26",
         room: "mmg",
@@ -2823,6 +2866,10 @@ class Component extends DCLogic {
             "Microsoft Graph · Claude Sonnet API",
             "pg_trgm trigram search" ] } ] },
       { id: "receiptflow", num: "02", title: "ReceiptFlow", kind: "iOS App", year: "In Development", status: "App Store Bound", tags: ["IOS"],
+        door: { bg: "#ECECEC", ink: "#282828", sub: "#686868", accent: "#282828", line: "#DCDCDC",
+          face: "-apple-system,'SF Pro Text',system-ui,'Helvetica Neue',sans-serif", weight: "800", track: "-.04em",
+          lface: "-apple-system,'SF Pro Text',system-ui,sans-serif", lweight: "600", ltrack: ".16em",
+          lang: "Neutral grey · borderless cards" },
         stack: "Flutter · Dart · Firebase · Apple Vision Framework",
         accent: "#282828",
         room: "rf",
@@ -2863,6 +2910,10 @@ class Component extends DCLogic {
             "Glassmorphism UI with Apple Wallet-style cards",
             "Monthly subscription tracking with smart reminders, tuned for Canadian merchants (Co-op, Tim Hortons, local shops)" ] } ] },
       { id: "dmc", num: "03", title: "Modern Marine Group & Dock Marine Canada", kind: "Web · Brand · Wallet", year: "2024 — Present", status: "Shipped", tags: ["WEB", "BRANDING"], web: true, link: "https://modernmarinegroup.com",
+        door: { bg: "#FFFFFF", ink: "#14161A", sub: "#75787E", accent: "#121F84", line: "#E4E5E7",
+          face: "'Playfair Display','Miller Banner',Georgia,serif", weight: "700", track: "-.015em",
+          lface: "'Montserrat',sans-serif", lweight: "700", ltrack: ".24em",
+          lang: "White · ultramarine · a great deal of air" },
         stack: "Web Development · Brand Design · Apple Wallet · YourAtlas IA",
         accent: "#121F84",
         room: "dmc",
@@ -2909,6 +2960,10 @@ class Component extends DCLogic {
             "Presented the JetPort product line — Jet Port Plus, Max and Multi Port — with technical specification layouts",
             "Ran the Seatown Marine PEI dealer partnership pitch" ] } ] },
       { id: "mindtomind", num: "04", title: "A Mind to Mind", kind: "Brand · Web · Content", year: "2025 — Present", status: "Live Client", tags: ["WEB", "BRANDING"], web: true, link: "https://www.denishachey.com",
+        door: { bg: "#F6F7F5", ink: "#33312E", sub: "#5A5853", accent: "#547E75", line: "#E2E4DF",
+          face: "'Playfair Display',Georgia,serif", weight: "400", track: "-.012em",
+          lface: "'Almarai',system-ui,sans-serif", lweight: "700", ltrack: ".26em",
+          lang: "Off-white · sage · a literary serif" },
         stack: "Brand Strategy · WordPress · SEO · Content · Meta Ads",
         accent: "#547e75",
         room: "mtm",
@@ -3075,7 +3130,8 @@ class Component extends DCLogic {
     const filterStyle = (active) => "appearance:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;padding:8px 14px;transition:background .3s,color .3s,border-color .3s;border:1px solid " +
       (active ? "#1a1b20;background:#1a1b20;color:#e7e5e0" : "rgba(26,27,32,0.28);background:transparent;color:#56544f");
     const G = this.graphs();
-    const decorate = (p, i) => ({ ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", flip: i % 2 === 1, typeOrder: i % 2 === 1 ? "2" : "1", visOrder: i % 2 === 1 ? "1" : "2" });
+    const total = String(all.length).padStart(2, "0");
+    const decorate = (p, i) => ({ ...p, total: total, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", flip: i % 2 === 1, typeOrder: i % 2 === 1 ? "2" : "1", visOrder: i % 2 === 1 ? "1" : "2" });
 
     let detailNext = null;
     let detailObj = null;
