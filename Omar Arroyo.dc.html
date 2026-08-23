@@ -84,6 +84,9 @@
   html[data-room="dmc"] { --room-accent:#121F84; --room-bg:#ffffff; }
   html[data-room="dmc"], html[data-room="dmc"] body, html[data-room="dmc"] #appRoot { background:#ffffff !important; }
 
+  html[data-room="rf"] { --room-accent:#282828; --room-bg:#ECECEC; }
+  html[data-room="rf"], html[data-room="rf"] body, html[data-room="rf"] #appRoot { background:#ECECEC !important; }
+
   /* ── ROOM: MMG OPERATIONS ───────────────────────────────────────────
      The app's own editorial language, lifted from DesignSystem.swift:
      warm paper, two typefaces (New York serif — ui-serif resolves to it
@@ -266,6 +269,101 @@
     .dmc .ix { grid-template-columns:1fr; gap:8px; }
     .dmc .navpill { padding:10px 10px 10px 16px; }
     .dmc .scrim { background:linear-gradient(180deg,rgba(10,16,60,.34),rgba(10,16,60,.74)) !important; }
+  }
+
+  /* ── ROOM: RECEIPTFLOW ──────────────────────────────────────────────
+     The app's own surface, sampled from the build: a neutral grey ground
+     with soft raised cards and no borders anywhere, SF Pro heavy for the
+     display numerals and SF Pro Rounded for money, micro-labels at 10.5pt
+     tracked out, and colour spent only where the app spends it — navy on
+     the payment card, signal red on a subscription ticket. */
+  .rf { --paper:#ECECEC; --card:#F4F4F4; --cardHi:#FAFAFA; --sunk:#E0E0E0;
+    --ink:#282828; --ash:#686868; --mute:#909090; --line:#DCDCDC;
+    --navy:#183054; --navy2:#2A5290; --red:#F03C48; --red2:#F0606A;
+    --rose:#E4D2D2; --slate:#C6CCD2;
+    background:var(--paper); color:var(--ink);
+    font-family:-apple-system,'SF Pro Text',system-ui,'Helvetica Neue',sans-serif;
+    font-size:15px; line-height:1.6; letter-spacing:-.011em; }
+  .rf h1,.rf h2,.rf h3 { margin:0; font-weight:800; letter-spacing:-.035em; }
+  .rf h1 { font-size:clamp(48px,8.4vw,116px); line-height:.94; }
+  .rf h2 { font-size:clamp(27px,3.7vw,50px); line-height:1.05; }
+  .rf h3 { font-size:18px; line-height:1.28; font-weight:700; letter-spacing:-.022em; }
+  .rf p { text-wrap:pretty; }
+  .rf .lbl { font-size:10.5px; font-weight:600; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--mute); }
+  .rf .amt { font-family:ui-rounded,'SF Pro Rounded',-apple-system,system-ui,sans-serif;
+    font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.035em; }
+  .rf .lede { font-size:clamp(16px,1.5vw,19.5px); line-height:1.62; color:var(--ash); }
+  .rf .wrap { max-width:1180px; margin:0 auto; padding:0 clamp(20px,5vw,64px); }
+  .rf .card { background:var(--card); border-radius:22px; padding:clamp(20px,2.4vw,30px);
+    box-shadow:0 1px 2px rgba(40,40,40,.05), 0 14px 28px -20px rgba(40,40,40,.34); }
+  .rf .well { background:var(--sunk); border-radius:18px; }
+  .rf .pill { display:inline-flex; align-items:center; gap:8px; border:1px solid transparent;
+    cursor:pointer; border-radius:999px; padding:12px 21px; font-size:13px; font-weight:600;
+    letter-spacing:-.012em; background:var(--ink); color:#F4F4F4; text-decoration:none;
+    transition:transform .32s cubic-bezier(.2,.7,.2,1), background .3s, color .3s; }
+  .rf .pill:hover { transform:translateY(-2px); background:#111; }
+  .rf .pill-soft { background:var(--card); color:var(--ink);
+    box-shadow:0 1px 2px rgba(40,40,40,.06), 0 8px 18px -14px rgba(40,40,40,.45); }
+  .rf .pill-soft:hover { background:#fff; }
+  .rf .seg { display:inline-flex; gap:4px; background:var(--sunk); border-radius:999px; padding:4px; }
+  .rf .seg span { border-radius:999px; padding:7px 16px; font-size:12.5px; font-weight:600; color:var(--ash); }
+  .rf .seg span.on { background:var(--cardHi); color:var(--ink);
+    box-shadow:0 1px 2px rgba(40,40,40,.12); }
+  /* the app's list row */
+  .rf .row { display:grid; grid-template-columns:46px minmax(0,1fr) auto; gap:16px;
+    align-items:center; background:var(--card); border-radius:18px; padding:15px 18px; margin-top:10px;
+    box-shadow:0 1px 2px rgba(40,40,40,.04), 0 10px 22px -18px rgba(40,40,40,.35);
+    transition:transform .35s cubic-bezier(.2,.7,.2,1), background .3s; }
+  .rf .row:hover { transform:translateX(5px); background:var(--cardHi); }
+  .rf .row .ic { width:46px; height:46px; border-radius:15px; display:grid; place-items:center;
+    background:var(--sunk); font-family:ui-rounded,'SF Pro Rounded',system-ui,sans-serif;
+    font-weight:700; font-size:14px; color:var(--ash); }
+  /* ── the receipt: torn top and bottom, flips on click, tilts to the cursor ── */
+  .rf .rstage { perspective:1500px; width:min(100%,420px); }
+  .rf .rcard { position:relative; display:grid; transform-style:preserve-3d; cursor:pointer;
+    transition:transform .62s cubic-bezier(.2,.75,.2,1); }
+  .rf .rcard:focus-visible { outline:2px solid var(--ink); outline-offset:8px; }
+  .rf .rface { grid-area:1/1; background:#FBFAF8; padding:32px 26px 30px; backface-visibility:hidden;
+    -webkit-backface-visibility:hidden; clip-path:polygon(0.0% 0, 2.5% 9px, 5.0% 0, 7.5% 9px, 10.0% 0, 12.5% 9px, 15.0% 0, 17.5% 9px, 20.0% 0, 22.5% 9px, 25.0% 0, 27.5% 9px, 30.0% 0, 32.5% 9px, 35.0% 0, 37.5% 9px, 40.0% 0, 42.5% 9px, 45.0% 0, 47.5% 9px, 50.0% 0, 52.5% 9px, 55.0% 0, 57.5% 9px, 60.0% 0, 62.5% 9px, 65.0% 0, 67.5% 9px, 70.0% 0, 72.5% 9px, 75.0% 0, 77.5% 9px, 80.0% 0, 82.5% 9px, 85.0% 0, 87.5% 9px, 90.0% 0, 92.5% 9px, 95.0% 0, 97.5% 9px, 100.0% 0, 100.0% 100%, 97.5% calc(100% - 9px), 95.0% 100%, 92.5% calc(100% - 9px), 90.0% 100%, 87.5% calc(100% - 9px), 85.0% 100%, 82.5% calc(100% - 9px), 80.0% 100%, 77.5% calc(100% - 9px), 75.0% 100%, 72.5% calc(100% - 9px), 70.0% 100%, 67.5% calc(100% - 9px), 65.0% 100%, 62.5% calc(100% - 9px), 60.0% 100%, 57.5% calc(100% - 9px), 55.0% 100%, 52.5% calc(100% - 9px), 50.0% 100%, 47.5% calc(100% - 9px), 45.0% 100%, 42.5% calc(100% - 9px), 40.0% 100%, 37.5% calc(100% - 9px), 35.0% 100%, 32.5% calc(100% - 9px), 30.0% 100%, 27.5% calc(100% - 9px), 25.0% 100%, 22.5% calc(100% - 9px), 20.0% 100%, 17.5% calc(100% - 9px), 15.0% 100%, 12.5% calc(100% - 9px), 10.0% 100%, 7.5% calc(100% - 9px), 5.0% 100%, 2.5% calc(100% - 9px), 0.0% 100%); }
+  .rf .rback { transform:rotateY(180deg); }
+  .rf .rback .rrow { padding:4px 0; }
+  .rf .rshadow { position:absolute; left:6%; right:6%; top:16%; bottom:-4%; z-index:-1;
+    background:rgba(40,40,40,.30); filter:blur(26px); border-radius:24px; }
+  .rf .rlbl { font-size:9.5px; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:#9C978E; }
+  .rf .rdash { height:1px; background:repeating-linear-gradient(90deg,#C9C4BA 0 5px,transparent 5px 11px); }
+  .rf .rrow { display:flex; justify-content:space-between; gap:14px; font-size:10.5px;
+    font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#5C574F; padding:5px 0; }
+  .rf .rrow b { font-weight:600; color:#282828; }
+  /* ── the subscription ticket, perforated ── */
+  .rf .ticket { position:relative; display:grid; grid-template-columns:minmax(0,1fr) 124px;
+    border-radius:20px; overflow:hidden; color:#fff;
+    background:linear-gradient(128deg,var(--red) 0%,var(--red2) 62%,#FF8A80 100%);
+    box-shadow:0 20px 40px -26px rgba(240,60,72,.75); }
+  .rf .ticket .perf { position:absolute; top:0; bottom:0; right:124px; width:1px;
+    background:repeating-linear-gradient(180deg,rgba(255,255,255,.85) 0 6px,transparent 6px 13px); }
+  .rf .ticket .notch { position:absolute; right:118px; width:13px; height:13px; border-radius:50%;
+    background:var(--paper); }
+  /* ── the payment card ── */
+  .rf .paycard { position:relative; aspect-ratio:1.586/1; border-radius:18px; overflow:hidden;
+    padding:22px; color:#fff; display:flex; flex-direction:column; justify-content:space-between;
+    background:linear-gradient(133deg,var(--navy) 0%,#1F3F70 48%,var(--navy2) 100%);
+    box-shadow:0 26px 48px -30px rgba(24,48,84,.9); }
+  .rf .chip { width:38px; height:29px; border-radius:5px;
+    background:linear-gradient(150deg,#E8C46A,#B9902F 55%,#F0D98C); }
+  .rf .swatch { height:88px; border-radius:14px; box-shadow:inset 0 0 0 1px rgba(40,40,40,.06); }
+  .rf .plates { display:grid; gap:clamp(14px,2vw,30px); grid-template-columns:repeat(6,minmax(0,1fr)); }
+  @media (max-width:1120px){ .rf .plates { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  @media (max-width:560px){ .rf .plates { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @keyframes rfRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
+  .rf [data-rf-rise] { animation:rfRise .9s cubic-bezier(.2,.7,.2,1) both; }
+  @media (prefers-reduced-motion:reduce){ .rf [data-rf-rise] { animation:none; } }
+  @media (max-width:760px){
+    .rf .m-stack { grid-template-columns:1fr !important; }
+    .rf .row { grid-template-columns:40px minmax(0,1fr); gap:12px; }
+    .rf .row .ic { width:40px; height:40px; border-radius:13px; }
+    .rf .row > :last-child { grid-column:2; }
+    .rf .rstage { max-width:330px; margin:0 auto; }
   }
 
   .light-leak { position:absolute; top:-22%; right:-12%; width:58%; height:76%; z-index:-1; pointer-events:none; background:linear-gradient(215deg, rgba(255,90,31,.17) 0%, rgba(255,90,31,.06) 34%, rgba(255,90,31,0) 60%); filter:blur(28px); animation:leakDrift 38s ease-in-out infinite; }
@@ -1145,6 +1243,276 @@
     </div>
     </sc-if>
 
+    <!-- ══ ROOM: RECEIPTFLOW ══ the app's own surface, rebuilt live ══ -->
+    <sc-if value="{{ detail.isRF }}" hint-placeholder-val="{{ false }}">
+    <div class="rf" style="margin:-120px -6vw -70px;">
+
+      <!-- the app's top bar: a soft icon button and one action -->
+      <header style="position:sticky;top:0;z-index:30;background:rgba(236,236,236,.86);backdrop-filter:blur(14px);">
+        <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:18px;height:70px;">
+          <div style="display:flex;align-items:center;gap:13px;">
+            <div style="width:42px;height:42px;border-radius:14px;background:var(--card);display:grid;place-items:center;box-shadow:0 1px 2px rgba(40,40,40,.07),0 8px 18px -14px rgba(40,40,40,.5);">
+              <svg viewBox="0 0 22 22" width="18" height="18" aria-hidden="true" fill="none" stroke="#282828" stroke-width="1.9" stroke-linecap="round"><path d="M4 6h14M4 11h14M4 16h9"></path></svg>
+            </div>
+            <div style="font-weight:700;font-size:14.5px;letter-spacing:-.02em;">ReceiptFlow</div>
+          </div>
+          <button class="pill pill-soft" data-hover onClick="{{ close }}">← Omar Arroyo</button>
+        </div>
+      </header>
+
+      <!-- nameplate — the home screen's greeting, then the number -->
+      <section class="wrap" style="padding:clamp(40px,6vw,86px) 0 clamp(30px,4vw,50px);">
+        <div class="lbl" data-rf-rise>In development · App Store bound</div>
+        <h1 data-rf-rise style="margin-top:14px;">ReceiptFlow</h1>
+        <p class="lede" data-rf-rise style="margin:26px 0 0;max-width:56ch;">Photograph a receipt and never think about it again. Every character is read on the device by Apple's Vision framework — no server sees a receipt, and there is no API bill to pass on to anyone.</p>
+        <div data-rf-rise style="display:flex;gap:11px;flex-wrap:wrap;margin-top:30px;align-items:center;">
+          <span class="pill" style="cursor:default;">Flutter · Dart · Firebase</span>
+          <span class="pill pill-soft" style="cursor:default;">Apple Vision Framework</span>
+        </div>
+
+        <div data-rf-rise style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,158px),1fr));gap:clamp(12px,1.4vw,18px);margin-top:clamp(34px,4.5vw,58px);">
+          <sc-for list="{{ detail.stats }}" as="st" hint-placeholder-count="4">
+            <div class="card" style="padding:22px 22px 20px;">
+              <div class="lbl">{{ st.l }}</div>
+              <div class="amt" style="font-size:clamp(30px,3.4vw,42px);line-height:1.05;margin-top:10px;">{{ st.v }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- the receipt: the app's signature object, running here -->
+      <section class="wrap" data-reveal style="transition:opacity .95s cubic-bezier(.2,.7,.2,1),transform .95s cubic-bezier(.2,.7,.2,1);padding:clamp(44px,6vw,90px) 0;">
+        <div class="m-stack" style="display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);gap:clamp(34px,5vw,76px);align-items:center;">
+          <div data-receipt style="display:flex;justify-content:center;">
+            <div class="rstage">
+              <div class="rcard" data-rcard>
+                <div class="rshadow" aria-hidden="true"></div>
+                <div class="rface">
+                  <div style="text-align:center;">
+                    <div class="rlbl">Receipt</div>
+                    <div style="font-weight:800;font-size:30px;letter-spacing:.02em;margin-top:9px;">CO-OP</div>
+                    <div class="rlbl" style="margin-top:7px;">Groceries</div>
+                  </div>
+                  <div class="rdash" style="margin:20px 0;"></div>
+                  <div class="amt" style="text-align:center;font-size:42px;line-height:1;">$12.98</div>
+                  <div class="rdash" style="margin:20px 0;"></div>
+                  <div class="rrow"><span>Date</span><b>Tue, Jun 23 · 9:33 AM</b></div>
+                  <div class="rrow"><span>Status</span><b>Confirmed</b></div>
+                  <div class="rrow"><span>Method</span><b>Receipt</b></div>
+                  <div class="rlbl" style="text-align:center;margin-top:20px;letter-spacing:.16em;">Tap to flip · move to tilt</div>
+                </div>
+                <div class="rface rback">
+                  <div style="text-align:center;">
+                    <div class="rlbl">Vision framework</div>
+                    <div style="font-weight:800;font-size:22px;letter-spacing:-.01em;margin-top:9px;">What it read</div>
+                    <div class="rlbl" style="margin-top:7px;">On device · offline</div>
+                  </div>
+                  <div class="rdash" style="margin:18px 0;"></div>
+                  <div class="rrow"><span>Merchant</span><b>CO-OP</b></div>
+                  <div class="rrow"><span>Total</span><b>12.98</b></div>
+                  <div class="rrow"><span>Date</span><b>2026-06-23</b></div>
+                  <div class="rrow"><span>Category</span><b>Groceries</b></div>
+                  <div class="rrow"><span>Tax</span><b>HST 15%</b></div>
+                  <div class="rdash" style="margin:18px 0;"></div>
+                  <div class="rrow"><span>Network calls</span><b>0</b></div>
+                  <div class="rrow"><span>API cost</span><b>$0.00</b></div>
+                  <div class="rlbl" style="text-align:center;margin-top:18px;letter-spacing:.16em;">Tap to flip back</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="lbl">The object</div>
+            <h2 style="margin-top:16px;max-width:14ch;">A receipt you can pick up.</h2>
+            <p class="lede" style="margin:20px 0 0;max-width:48ch;">In the app a saved receipt is not a row in a table — it is a torn slip of paper that tilts under your thumb and turns over to show what the scan actually pulled out of it. Give it a tap. It is the real component, rebuilt in the page rather than screenshotted.</p>
+            <p class="lede" style="margin:18px 0 0;max-width:48ch;">The back is the honest half: merchant, total, date and tax as Vision returned them, and underneath, the two numbers the whole architecture exists to keep at zero.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- on device -->
+      <section data-reveal style="transition:opacity .95s cubic-bezier(.2,.7,.2,1),transform .95s cubic-bezier(.2,.7,.2,1);background:var(--ink);color:#EDEDED;padding:clamp(52px,7vw,104px) 0;">
+        <div class="wrap m-stack" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:clamp(30px,5vw,68px);align-items:start;">
+          <div>
+            <div class="lbl" style="color:#8B8B8B;">On device</div>
+            <h2 style="margin-top:16px;color:#F4F4F4;max-width:15ch;">Nothing leaves the phone.</h2>
+            <p class="lede" style="margin:20px 0 0;max-width:48ch;color:#A8A8A8;">Vision runs the whole read locally — text detection, merchant, total, date, category. That is a privacy decision first and an economic one second: with no OCR API in the loop there is no per-scan cost, so there is no subscription to charge for it.</p>
+            <div style="display:flex;gap:clamp(24px,4vw,52px);flex-wrap:wrap;margin-top:34px;">
+              <div><div class="lbl" style="color:#8B8B8B;">Per scan</div><div class="amt" style="font-size:clamp(36px,4.6vw,60px);color:#F4F4F4;margin-top:8px;">$0.00</div></div>
+              <div><div class="lbl" style="color:#8B8B8B;">Receipts uploaded</div><div class="amt" style="font-size:clamp(36px,4.6vw,60px);color:#F4F4F4;margin-top:8px;">0</div></div>
+            </div>
+          </div>
+          <div style="border-top:1px solid #3A3A3A;">
+            <sc-for list="{{ detail.pipe }}" as="q" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:34px minmax(0,1fr);gap:18px;padding:17px 0;border-bottom:1px solid #3A3A3A;align-items:baseline;">
+                <div class="amt" style="font-size:17px;color:#7A7A7A;">{{ q.n }}</div>
+                <div>
+                  <h3 style="color:#F4F4F4;">{{ q.t }}</h3>
+                  <p style="margin:7px 0 0;font-size:13.5px;line-height:1.6;color:#9A9A9A;">{{ q.d }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <!-- the screens -->
+      <section class="wrap" data-reveal style="transition:opacity .95s cubic-bezier(.2,.7,.2,1),transform .95s cubic-bezier(.2,.7,.2,1);padding:clamp(52px,7vw,100px) 0 clamp(30px,4vw,50px);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;">
+          <div>
+            <div class="lbl">The app</div>
+            <h2 style="margin-top:16px;">Seven screens.</h2>
+          </div>
+          <div class="seg" aria-hidden="true"><span class="on">Month</span><span>Year</span></div>
+        </div>
+        <div style="margin-top:clamp(24px,3vw,38px);">
+          <sc-for list="{{ detail.screens }}" as="v" hint-placeholder-count="7">
+            <div class="row" data-hover>
+              <div class="ic">{{ v.n }}</div>
+              <div style="min-width:0;">
+                <h3>{{ v.t }}</h3>
+                <p style="margin:4px 0 0;font-size:13.5px;line-height:1.55;color:var(--ash);">{{ v.d }}</p>
+              </div>
+              <div class="lbl" style="white-space:nowrap;">{{ v.k }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- two more components, rebuilt -->
+      <section class="wrap" data-reveal style="transition:opacity .95s cubic-bezier(.2,.7,.2,1),transform .95s cubic-bezier(.2,.7,.2,1);padding:clamp(40px,5vw,80px) 0;">
+        <div class="lbl">Also rebuilt here</div>
+        <h2 style="margin-top:16px;max-width:20ch;">The ticket and the card.</h2>
+        <p class="lede" style="margin:18px 0 clamp(28px,4vw,46px);max-width:54ch;">A subscription is a perforated ticket with a stub counting down to the next billing date. A payment method is a card you can actually look at. Both are HTML on this page, not pictures of the app.</p>
+        <div class="m-stack" style="display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,3.4vw,44px);align-items:center;">
+          <div class="ticket">
+            <div class="perf" aria-hidden="true"></div>
+            <div class="notch" style="top:-6.5px;" aria-hidden="true"></div>
+            <div class="notch" style="bottom:-6.5px;" aria-hidden="true"></div>
+            <div style="padding:clamp(22px,2.6vw,32px);">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+                <div style="display:flex;align-items:center;gap:13px;min-width:0;">
+                  <div style="width:40px;height:40px;border-radius:13px;background:rgba(255,255,255,.24);display:grid;place-items:center;flex:none;">
+                    <svg viewBox="0 0 22 22" width="18" height="18" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M8 16V5l9-2v11"></path><circle cx="6" cy="16" r="2.4"></circle><circle cx="15" cy="14" r="2.4"></circle></svg>
+                  </div>
+                  <div style="min-width:0;">
+                    <div style="font-weight:700;font-size:19px;letter-spacing:-.02em;">Apple Music</div>
+                    <div style="font-size:12.5px;color:rgba(255,255,255,.78);">Individual</div>
+                  </div>
+                </div>
+                <div style="text-align:right;flex:none;">
+                  <div class="amt" style="font-size:clamp(21px,2.2vw,27px);line-height:1;">$11.99</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,.78);margin-top:3px;">/mo</div>
+                </div>
+              </div>
+              <div style="margin-top:clamp(26px,3vw,44px);">
+                <div style="font-size:9.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.72);">Next billing</div>
+                <div style="font-weight:700;font-size:17px;margin-top:5px;letter-spacing:-.02em;">Jun 30, 2026</div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;">
+                <span style="border-radius:999px;background:rgba(255,255,255,.24);padding:5px 12px;font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;">Monthly</span>
+                <span style="border-radius:999px;background:rgba(255,255,255,.14);padding:5px 12px;font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;">Day 30</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 12px;">
+              <div style="border-radius:16px;background:rgba(255,255,255,.22);padding:15px 16px;text-align:center;min-width:74px;">
+                <div class="amt" style="font-size:30px;line-height:1;">6</div>
+                <div style="font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-top:5px;color:rgba(255,255,255,.88);">Days</div>
+              </div>
+              <div style="font-size:9.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-top:10px;color:rgba(255,255,255,.72);">Left</div>
+            </div>
+          </div>
+          <div class="paycard">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div>
+                <div style="font-weight:600;font-size:14.5px;letter-spacing:-.01em;">Omar Arroyo</div>
+                <div class="chip" style="margin-top:18px;"></div>
+              </div>
+              <div style="font-size:11.5px;color:rgba(255,255,255,.78);">Personal</div>
+            </div>
+            <div>
+              <div class="amt" style="font-size:clamp(15px,1.5vw,18px);letter-spacing:.12em;">•••• &#8194;•••• &#8194;•••• &#8194;5460</div>
+              <div style="display:flex;justify-content:flex-end;margin-top:10px;text-align:right;line-height:1.35;">
+                <div><div style="font-size:11px;font-weight:600;">NBC</div><div style="font-size:10px;color:rgba(255,255,255,.68);">Visa</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- identity -->
+      <section class="wrap" data-reveal style="transition:opacity .95s cubic-bezier(.2,.7,.2,1),transform .95s cubic-bezier(.2,.7,.2,1);padding:clamp(52px,7vw,100px) 0;">
+        <div class="lbl">The surface</div>
+        <h2 style="margin-top:16px;">Why it looks like this.</h2>
+        <div class="m-stack" style="margin-top:clamp(28px,4vw,50px);display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(28px,5vw,68px);align-items:start;">
+          <div>
+            <p style="margin:0;font-size:clamp(16px,1.45vw,19px);line-height:1.66;color:#3C3C3C;">{{ detail.brand.purpose }}</p>
+            <p style="margin:24px 0 0;padding-left:18px;border-left:2px solid var(--ink);font-size:12.5px;font-weight:600;line-height:1.9;letter-spacing:.09em;text-transform:uppercase;color:var(--ash);">{{ detail.brand.positioning }}</p>
+          </div>
+          <div class="card">
+            <div class="lbl">Typefaces</div>
+            <sc-for list="{{ detail.brand.fonts }}" as="f" hint-placeholder-count="2">
+              <div style="display:flex;align-items:baseline;gap:18px;border-top:1px solid var(--line);padding:18px 0 14px;margin-top:14px;">
+                <div style="font-family:{{ f.f }};font-weight:{{ f.w }};font-size:40px;line-height:1;flex:none;min-width:70px;letter-spacing:-.04em;">{{ f.g }}</div>
+                <div style="min-width:0;">
+                  <div style="font-family:{{ f.f }};font-weight:{{ f.w }};font-size:16.5px;letter-spacing:-.02em;">{{ f.n }}</div>
+                  <div class="lbl" style="margin-top:6px;">{{ f.r }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="margin-top:clamp(34px,4.5vw,60px);">
+          <div class="lbl">Palette — sampled off the build</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,128px),1fr));gap:clamp(11px,1.3vw,18px);margin-top:18px;">
+            <sc-for list="{{ detail.brand.palette }}" as="c" hint-placeholder-count="8">
+              <div data-hover style="transition:transform .45s cubic-bezier(.2,.7,.2,1);" style-hover="transform:translateY(-5px);">
+                <div class="swatch" style="background:{{ c.h }};"></div>
+                <div class="amt" style="font-size:12px;letter-spacing:.01em;margin-top:11px;">{{ c.h }}</div>
+                <div style="font-size:13px;margin-top:2px;">{{ c.n }}</div>
+                <div class="lbl" style="margin-top:4px;">{{ c.r }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <!-- plates, in phones -->
+      <section class="wrap" data-reveal style="transition:opacity .95s cubic-bezier(.2,.7,.2,1),transform .95s cubic-bezier(.2,.7,.2,1);padding:clamp(30px,4vw,60px) 0 clamp(52px,7vw,100px);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;">
+          <div>
+            <div class="lbl">The build</div>
+            <h2 style="margin-top:16px;">Screens as shipped.</h2>
+          </div>
+          <span class="lbl">Tap any screen to enlarge</span>
+        </div>
+        <div class="plates" style="margin-top:clamp(28px,3.6vw,50px);">
+          <sc-for list="{{ detail.gallery }}" as="cell" hint-placeholder-count="6">
+            <figure data-hover onClick="{{ cell.onView }}" style="margin:0;cursor:zoom-in;transition:transform .5s cubic-bezier(.2,.7,.2,1);" style-hover="transform:translateY(-8px);">
+              <div style="background:#282828;border-radius:34px;padding:8px;box-shadow:0 22px 44px -28px rgba(40,40,40,.85);">
+                <div style="position:relative;border-radius:27px;overflow:hidden;background:var(--sunk);aspect-ratio:9/19.5;">
+                  <image-slot id="{{ cell.id }}" src="images/{{ cell.id }}" fit="cover" shape="rect" res="1600" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ cell.ph }}"></image-slot>
+                </div>
+              </div>
+              <figcaption class="lbl" style="text-align:center;margin-top:13px;">Screen {{ cell.n }}</figcaption>
+            </figure>
+          </sc-for>
+        </div>
+      </section>
+
+      <footer style="background:var(--ink);color:#EDEDED;padding:clamp(52px,7vw,104px) 0;">
+        <div class="wrap" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:28px;">
+          <div>
+            <div class="lbl" style="color:#8B8B8B;">ReceiptFlow · iOS</div>
+            <h2 style="margin-top:16px;color:#F4F4F4;max-width:15ch;">A wallet you like opening.</h2>
+            <div style="margin-top:14px;font-size:13.5px;color:#9A9A9A;">{{ detail.stack }}</div>
+          </div>
+          <button class="pill" data-hover onClick="{{ close }}" style="background:#F4F4F4;color:#282828;">← Back to the index</button>
+        </div>
+      </footer>
+    </div>
+    </sc-if>
+
     <sc-if value="{{ detail.isGeneric }}" hint-placeholder-val="{{ true }}">
     <button data-hover onClick="{{ close }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;padding:0;margin-bottom:60px;transition:color .3s;" style-hover="color:#ff5a1f;">← Back to index</button>
 
@@ -1399,7 +1767,7 @@ class Component extends DCLogic {
     document.addEventListener("pointerdown", this._onPt, true);
   }
   componentWillUnmount() { document.documentElement.removeAttribute("data-room"); if (this._esc) document.removeEventListener("keydown", this._esc); if (this._onPt) document.removeEventListener("pointerdown", this._onPt, true); if (this._warpRAF) cancelAnimationFrame(this._warpRAF); }
-  componentDidUpdate() { this.setupReveal(); this.initHero(); this.setRoom(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser(); this.initSpiral(); }
+  componentDidUpdate() { this.setupReveal(); this.initHero(); this.setRoom(); this.initGraphite(); this.initAmbient(); this.initSketch(); this.initBrowser(); this.initSpiral(); this.initReceipt(); }
 
   setupHeroEvents() {
     if (this._heroEvt) return;
@@ -1588,6 +1956,43 @@ class Component extends DCLogic {
       const t0 = performance.now();
       const tick = (now) => { if (!cv.isConnected) return; draw((now - t0) / 1000); requestAnimationFrame(tick); };
       requestAnimationFrame(tick);
+    });
+  }
+
+  // ── The receipt ─────────────────────────────────────────────────────────
+  // ReceiptFlow's signature object: a torn slip that tilts toward the cursor
+  // and turns over on a tap to show what Vision actually read off it. The
+  // transform is written in one place so the tilt and the flip compose
+  // instead of fighting each other.
+  initReceipt() {
+    document.querySelectorAll("[data-receipt]").forEach((stage) => {
+      if (stage.__rc) return;
+      stage.__rc = true;
+      const card = stage.querySelector("[data-rcard]");
+      if (!card) return;
+      const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let flipped = false, rx = 0, ry = 0;
+      const apply = () => {
+        card.style.transform = "rotateX(" + rx.toFixed(2) + "deg) rotateY(" + (ry + (flipped ? 180 : 0)).toFixed(2) + "deg)";
+      };
+      if (!reduced) {
+        stage.addEventListener("pointermove", (e) => {
+          const r = stage.getBoundingClientRect();
+          rx = -(((e.clientY - r.top) / (r.height || 1)) - 0.5) * 14;
+          ry = (((e.clientX - r.left) / (r.width || 1)) - 0.5) * 18;
+          apply();
+        });
+        stage.addEventListener("pointerleave", () => { rx = 0; ry = 0; apply(); });
+      }
+      const flip = () => { flipped = !flipped; apply(); };
+      card.addEventListener("click", flip);
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", "Flip the receipt to see what the scan read");
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); }
+      });
+      apply();
     });
   }
 
@@ -2354,12 +2759,33 @@ class Component extends DCLogic {
             "pg_trgm trigram search" ] } ] },
       { id: "receiptflow", num: "02", title: "ReceiptFlow", kind: "iOS App", year: "In Development", status: "App Store Bound", tags: ["IOS"],
         stack: "Flutter · Dart · Firebase · Apple Vision Framework",
-        accent: "#e0a92e",
+        accent: "#282828",
+        room: "rf",
+        stats: [
+          { v: "$0.00", l: "Cost per scan" }, { v: "0", l: "Receipts uploaded" },
+          { v: "7", l: "Screens" }, { v: "100%", l: "OCR on device" }
+        ],
+        screens: [
+          { n: "01", t: "Home", d: "The greeting, the month's total set large, and every receipt as a card you can thumb through.", k: "41 receipts" },
+          { n: "02", t: "Receipt", d: "One slip of paper, torn top and bottom. Tap to flip it over, drag to tilt it in the light.", k: "Flip · tilt" },
+          { n: "03", t: "Analytics", d: "Spending trend by month or year, with the tax breakdown underneath it.", k: "Month · Year" },
+          { n: "04", t: "Subscriptions", d: "A calendar of billing dates, and each subscription as a perforated ticket counting down.", k: "Countdown" },
+          { n: "05", t: "Cards", d: "Payment methods as real cards in a carousel, each one opening onto its own expenses.", k: "Carousel" },
+          { n: "06", t: "Categories", d: "Every category with a sparkline, a share of the month, and a running total.", k: "Sparklines" },
+          { n: "07", t: "Currency", d: "Live rates with a swap control between the two amounts — built for cross-border receipts.", k: "USD ⇄ CAD" }
+        ],
+        pipe: [
+          { n: "01", t: "Capture", d: "The camera opens straight to a frame guide. No crop step, no upload spinner." },
+          { n: "02", t: "Detect", d: "Vision's text recogniser runs on the frame locally and returns positioned strings." },
+          { n: "03", t: "Parse", d: "Merchant, total, date and tax are pulled out of that soup — including receipts scanned months late." },
+          { n: "04", t: "Categorise", d: "Canadian merchants matched by name: Co-op, Tim Hortons, Shoppers, the local shops." },
+          { n: "05", t: "Store", d: "Written to the device. Firebase holds the account, never the receipt." }
+        ],
         brand: {
-          purpose: "Built for people who photograph a receipt and never think about it again. Everything is read on the device — no server sees a receipt, and there is no API bill to pass on. The warmth is deliberate: expense tracking is a chore, so the app is made to feel like a wallet you like opening rather than an accounting tool.",
+          purpose: "Built for people who photograph a receipt and never think about it again. Everything is read on the device — no server sees a receipt, and there is no API bill to pass on. The surface is deliberately quiet: a neutral grey ground, soft raised cards with no borders anywhere, and colour spent only twice — navy on a payment card, signal red on a subscription. Expense tracking is a chore, so the app is built to feel like a wallet you like opening rather than an accounting tool.",
           positioning: "A private, Canadian-first expense tracker with the tactility of Apple Wallet and none of the subscription anxiety.",
-          palette: [{ h: "#f6f4f0", n: "Paper", r: "Canvas" }, { h: "#ffffff", n: "Card", r: "Surfaces" }, { h: "#e0a92e", n: "Amber", r: "Primary action" }, { h: "#c8875a", n: "Clay", r: "Categories" }, { h: "#6f6a62", n: "Ash", r: "Secondary type" }, { h: "#1c1b19", n: "Ink", r: "Type" }],
-          fonts: [{ n: "SF Pro Text", r: "Interface", f: "-apple-system,'SF Pro Text',system-ui,sans-serif", w: "600" }, { n: "SF Pro Rounded", r: "Amounts · totals", f: "ui-rounded,'SF Pro Rounded',-apple-system,sans-serif", w: "700" }]
+          palette: [{ h: "#ECECEC", n: "Paper", r: "The ground" }, { h: "#F4F4F4", n: "Card", r: "Raised surfaces" }, { h: "#E0E0E0", n: "Sunken", r: "Wells · tracks" }, { h: "#282828", n: "Ink", r: "Type · the button" }, { h: "#686868", n: "Ash", r: "Secondary type" }, { h: "#909090", n: "Mute", r: "Micro-labels" }, { h: "#183054", n: "Card Navy", r: "Payment cards" }, { h: "#F03C48", n: "Signal", r: "Subscriptions" }],
+          fonts: [{ n: "SF Pro Text", r: "Interface · body · labels", f: "-apple-system,'SF Pro Text',system-ui,sans-serif", w: "700", g: "Aa" }, { n: "SF Pro Rounded", r: "Amounts · totals · counters", f: "ui-rounded,'SF Pro Rounded',-apple-system,sans-serif", w: "800", g: "$0" }]
         },
         blurb: "An expense tracker with fully on-device OCR receipt scanning, built for the Canadian market.",
         overview: "An expense tracking iOS app designed for App Store submission, using Apple's Vision Framework for receipt OCR entirely on-device — no API costs.",
@@ -2601,7 +3027,7 @@ class Component extends DCLogic {
         const label = p.title.toUpperCase() + " \u2014 PLATE " + nn;
         gallery.push({ id: gid, n: nn, ph: "PLATE " + nn, onView: () => this.openLightbox(gid, label) });
       }
-      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, isMTM: p.room === "mtm", isMMG: p.room === "mmg", isDMC: p.room === "dmc", isGeneric: !p.room, dests: p.dests || [], field: p.field || [], stats: p.stats || [], integ: p.integ || [], blog: p.blog || [], process: p.process || [], ix: p.ix || [], pitches: p.pitches || [], recovery: p.recovery || [], gallery: gallery };
+      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, isMTM: p.room === "mtm", isMMG: p.room === "mmg", isDMC: p.room === "dmc", isRF: p.room === "rf", isGeneric: !p.room, dests: p.dests || [], field: p.field || [], stats: p.stats || [], integ: p.integ || [], blog: p.blog || [], process: p.process || [], ix: p.ix || [], pitches: p.pitches || [], recovery: p.recovery || [], screens: p.screens || [], pipe: p.pipe || [], gallery: gallery };
     }
 
     return {
