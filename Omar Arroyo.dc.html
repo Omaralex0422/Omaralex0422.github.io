@@ -144,6 +144,10 @@
   .mmg .night h2, .mmg .night h3 { color:#F0EAE0; }
   .mmg .night .cap { color:#7A6F5E; }
   .mmg .night .rule { background:#3A332A; }
+  .mmg .nextrow { display:block; width:100%; text-align:left; appearance:none; cursor:pointer;
+    border:0; border-top:1px solid var(--divider); background:none; color:inherit; font-family:inherit;
+    padding:clamp(38px,5vw,64px) 0; transition:background .4s ease; }
+  .mmg .nextrow:hover { background:var(--paperEl); }
   @keyframes mmgIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
   .mmg [data-mmg-in] { animation:mmgIn .28s ease-out both; }
   @media (max-width:760px){
@@ -184,6 +188,10 @@
   .mtm .step { display:grid; grid-template-columns:56px minmax(0,1fr); gap:22px; padding:30px 0; border-top:1px solid #e2e4df; }
   .mtm .step .n { font-family:'Playfair Display',serif; font-size:30px; color:var(--mist); line-height:1; }
   .mtm .sw { height:104px; border-radius:3px; }
+  .mtm .nextrow { display:block; width:100%; text-align:left; appearance:none; cursor:pointer;
+    border:0; border-top:1px solid #e2e4df; background:none; color:inherit; font-family:inherit;
+    padding:clamp(38px,5vw,64px) 0; transition:background .4s ease; }
+  .mtm .nextrow:hover { background:#eef1ec; }
   @keyframes mtmRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
   .mtm [data-mtm-rise] { animation:mtmRise .95s cubic-bezier(.2,.7,.2,1) both; }
   @media (max-width:760px){
@@ -258,6 +266,10 @@
   .dmc .mark g:nth-of-type(2) * { animation-delay:.16s; }
   .dmc .mark g:nth-of-type(3) * { animation-delay:.32s; }
   .dmc .mark g:nth-of-type(4) * { animation-delay:.48s; }
+  .dmc .nextrow { display:block; width:100%; text-align:left; appearance:none; cursor:pointer;
+    border:0; border-top:1px solid var(--hair); background:none; color:inherit; font-family:inherit;
+    padding:clamp(38px,5vw,66px) 0; transition:background .4s ease; }
+  .dmc .nextrow:hover { background:var(--salt); }
   @keyframes dmcRise { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
   .dmc [data-dmc-rise] { animation:dmcRise .95s cubic-bezier(.2,.7,.2,1) both; }
   @media (prefers-reduced-motion:reduce){
@@ -355,6 +367,11 @@
   .rf .plates { display:grid; gap:clamp(14px,2vw,30px); grid-template-columns:repeat(6,minmax(0,1fr)); }
   @media (max-width:1120px){ .rf .plates { grid-template-columns:repeat(3,minmax(0,1fr)); } }
   @media (max-width:560px){ .rf .plates { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  .rf .nextcard { display:flex; width:100%; text-align:left; align-items:center;
+    justify-content:space-between; gap:26px; appearance:none; cursor:pointer; border:0;
+    color:inherit; font-family:inherit; padding:clamp(26px,3vw,38px) clamp(24px,2.6vw,34px);
+    transition:transform .4s cubic-bezier(.2,.7,.2,1), background .3s ease; }
+  .rf .nextcard:hover { transform:translateY(-4px); background:var(--cardHi); }
   @keyframes rfRise { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:none; } }
   .rf [data-rf-rise] { animation:rfRise .9s cubic-bezier(.2,.7,.2,1) both; }
   @media (prefers-reduced-motion:reduce){ .rf [data-rf-rise] { animation:none; } }
@@ -793,6 +810,18 @@
         </div>
       </section>
 
+      <sc-if value="{{ detailNext }}" hint-placeholder-val="{{ true }}">
+      <button class="nextrow" data-hover onClick="{{ detailNext.onOpen }}">
+        <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:28px;">
+          <div>
+            <div class="eb">Next — {{ detailNext.num }}</div>
+            <div class="serif" style="margin-top:14px;font-size:clamp(24px,3.2vw,42px);line-height:1.1;letter-spacing:-.5px;">{{ detailNext.title }}</div>
+          </div>
+          <span class="serif" style="font-size:clamp(22px,3vw,38px);color:var(--oxblood);flex:none;">→</span>
+        </div>
+      </button>
+      </sc-if>
+
       <footer class="night" style="padding:clamp(56px,7vw,96px) 0;">
         <div class="wrap" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:28px;">
           <div>
@@ -923,6 +952,18 @@
           </div>
         </sc-for>
       </section>
+
+      <sc-if value="{{ detailNext }}" hint-placeholder-val="{{ true }}">
+      <button class="nextrow" data-hover onClick="{{ detailNext.onOpen }}">
+        <div style="max-width:1180px;margin:0 auto;padding:0 clamp(24px,6vw,80px);display:flex;justify-content:space-between;align-items:center;gap:28px;">
+          <div>
+            <div class="eyebrow">Next — {{ detailNext.num }}</div>
+            <div style="font-family:'Playfair Display',Georgia,serif;margin-top:16px;font-size:clamp(24px,3.2vw,44px);line-height:1.12;">{{ detailNext.title }}</div>
+          </div>
+          <span style="font-size:clamp(22px,3vw,36px);color:var(--sage);flex:none;">→</span>
+        </div>
+      </button>
+      </sc-if>
 
       <footer style="padding:clamp(56px,7vw,96px) clamp(24px,6vw,80px);background:#547e75;color:#fff;">
         <div style="max-width:1180px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px;">
@@ -1227,6 +1268,18 @@
         </div>
       </section>
 
+      <sc-if value="{{ detailNext }}" hint-placeholder-val="{{ true }}">
+      <button class="nextrow" data-hover onClick="{{ detailNext.onOpen }}">
+        <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:28px;">
+          <div>
+            <div class="eb">Next — {{ detailNext.num }}</div>
+            <h2 style="margin-top:16px;font-size:clamp(24px,3.2vw,44px);">{{ detailNext.title }}</h2>
+          </div>
+          <span style="font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,3vw,40px);color:var(--ultra);flex:none;">→</span>
+        </div>
+      </button>
+      </sc-if>
+
       <footer style="background:var(--ultra);color:#fff;padding:clamp(58px,8vw,112px) 0;">
         <div class="wrap" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px;">
           <div>
@@ -1499,6 +1552,18 @@
           </sc-for>
         </div>
       </section>
+
+      <sc-if value="{{ detailNext }}" hint-placeholder-val="{{ true }}">
+      <div class="wrap" style="padding-bottom:clamp(40px,5vw,72px);">
+        <button class="nextcard card" data-hover onClick="{{ detailNext.onOpen }}">
+          <div>
+            <div class="lbl">Next — {{ detailNext.num }}</div>
+            <div style="margin-top:12px;font-weight:800;letter-spacing:-.035em;font-size:clamp(23px,3vw,40px);line-height:1.06;">{{ detailNext.title }}</div>
+          </div>
+          <span class="amt" style="font-size:clamp(22px,2.6vw,34px);flex:none;">→</span>
+        </button>
+      </div>
+      </sc-if>
 
       <footer style="background:var(--ink);color:#EDEDED;padding:clamp(52px,7vw,104px) 0;">
         <div class="wrap" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:28px;">
