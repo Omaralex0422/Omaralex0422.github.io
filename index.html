@@ -2591,12 +2591,34 @@ class Component extends DCLogic {
     const src = img && img.getAttribute("src");
     if (src && img.style.display !== "none") this.setState({ lightbox: { src: src, label: label } });
   }
+  // Put the page where it belongs and keep insisting until it sticks. Right
+  // after a swap the new view has not finished laying out, so a single
+  // scrollTo lands short — or at zero — and the transition then photographs
+  // the wrong part of the page.
+  _applyScroll(y) {
+    const self = this;
+    let tries = 0;
+    this._scrollSettled = false;
+    const put = () => {
+      window.scrollTo(0, y);
+      if (Math.abs(window.scrollY - y) <= 2 || tries++ > 40) { self._scrollSettled = true; return; }
+      requestAnimationFrame(put);
+    };
+    put();
+  }
+
   open(id) {
     const p = this.data().find((x) => x.id === id);
-    this._transport(() => this.setState({ view: "detail", project: p }, () => window.scrollTo({ top: 0 })));
+    if (!p) return;
+    // Remember where the index was standing. Coming back out to the top of
+    // the page is the moment the illusion breaks — you are meant to still be
+    // in front of the door you just walked through.
+    if (this.state.view === "home") this._homeScroll = window.scrollY;
+    this._transport(() => this.setState({ view: "detail", project: p }, () => this._applyScroll(0)));
   }
   close() {
-    this._transport(() => this.setState({ view: "home", project: null }, () => window.scrollTo({ top: 0 })));
+    const back = this._homeScroll || 0;
+    this._transport(() => this.setState({ view: "home", project: null }, () => this._applyScroll(back)));
   }
 
   // ── Transport: the page turns to dust ───────────────────────────────────
@@ -2621,7 +2643,7 @@ class Component extends DCLogic {
   _capture() {
     // <image-slot> keeps its <img> in shadow DOM, which the rasterizer can't
     // see — mirror each visible one into a temporary light-DOM overlay.
-    const H = window.innerHeight;
+    const H = document.documentElement.clientHeight;
     const ov = document.createElement("div");
     ov.style.cssText = "position:fixed;inset:0;z-index:5;pointer-events:none;";
     document.querySelectorAll("image-slot").forEach((s) => {
@@ -2643,7 +2665,7 @@ class Component extends DCLogic {
       return { el: el, prev: prev };
     });
     const restore = () => grads.forEach((g) => g.el.setAttribute("style", g.prev));
-    const W = window.innerWidth;
+    const W = document.documentElement.clientWidth;
     const scale = Math.min(1, 1100 / W);
     return window.html2canvas(document.body, {
       x: window.scrollX, y: window.scrollY, width: W, height: H, scrollX: 0, scrollY: 0,
@@ -2653,7 +2675,7 @@ class Component extends DCLogic {
   }
 
   _dust(canvas, stage, origin, L) {
-    const w = canvas.width, h = canvas.height, k = w / window.innerWidth;
+    const w = canvas.width, h = canvas.height, k = w / document.documentElement.clientWidth;
     const ox = origin.x * k, oy = origin.y * k;
     const src = canvas.getContext("2d").getImageData(0, 0, w, h).data;
     const layers = [];
@@ -2687,16 +2709,33 @@ class Component extends DCLogic {
     this._warping = true;
     this._sfxAsh();
     const self = this;
-    const W = window.innerWidth, H = window.innerHeight;
+    const W = document.documentElement.clientWidth, H = document.documentElement.clientHeight;
     const lp = this._lastPt;
     const origin = lp && performance.now() - lp.t < 4000 ? lp : { x: W / 2, y: H / 2 };
-    const html = document.documentElement, prevOv = html.style.overflow; html.style.overflow = "hidden";
+
+    // Hold the page still WITHOUT taking the scrollbar away. Setting
+    // overflow:hidden on the root reclaims the gutter and reflows the whole
+    // layout sideways by its width — that jolt lands at both ends of the
+    // transition and is the first thing the eye catches. Swallowing the
+    // scroll inputs instead leaves the geometry untouched, and leaves
+    // window.scrollTo working so the new view can be positioned before it
+    // is photographed.
+    const eat = (e) => e.preventDefault();
+    const eatKeys = (e) => {
+      if ([" ", "PageDown", "PageUp", "Home", "End", "ArrowUp", "ArrowDown"].indexOf(e.key) >= 0) e.preventDefault();
+    };
+    window.addEventListener("wheel", eat, { passive: false });
+    window.addEventListener("touchmove", eat, { passive: false });
+    window.addEventListener("keydown", eatKeys);
+
     const stage = document.createElement("div");
     stage.setAttribute("data-no-capture", "");
-    stage.style.cssText = "position:fixed;inset:0;z-index:990;pointer-events:none;overflow:hidden;";
+    stage.style.cssText = "position:fixed;inset:0;z-index:990;pointer-events:none;overflow:hidden;opacity:0;";
     document.body.appendChild(stage);
+
     const ctx = cv.getContext("2d"), DPR = Math.min(window.devicePixelRatio || 1, 2);
     cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+    cv.style.transition = "none"; cv.style.opacity = "1";
     cv.style.display = "block"; cv.style.zIndex = "994";
     const maxD = Math.hypot(Math.max(origin.x, W - origin.x), Math.max(origin.y, H - origin.y)) || 1;
     // Ember field riding the dissolve front.
@@ -2725,15 +2764,49 @@ class Component extends DCLogic {
       if (alive || ash.length) self._warpRAF = requestAnimationFrame(loop);
     };
     self._warpRAF = requestAnimationFrame(loop);
+
+    let finished = false;
     const finish = (main1) => {
+      if (finished) return;
+      finished = true;
       alive = false; front = -1;
       if (main1) { main1.style.opacity = ""; main1.style.filter = ""; main1.style.transition = ""; }
-      stage.remove(); html.style.overflow = prevOv;
-      setTimeout(() => { cv.style.display = "none"; }, 1200);
+      window.removeEventListener("wheel", eat);
+      window.removeEventListener("touchmove", eat);
+      window.removeEventListener("keydown", eatKeys);
+      stage.remove();
       self._warping = false;
+      // Let the last embers burn down instead of blinking off mid-flight —
+      // an ash mote lives up to three seconds and the canvas used to be
+      // switched off flat at 1.2s.
+      cv.style.transition = "opacity 1.4s cubic-bezier(.4,0,.7,1)";
+      cv.style.opacity = "0";
+      setTimeout(() => {
+        if (self._warping) return;
+        cv.style.display = "none"; cv.style.transition = "none"; cv.style.opacity = "1";
+      }, 1500);
     };
+
+    // Hand the frame back to the live DOM without a sharpening pop. The dust
+    // is rebuilt from a raster of the page taken below native resolution, so
+    // cutting from the reconstruction to the real thing in a single frame
+    // reads as a snap. Cross-dissolve instead: both sides are showing the
+    // same picture, so the dissolve itself cannot be seen and only the
+    // sharpness resolves, gradually.
+    const settle = (main1) => {
+      if (!main1) { finish(null); return; }
+      main1.style.transition = ""; main1.style.filter = ""; main1.style.opacity = "1";
+      requestAnimationFrame(() => {
+        stage.addEventListener("transitionend", () => finish(main1), { once: true });
+        stage.style.transition = "opacity .46s cubic-bezier(.33,0,.5,1)";
+        stage.style.opacity = "0";
+        setTimeout(() => finish(main1), 900);
+      });
+    };
+
     // Fallback when the rasterizer is unavailable: soft blur crossfade.
     const crossfade = () => {
+      stage.style.opacity = "0";
       main0.style.transition = "opacity .45s ease, filter .45s ease"; main0.style.opacity = "0"; main0.style.filter = "blur(6px)";
       setTimeout(() => {
         swap();
@@ -2741,10 +2814,14 @@ class Component extends DCLogic {
           const m1 = document.querySelector("main");
           if (!m1) { finish(null); return; }
           m1.style.opacity = "0"; m1.style.filter = "blur(6px)";
-          requestAnimationFrame(() => { m1.style.transition = "opacity .6s ease, filter .6s ease"; m1.style.opacity = "1"; m1.style.filter = "blur(0)"; setTimeout(() => finish(m1), 650); });
+          requestAnimationFrame(() => {
+            m1.style.transition = "opacity .6s ease, filter .6s ease"; m1.style.opacity = "1"; m1.style.filter = "blur(0)";
+            setTimeout(() => finish(m1), 660);
+          });
         }));
       }, 460);
     };
+
     // Phones get fewer dust layers — same look, a fraction of the pixel work.
     const small = W < 760;
     const L_OUT = small ? 10 : 18, STEP = small ? 60 : 42, DUR = 1150;
@@ -2754,36 +2831,75 @@ class Component extends DCLogic {
       return self._capture().then((snap) => {
         if (!snap) { crossfade(); return; }
         let layers; try { layers = self._dust(snap, stage, origin, L_OUT); } catch (e) { crossfade(); return; }
+
         // ── Phase 1: the page dusts away from the click ──
-        main0.style.opacity = "0";
-        const t0 = performance.now();
-        const frontTick = () => { if (!alive) return; front = (performance.now() - t0) / (L_OUT * STEP + DUR * 0.5); if (front <= 1.2) requestAnimationFrame(frontTick); };
-        requestAnimationFrame(frontTick);
-        layers.forEach((c, i) => {
-          const ang = (Math.random() - 0.5) * 28;
-          const dx = 30 + Math.random() * 110, dy = -(50 + Math.random() * 150);
-          c.animate([
-            { transform: "rotate(0deg) translate(0,0) scale(1)", opacity: 1, filter: "blur(0px)" },
-            { offset: 0.35, opacity: 0.95, filter: "blur(0.4px)" },
-            { transform: "rotate(" + ang.toFixed(1) + "deg) translate(" + dx.toFixed(0) + "px," + dy.toFixed(0) + "px) scale(1.03)", opacity: 0, filter: "blur(2.2px)" }
-          ], { duration: DUR + Math.random() * 250, delay: i * STEP, easing: "cubic-bezier(.3,.1,.55,1)", fill: "forwards" });
-        });
+        // Bring the dust up over the still-visible page first. Until the
+        // stage is opaque the two are the same image, so the blend cannot be
+        // seen; the page underneath only goes dark once it is covered.
+        //
+        // Painting eighteen full-viewport canvases for the first time can
+        // cost a few hundred milliseconds, and that delays the frame the
+        // fade rides on. Driving the rest of the sequence off a timer that
+        // started before the paint let the page go dark while the dust was
+        // still half transparent — a flash of empty room. Wait for the
+        // transition to genuinely end instead, with a backstop in case the
+        // browser never reports it.
+        stage.style.transition = "opacity .18s linear";
+        requestAnimationFrame(() => requestAnimationFrame(() => { stage.style.opacity = "1"; }));
+
+        let begun = false;
+        const beginOut = () => {
+          if (begun) return;
+          begun = true;
+          main0.style.opacity = "0";
+          const t0 = performance.now();
+          const frontTick = () => {
+            if (!alive) return;
+            front = (performance.now() - t0) / (L_OUT * STEP + DUR * 0.5);
+            if (front <= 1.2) requestAnimationFrame(frontTick);
+          };
+          requestAnimationFrame(frontTick);
+          layers.forEach((c, i) => {
+            const ang = (Math.random() - 0.5) * 28;
+            const dx = 30 + Math.random() * 110, dy = -(50 + Math.random() * 150);
+            c.animate([
+              { transform: "rotate(0deg) translate(0,0) scale(1)", opacity: 1, filter: "blur(0px)" },
+              { offset: 0.35, opacity: 0.95, filter: "blur(0.4px)" },
+              { transform: "rotate(" + ang.toFixed(1) + "deg) translate(" + dx.toFixed(0) + "px," + dy.toFixed(0) + "px) scale(1.03)", opacity: 0, filter: "blur(2.2px)" }
+            ], { duration: DUR + Math.random() * 250, delay: i * STEP, easing: "cubic-bezier(.3,.1,.55,1)", fill: "forwards" });
+          });
+          // Retire the outgoing layers only once every one of them has really
+          // finished. They used to be torn out the moment the incoming dust
+          // was built, while the slowest were still a third opaque.
+          setTimeout(() => layers.forEach((c) => c.remove()), (L_OUT - 1) * STEP + DUR + 420);
+          setTimeout(phase2, L_OUT * STEP + DUR * 0.32);
+        };
+        stage.addEventListener("transitionend", beginOut, { once: true });
+        setTimeout(beginOut, 900);
+
         // ── Phase 2: swap under cover; the new room condenses from dust ──
-        setTimeout(() => {
+        function phase2() {
           swap();
           let tries = 0;
           const waitNew = () => {
             const m1 = document.querySelector("main");
             if ((!m1 || m1 === main0) && tries++ < 30) { requestAnimationFrame(waitNew); return; }
             if (!m1) { finish(null); return; }
+            if (self._scrollSettled === false && tries++ < 70) { requestAnimationFrame(waitNew); return; }
             m1.style.opacity = "0";
             requestAnimationFrame(() => requestAnimationFrame(() => {
               // Keep the real page invisible while we photograph it.
               m1.style.opacity = "1"; m1.style.filter = "opacity(0)";
               self._capture().then((snap2) => {
-                layers.forEach((c) => c.remove());
-                if (!snap2) { m1.style.filter = ""; m1.style.opacity = "0"; requestAnimationFrame(() => { m1.style.transition = "opacity .6s ease"; m1.style.opacity = "1"; setTimeout(() => finish(m1), 650); }); return; }
-                let l2; try { l2 = self._dust(snap2, stage, { x: W / 2, y: H * 0.45 }, L_IN); } catch (e) { m1.style.filter = ""; finish(m1); return; }
+                if (!snap2) {
+                  m1.style.filter = ""; m1.style.opacity = "0";
+                  requestAnimationFrame(() => {
+                    m1.style.transition = "opacity .6s ease"; m1.style.opacity = "1";
+                    setTimeout(() => finish(m1), 660);
+                  });
+                  return;
+                }
+                let l2; try { l2 = self._dust(snap2, stage, origin, L_IN); } catch (e) { settle(m1); return; }
                 gravity = 0.02; wind = 0.12; front = -1;
                 l2.forEach((c, i) => {
                   const ang = (Math.random() - 0.5) * 22;
@@ -2794,12 +2910,14 @@ class Component extends DCLogic {
                     { transform: "rotate(0deg) translate(0,0) scale(1)", opacity: 1, filter: "blur(0px)" }
                   ], { duration: DUR_IN + Math.random() * 200, delay: (L_IN - 1 - i) * STEP_IN, easing: "cubic-bezier(.2,.6,.3,1)", fill: "forwards" });
                 });
-                setTimeout(() => { m1.style.filter = ""; finish(m1); }, L_IN * STEP_IN + DUR_IN + 180);
+                // Wait out the slowest incoming layer with headroom to spare,
+                // then dissolve rather than cut.
+                setTimeout(() => settle(m1), (L_IN - 1) * STEP_IN + DUR_IN + 300);
               });
             }));
           };
           requestAnimationFrame(waitNew);
-        }, L_OUT * STEP + DUR * 0.45);
+        }
       });
     });
   }
