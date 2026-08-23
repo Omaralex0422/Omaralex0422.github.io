@@ -2713,6 +2713,18 @@ class Component extends DCLogic {
     const lp = this._lastPt;
     const origin = lp && performance.now() - lp.t < 4000 ? lp : { x: W / 2, y: H / 2 };
 
+    // The weather for this crossing. A single bearing carries the outgoing
+    // page away, and it is never the one the last crossing used — turned at
+    // least a quarter and at most three quarters of the way round — so two
+    // navigations in a row never blow the same way. The tempo shifts a little
+    // too, so no two dissolves run to the same clock.
+    const wa = this._lastWind == null
+      ? Math.random() * 6.283
+      : this._lastWind + Math.PI * 0.5 + Math.random() * Math.PI;
+    this._lastWind = wa;
+    const wx = Math.cos(wa), wy = Math.sin(wa);
+    const tempo = 0.82 + Math.random() * 0.46;
+
     // Hold the page still WITHOUT taking the scrollbar away. Setting
     // overflow:hidden on the root reclaims the gutter and reflows the whole
     // layout sideways by its width — that jolt lands at both ends of the
@@ -2739,7 +2751,8 @@ class Component extends DCLogic {
     cv.style.display = "block"; cv.style.zIndex = "994";
     const maxD = Math.hypot(Math.max(origin.x, W - origin.x), Math.max(origin.y, H - origin.y)) || 1;
     // Ember field riding the dissolve front.
-    const ash = []; let alive = true, front = -1, gravity = -0.01, wind = 0.3;
+    const ash = []; let alive = true, front = -1, gravity = -0.01;
+    let windX = wx * 0.95, windY = wy * 0.95;
     const loop = (now) => {
       if (front >= 0 && front <= 1.15 && ash.length < 1400) {
         for (let i = 0; i < 10; i++) {
@@ -2747,14 +2760,18 @@ class Component extends DCLogic {
           const x = origin.x + Math.cos(a) * rr, y = origin.y + Math.sin(a) * rr;
           if (x < 0 || x > W || y < 0 || y > H) continue;
           const ember = Math.random() < 0.35;
-          ash.push({ x: x, y: y, vx: (Math.random() - 0.5) * 1.1, vy: -(0.3 + Math.random() * 1.3), r: ember ? 0.6 + Math.random() * 1.3 : 0.5 + Math.random() * 2, a: 0.3 + Math.random() * 0.6, life: 1, decay: 0.005 + Math.random() * 0.009, seed: Math.random() * 6.283, ember: ember });
+          const push = 0.3 + Math.random() * 1.2;
+          ash.push({ x: x, y: y, vx: wx * push + (Math.random() - 0.5) * 0.8, vy: wy * push + (Math.random() - 0.5) * 0.8 - 0.22, r: ember ? 0.6 + Math.random() * 1.3 : 0.5 + Math.random() * 2, a: 0.3 + Math.random() * 0.6, life: 1, decay: 0.005 + Math.random() * 0.009, seed: Math.random() * 6.283, ember: ember });
         }
       }
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.clearRect(0, 0, W, H);
       for (let i = ash.length - 1; i >= 0; i--) {
         const p = ash[i];
-        p.vy += gravity; p.x += p.vx + wind + Math.sin(now * 0.0012 + p.seed) * 0.35; p.y += p.vy; p.life -= p.decay;
-        if (p.life <= 0 || p.y < -30 || p.y > H + 30) { ash.splice(i, 1); continue; }
+        p.vy += gravity;
+        p.x += p.vx + windX + Math.sin(now * 0.0012 + p.seed) * 0.35;
+        p.y += p.vy + windY + Math.cos(now * 0.0011 + p.seed) * 0.28;
+        p.life -= p.decay;
+        if (p.life <= 0 || p.y < -34 || p.y > H + 34 || p.x < -40 || p.x > W + 40) { ash.splice(i, 1); continue; }
         const fl = p.ember ? 0.5 + 0.5 * Math.sin(now * 0.02 + p.seed) : 1;
         ctx.globalAlpha = Math.min(1, p.a * p.life * (p.ember ? 0.55 + 0.45 * fl : 0.85));
         if (p.ember) { ctx.fillStyle = "#ff6a2a"; ctx.shadowColor = "#ff7a3a"; ctx.shadowBlur = 10; } else { ctx.fillStyle = "#cfc9bf"; ctx.shadowBlur = 0; }
@@ -2824,8 +2841,8 @@ class Component extends DCLogic {
 
     // Phones get fewer dust layers — same look, a fraction of the pixel work.
     const small = W < 760;
-    const L_OUT = small ? 10 : 18, STEP = small ? 60 : 42, DUR = 1150;
-    const L_IN = small ? 7 : 12, STEP_IN = small ? 50 : 34, DUR_IN = 950;
+    const L_OUT = small ? 10 : 18, STEP = Math.round((small ? 60 : 42) * tempo), DUR = Math.round(1150 * tempo);
+    const L_IN = small ? 7 : 12, STEP_IN = Math.round((small ? 50 : 34) * tempo), DUR_IN = Math.round(950 * tempo);
     this._loadRasterizer().then((ok) => {
       if (!ok) { crossfade(); return; }
       return self._capture().then((snap) => {
@@ -2861,7 +2878,11 @@ class Component extends DCLogic {
           requestAnimationFrame(frontTick);
           layers.forEach((c, i) => {
             const ang = (Math.random() - 0.5) * 28;
-            const dx = 30 + Math.random() * 110, dy = -(50 + Math.random() * 150);
+            // Every layer follows this crossing's bearing, fanned out a little
+            // either side of it and travelling its own distance — a gust, not
+            // a conveyor belt.
+            const la = wa + (Math.random() - 0.5) * 0.85, ld = 95 + Math.random() * 135;
+            const dx = Math.cos(la) * ld, dy = Math.sin(la) * ld;
             c.animate([
               { transform: "rotate(0deg) translate(0,0) scale(1)", opacity: 1, filter: "blur(0px)" },
               { offset: 0.35, opacity: 0.95, filter: "blur(0.4px)" },
@@ -2900,10 +2921,15 @@ class Component extends DCLogic {
                   return;
                 }
                 let l2; try { l2 = self._dust(snap2, stage, origin, L_IN); } catch (e) { settle(m1); return; }
-                gravity = 0.02; wind = 0.12; front = -1;
+                gravity = 0.012; windX = wx * 0.16; windY = wy * 0.16; front = -1;
                 l2.forEach((c, i) => {
                   const ang = (Math.random() - 0.5) * 22;
-                  const dx = -(20 + Math.random() * 90), dy = 60 + Math.random() * 140;
+                  // The circle shared out among the layers, jittered, so the
+                  // new room draws itself in from above, below and both sides
+                  // at the same time instead of sliding up from one edge.
+                  const ia = (i / l2.length) * 6.283 + wa + (Math.random() - 0.5) * 0.7;
+                  const idd = 75 + Math.random() * 125;
+                  const dx = Math.cos(ia) * idd, dy = Math.sin(ia) * idd;
                   c.animate([
                     { transform: "rotate(" + ang.toFixed(1) + "deg) translate(" + dx.toFixed(0) + "px," + dy.toFixed(0) + "px) scale(1.03)", opacity: 0, filter: "blur(2.2px)" },
                     { offset: 0.6, opacity: 0.92, filter: "blur(0.5px)" },
