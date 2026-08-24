@@ -1,8 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Identity. These live in the real <head> rather than the framework's
+     <helmet>, because the scrapers that build link previews — LinkedIn,
+     iMessage, WhatsApp, Slack — do not run JavaScript, so anything injected
+     at runtime is invisible to them. -->
+<title>Omar Arroyo — Software Developer &amp; Operations Lead</title>
+<meta name="description" content="A software developer and operations lead working where engineering meets the running of a business. Native macOS and iOS apps, AI integrations and brand systems.">
+<meta name="author" content="Omar Arroyo">
+<meta name="theme-color" content="#101014">
+<link rel="canonical" href="https://omaralex0422.github.io/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23101014'/><rect x='6' y='6' width='20' height='20' fill='%23ff5a1f'/><rect x='6' y='6' width='20' height='6' fill='%23d23e0a'/></svg>">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Omar Arroyo">
+<meta property="og:title" content="Omar Arroyo — Software Developer & Operations Lead">
+<meta property="og:description" content="A software developer and operations lead working where engineering meets the running of a business. Native macOS and iOS apps, AI integrations and brand systems.">
+<meta property="og:url" content="https://omaralex0422.github.io/">
+<meta property="og:image" content="https://omaralex0422.github.io/images/og-cover.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Omar Arroyo — a dystopian museum of work. The name set in a dot matrix over a graphite skyline.">
+<meta property="og:locale" content="en_CA">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Omar Arroyo — Software Developer & Operations Lead">
+<meta name="twitter:description" content="A software developer and operations lead working where engineering meets the running of a business. Native macOS and iOS apps, AI integrations and brand systems.">
+<meta name="twitter:image" content="https://omaralex0422.github.io/images/og-cover.jpg">
+<meta name="twitter:image:alt" content="Omar Arroyo — a dystopian museum of work.">
+
 <script src="./support.js"></script>
 </head>
 <body>
@@ -901,7 +931,7 @@
               <span style="flex:1;background:#fff;border:1px solid #e6e8e3;border-radius:300px;padding:4px 13px;font-size:10.5px;color:#8a8781;letter-spacing:.04em;">denishachey.com</span>
             </div>
             <div data-bvp style="position:relative;aspect-ratio:16/10;overflow:hidden;background:#fff;">
-              <img data-bimg src="images/site-mindtomind.jpg" alt="" style="position:absolute;top:0;left:0;width:100%;display:block;will-change:transform;">
+              <img data-bimg src="images/site-mindtomind.webp" alt="" style="position:absolute;top:0;left:0;width:100%;display:block;will-change:transform;">
             </div>
           </div>
           <div style="margin-top:14px;font-size:12px;color:#9a9791;letter-spacing:.02em;">Hover the screen to browse it.</div>
@@ -1089,7 +1119,7 @@
       <!-- full bleed: their own water, their own words -->
       <section style="position:relative;margin-top:clamp(20px,3vw,40px);">
         <div style="position:relative;overflow:hidden;">
-          <img src="images/dmc-water.jpg" alt="Floating docks on the water in New Brunswick" style="display:block;width:100%;height:clamp(300px,46vw,560px);object-fit:cover;">
+          <img src="images/dmc-water.webp" alt="Floating docks on the water in New Brunswick" style="display:block;width:100%;height:clamp(300px,46vw,560px);object-fit:cover;">
           <div class="scrim" aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(100deg,rgba(10,16,60,.62),rgba(10,16,60,.18) 52%,rgba(10,16,60,0));"></div>
           <div style="position:absolute;inset:0;display:flex;align-items:center;">
             <div class="wrap" style="width:100%;">
@@ -1267,7 +1297,7 @@
             <div class="eb" style="color:var(--ember);">Incident</div>
             <h2 style="margin-top:20px;max-width:16ch;">The week the nameservers walked.</h2>
             <p class="lede" style="margin:22px 0 0;max-width:48ch;">A previous developer redirected the domain's nameservers. Email stopped, the site went with it, and the registrar account was no longer in the company's hands. Recovered in full — the site, the mail, and the ownership record.</p>
-            <img src="images/dmc-cubes.jpg" alt="Floating cube dock in clear water" style="display:block;width:100%;max-width:420px;border-radius:12px;margin-top:clamp(28px,4vw,44px);">
+            <img src="images/dmc-cubes.webp" alt="Floating cube dock in clear water" style="display:block;width:100%;max-width:420px;border-radius:12px;margin-top:clamp(28px,4vw,44px);">
           </div>
           <div style="border-top:1px solid #DEDFE1;">
             <sc-for list="{{ detail.recovery }}" as="r" hint-placeholder-count="5">
@@ -3102,7 +3132,7 @@ class Component extends DCLogic {
         stack: "Web Development · Brand Design · Apple Wallet · YourAtlas IA",
         accent: "#121F84",
         room: "dmc",
-        site: { url: "https://modernmarinegroup.com", label: "modernmarinegroup.com", shot: "images/site-dmc.jpg" },
+        site: { url: "https://modernmarinegroup.com", label: "modernmarinegroup.com", shot: "images/site-dmc.webp" },
         ix: [
           { n: "01", t: "The Website", d: "The full Dock Marine Canada site — structure, copy, product pages and the project index, built to keep the photography carrying the weight." },
           { n: "02", t: "Configurator", d: "An interactive dock configurator so a dealer or an owner can assemble a layout before a single quote is written." },
@@ -3152,7 +3182,7 @@ class Component extends DCLogic {
         stack: "Brand Strategy · WordPress · SEO · Content · Meta Ads",
         accent: "#547e75",
         room: "mtm",
-        site: { url: "https://www.denishachey.com", label: "denishachey.com", shot: "images/site-mindtomind.jpg" },
+        site: { url: "https://www.denishachey.com", label: "denishachey.com", shot: "images/site-mindtomind.webp" },
         blog: [
           { n: "35", t: "The Cave You Fear to Enter", x: "The breakthrough you are searching for is hidden inside the exact task you are actively putting off." },
           { n: "34", t: "The Dark Cloud", x: "How mindset dictates reality — and why the same conditions produce two completely different lives." },

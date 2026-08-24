@@ -592,7 +592,7 @@
     // runs on every store change and resize) never re-fetches:
     //   • data: URL                     → used as-is
     //   • path WITH an image extension  → verified once, '' if it 404s
-    //   • path WITHOUT an extension     → tries .jpg/.jpeg/.png/.webp/.avif
+    //   • path WITHOUT an extension     → tries .webp/.jpg/.jpeg/.png/.avif
     //                                     and keeps the first that loads
     // Returns '' while still probing or when nothing was found, so a missing
     // file shows the empty "Drop an image" placeholder, never a broken icon.
@@ -604,7 +604,7 @@
         const hasExt = /\.(png|jpe?g|webp|avif|gif)(\?.*)?$/i.test(srcAttr);
         const candidates = hasExt
           ? [srcAttr]
-          : ['.jpg', '.jpeg', '.png', '.webp', '.avif'].map((e) => srcAttr + e);
+          : ['.webp', '.jpg', '.jpeg', '.png', '.avif'].map((e) => srcAttr + e);
         let i = 0;
         const probe = () => {
           if (this._srcKey !== srcAttr) return;   // src changed mid-probe
