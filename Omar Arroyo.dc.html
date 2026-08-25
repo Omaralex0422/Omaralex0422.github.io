@@ -42,7 +42,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Typefaces belonging to the projects, so each specimen is set in its own face. -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Almarai:wght@300;400;700&family=Montserrat:wght@200;300;400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Almarai:wght@300;400;700&family=Montserrat:wght@200;300;400;500;600;700&family=Raleway:wght@300;400;500;600&family=Open+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root{ --ink:#e9e5dc; --void:#101014; --orange:#ff5a1f; --orange-deep:#d23e0a; }
   html { background:#101014; }
@@ -357,22 +357,29 @@
      display numerals and SF Pro Rounded for money, micro-labels at 10.5pt
      tracked out, and colour spent only where the app spends it — navy on
      the payment card, signal red on a subscription ticket. */
-  .rf { --paper:#ECECEC; --card:#F4F4F4; --cardHi:#FAFAFA; --sunk:#E0E0E0;
-    --ink:#282828; --ash:#686868; --mute:#909090; --line:#DCDCDC;
+  .rf { /* surfaces */ --paper:#F2F1EF; --sunk:#EAE8E5; --card:#F5F4F2; --cardHi:#FBFAF9;
+    --line:#D8D7D3;
+    /* ink */ --ink:#1A1A1C; --ash:#6B6A67; --mute:#9A9895;
+    /* the accent, and its tints */ --tang:#B44309; --tangPress:#973808; --onTang:#FFFFFF;
+    --tint8:#EDE3DD; --tint15:#E9D7CC; --tint25:#E2C6B6;
+    /* semantic, kept off-orange so they never read as the accent */
+    --ok:#3A8E4E; --warn:#CA8A04; --err:#DC2626;
+    /* object colours the theme does not own: the card and the ticket */
     --navy:#183054; --navy2:#2A5290; --red:#F03C48; --red2:#F0606A;
     --rose:#E4D2D2; --slate:#C6CCD2;
     background:var(--paper); color:var(--ink);
-    font-family:-apple-system,'SF Pro Text',system-ui,'Helvetica Neue',sans-serif;
+    font-family:'Open Sans','Helvetica Neue',Arial,sans-serif;
     font-size:15px; line-height:1.6; letter-spacing:-.011em; }
-  .rf h1,.rf h2,.rf h3 { margin:0; font-weight:800; letter-spacing:-.035em; }
+  .rf h1,.rf h2,.rf h3 { margin:0; font-weight:900; letter-spacing:-.032em; }
   .rf h1 { font-size:clamp(48px,8.4vw,116px); line-height:.94; }
   .rf h2 { font-size:clamp(27px,3.7vw,50px); line-height:1.05; }
   .rf h3 { font-size:18px; line-height:1.28; font-weight:700; letter-spacing:-.022em; }
   .rf p { text-wrap:pretty; }
   .rf .lbl { font-size:10.5px; font-weight:600; letter-spacing:.16em;
     text-transform:uppercase; color:var(--mute); }
-  .rf .amt { font-family:ui-rounded,'SF Pro Rounded',-apple-system,system-ui,sans-serif;
-    font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.035em; }
+  .rf .amt { font-family:'Open Sans','Helvetica Neue',Arial,sans-serif;
+    font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:-.028em; }
+  .rf .amt.hero { font-weight:900; letter-spacing:-.04em; color:var(--tang); }
   .rf .lede { font-size:clamp(16px,1.5vw,19.5px); line-height:1.62; color:var(--ash); }
   .rf .wrap { max-width:1180px; margin:0 auto; padding:0 clamp(20px,5vw,64px); }
   .rf .card { background:var(--card); border-radius:22px; padding:clamp(20px,2.4vw,30px);
@@ -380,16 +387,17 @@
   .rf .well { background:var(--sunk); border-radius:18px; }
   .rf .pill { display:inline-flex; align-items:center; gap:8px; border:1px solid transparent;
     cursor:pointer; border-radius:999px; padding:12px 21px; font-size:13px; font-weight:600;
-    letter-spacing:-.012em; background:var(--ink); color:#F4F4F4; text-decoration:none;
+    letter-spacing:-.012em; background:var(--tang); color:var(--onTang); text-decoration:none;
     transition:transform .32s cubic-bezier(.2,.7,.2,1), background .3s, color .3s; }
-  .rf .pill:hover { transform:translateY(-2px); background:#111; }
+  .rf .pill:hover { transform:translateY(-2px); background:var(--tangPress); }
   .rf .pill-soft { background:var(--card); color:var(--ink);
     box-shadow:0 1px 2px rgba(40,40,40,.06), 0 8px 18px -14px rgba(40,40,40,.45); }
   .rf .pill-soft:hover { background:#fff; }
   .rf .seg { display:inline-flex; gap:4px; background:var(--sunk); border-radius:999px; padding:4px; }
   .rf .seg span { border-radius:999px; padding:7px 16px; font-size:12.5px; font-weight:600; color:var(--ash); }
-  .rf .seg span.on { background:var(--cardHi); color:var(--ink);
-    box-shadow:0 1px 2px rgba(40,40,40,.12); }
+  .rf .seg span.on { background:var(--tang); color:var(--onTang);
+    box-shadow:0 1px 2px rgba(180,67,9,.28); }
+  .rf .seg span:focus-visible { outline:2px solid var(--tang); outline-offset:2px; }
   /* the app's list row */
   .rf .row { display:grid; grid-template-columns:46px minmax(0,1fr) auto; gap:16px;
     align-items:center; background:var(--card); border-radius:18px; padding:15px 18px; margin-top:10px;
@@ -403,7 +411,7 @@
   .rf .rstage { perspective:1500px; width:min(100%,420px); }
   .rf .rcard { position:relative; display:grid; transform-style:preserve-3d; cursor:pointer;
     transition:transform .62s cubic-bezier(.2,.75,.2,1); }
-  .rf .rcard:focus-visible { outline:2px solid var(--ink); outline-offset:8px; }
+  .rf .rcard:focus-visible { outline:2px solid var(--tang); outline-offset:8px; }
   .rf .rface { grid-area:1/1; background:#FBFAF8; padding:32px 26px 30px; backface-visibility:hidden;
     -webkit-backface-visibility:hidden; clip-path:polygon(0.0% 0, 2.5% 9px, 5.0% 0, 7.5% 9px, 10.0% 0, 12.5% 9px, 15.0% 0, 17.5% 9px, 20.0% 0, 22.5% 9px, 25.0% 0, 27.5% 9px, 30.0% 0, 32.5% 9px, 35.0% 0, 37.5% 9px, 40.0% 0, 42.5% 9px, 45.0% 0, 47.5% 9px, 50.0% 0, 52.5% 9px, 55.0% 0, 57.5% 9px, 60.0% 0, 62.5% 9px, 65.0% 0, 67.5% 9px, 70.0% 0, 72.5% 9px, 75.0% 0, 77.5% 9px, 80.0% 0, 82.5% 9px, 85.0% 0, 87.5% 9px, 90.0% 0, 92.5% 9px, 95.0% 0, 97.5% 9px, 100.0% 0, 100.0% 100%, 97.5% calc(100% - 9px), 95.0% 100%, 92.5% calc(100% - 9px), 90.0% 100%, 87.5% calc(100% - 9px), 85.0% 100%, 82.5% calc(100% - 9px), 80.0% 100%, 77.5% calc(100% - 9px), 75.0% 100%, 72.5% calc(100% - 9px), 70.0% 100%, 67.5% calc(100% - 9px), 65.0% 100%, 62.5% calc(100% - 9px), 60.0% 100%, 57.5% calc(100% - 9px), 55.0% 100%, 52.5% calc(100% - 9px), 50.0% 100%, 47.5% calc(100% - 9px), 45.0% 100%, 42.5% calc(100% - 9px), 40.0% 100%, 37.5% calc(100% - 9px), 35.0% 100%, 32.5% calc(100% - 9px), 30.0% 100%, 27.5% calc(100% - 9px), 25.0% 100%, 22.5% calc(100% - 9px), 20.0% 100%, 17.5% calc(100% - 9px), 15.0% 100%, 12.5% calc(100% - 9px), 10.0% 100%, 7.5% calc(100% - 9px), 5.0% 100%, 2.5% calc(100% - 9px), 0.0% 100%); }
   .rf .rback { transform:rotateY(180deg); }
@@ -438,8 +446,10 @@
   .rf .bar { position:relative; flex:1 1 0; min-width:0; background:var(--sunk); appearance:none;
     border:0; padding:0; border-radius:9px 9px 5px 5px; cursor:pointer;
     transition:height .55s cubic-bezier(.2,.75,.2,1), background .26s; }
+  /* deliberately ink, never Tangerine: the accent is excluded from the
+     chart ramp so orange only ever reads as "tap me". */
   .rf .bar:hover, .rf .bar.on { background:var(--ink); }
-  .rf .bar:focus-visible { outline:2px solid var(--ink); outline-offset:3px; }
+  .rf .bar:focus-visible { outline:2px solid var(--tang); outline-offset:3px; }
   .rf .bar .cap { position:absolute; left:50%; bottom:-21px; transform:translateX(-50%);
     font-size:9.5px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
     color:var(--mute); white-space:nowrap; transition:color .26s; }
@@ -454,11 +464,11 @@
   .rf .wallet { display:grid; padding-bottom:38px; }
   .rf .wallet .paycard { grid-area:1/1; cursor:pointer; transform-origin:50% 100%;
     transition:transform .58s cubic-bezier(.2,.75,.2,1), opacity .45s ease, box-shadow .5s ease; }
-  .rf .wallet .paycard:focus-visible { outline:2px solid var(--ink); outline-offset:6px; }
+  .rf .wallet .paycard:focus-visible { outline:2px solid var(--tang); outline-offset:6px; }
   .rf .dots { display:flex; gap:9px; justify-content:center; margin-top:20px; }
   .rf .dots button { width:7px; height:7px; padding:0; border:0; border-radius:50%; cursor:pointer;
     background:#C4C4C4; transition:background .3s, transform .3s; }
-  .rf .dots button.on { background:var(--ink); transform:scale(1.3); }
+  .rf .dots button.on { background:var(--tang); transform:scale(1.3); }
   .rf .plates { display:grid; gap:clamp(14px,2vw,30px); grid-template-columns:repeat(6,minmax(0,1fr)); }
   @media (max-width:1120px){ .rf .plates { grid-template-columns:repeat(3,minmax(0,1fr)); } }
   @media (max-width:560px){ .rf .plates { grid-template-columns:repeat(2,minmax(0,1fr)); } }
@@ -1517,12 +1527,12 @@
             <span role="tab" tabindex="0" aria-selected="false" data-period="year">Year</span>
           </div>
         </div>
-        <p class="lede" style="margin:18px 0 0;max-width:52ch;">Screen 03, rebuilt on this page. Switch the period, or pick a bar. The chart is real; the figures are sample data rather than anybody's actual spending.</p>
+        <p class="lede" style="margin:18px 0 0;max-width:52ch;">Screen 03, rebuilt on this page. Switch the period, or pick a bar. The bars stay ink on purpose — Tangerine is reserved for what you can act on, so it is kept off the chart entirely and spent on the total instead. The figures are sample data rather than anybody's actual spending.</p>
         <div class="card" style="margin-top:clamp(24px,3vw,38px);">
           <div style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap;">
             <div>
               <div class="lbl" data-chart-caption>Last twelve months</div>
-              <div class="amt" data-chart-total style="font-size:clamp(30px,3.4vw,46px);line-height:1.04;margin-top:7px;">&#8212;</div>
+              <div class="amt hero" data-chart-total style="font-size:clamp(30px,3.4vw,46px);line-height:1.04;margin-top:7px;">&#8212;</div>
             </div>
             <div style="text-align:right;">
               <div class="lbl">HST 15% &#183; included</div>
@@ -3337,10 +3347,10 @@ class Component extends DCLogic {
           { n: "05", t: "Store", d: "Written to the device. Firebase holds the account, never the receipt." }
         ],
         brand: {
-          purpose: "Built for people who photograph a receipt and never think about it again. Everything is read on the device — no server sees a receipt, and there is no API bill to pass on. The surface is deliberately quiet: a neutral grey ground, soft raised cards with no borders anywhere, and colour spent only twice — navy on a payment card, signal red on a subscription. Expense tracking is a chore, so the app is built to feel like a wallet you like opening rather than an accounting tool.",
+          purpose: "Built for people who photograph a receipt and never think about it again. Everything is read on the device — no server sees a receipt, and there is no API bill to pass on. The theme is called Tangerine Heat and it runs on one rule: Tangerine means interactive or important right now. The accent is spent on affordances — buttons, toggles, focus rings, the monthly total — and is deliberately kept out of the category ramp, so orange always reads as an invitation and never competes with a chart. The budget per screen is roughly sixty percent canvas, twenty-five cards, ten ink, and only five to ten Tangerine. Expense tracking is a chore, so the app is built to feel like a wallet you like opening rather than an accounting tool.",
           positioning: "A private, Canadian-first expense tracker with the tactility of Apple Wallet and none of the subscription anxiety.",
-          palette: [{ h: "#ECECEC", n: "Paper", r: "The ground" }, { h: "#F4F4F4", n: "Card", r: "Raised surfaces" }, { h: "#E0E0E0", n: "Sunken", r: "Wells · tracks" }, { h: "#282828", n: "Ink", r: "Type · the button" }, { h: "#686868", n: "Ash", r: "Secondary type" }, { h: "#909090", n: "Mute", r: "Micro-labels" }, { h: "#183054", n: "Card Navy", r: "Payment cards" }, { h: "#F03C48", n: "Signal", r: "Subscriptions" }],
-          fonts: [{ n: "SF Pro Text", r: "Interface · body · labels", f: "-apple-system,'SF Pro Text',system-ui,sans-serif", w: "700", g: "Aa" }, { n: "SF Pro Rounded", r: "Amounts · totals · counters", f: "ui-rounded,'SF Pro Rounded',-apple-system,sans-serif", w: "800", g: "$0" }]
+          palette: [{ h: "#F2F1EF", n: "Canvas", r: "The ground · 60%" }, { h: "#EAE8E5", n: "Surface", r: "Wells · tracks" }, { h: "#F5F4F2", n: "Card", r: "Raised · 25%" }, { h: "#D8D7D3", n: "Line", r: "Hairlines" }, { h: "#1A1A1C", n: "Ink", r: "Type · 10%" }, { h: "#6B6A67", n: "Ink Secondary", r: "Supporting type" }, { h: "#9A9895", n: "Ink Tertiary", r: "Micro-labels" }, { h: "#B44309", n: "Tangerine", r: "Interactive only · 5–10%" }],
+          fonts: [{ n: "Open Sans", r: "Everything — 900 for display, 700 on a card amount", f: "'Open Sans','Helvetica Neue',Arial,sans-serif", w: "900", g: "Aa" }, { n: "SF Mono", r: "Monospaced data readouts", f: "ui-monospace,'SF Mono',Menlo,'Courier New',monospace", w: "600", g: "$0" }]
         },
         blurb: "An expense tracker with fully on-device OCR receipt scanning, built for the Canadian market.",
         overview: "An expense tracking iOS app designed for App Store submission, using Apple's Vision Framework for receipt OCR entirely on-device — no API costs.",
