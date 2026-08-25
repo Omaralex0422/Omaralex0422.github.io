@@ -823,6 +823,31 @@
         </div>
       </section>
 
+      <!-- the plates: four screens off the running app -->
+      <section class="wrap" style="padding:clamp(46px,6vw,80px) clamp(24px,4vw,48px);">
+        <div class="eb">The evidence</div>
+        <h2 style="margin-top:18px;">Four of them, running.</h2>
+        <p class="bodyserif measure" style="margin:20px 0 clamp(30px,4vw,46px);color:var(--ink2);">Screen captures off the built application, not mockups &#8212; every claim above this line is visible in one of them. Click a plate to open it full size.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr));gap:clamp(24px,3.2vw,44px);">
+          <sc-for list="{{ detail.gallery }}" as="cell" hint-placeholder-count="4">
+            <figure data-hover onClick="{{ cell.onView }}" aria-label="{{ cell.t }} &#8212; open full size" style="margin:0;cursor:zoom-in;">
+              <div style="position:relative;aspect-ratio:16/10;border:1px solid var(--divider);background:var(--paperSunk);overflow:hidden;border-radius:3px;transition:border-color .4s ease;" style-hover="border-color:var(--ornament);">
+                <image-slot id="{{ cell.id }}" src="images/{{ cell.id }}" fit="cover" shape="rect" res="2800" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ cell.ph }}"></image-slot>
+              </div>
+              <figcaption style="display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:baseline;margin-top:15px;">
+                <div class="num" style="font-size:12px;color:var(--inkMuted);">{{ cell.n }}</div>
+                <div style="min-width:0;">
+                  <div class="serif" style="font-size:17px;letter-spacing:-.3px;">{{ cell.t }}</div>
+                  <p class="cap" style="margin:6px 0 0;line-height:1.6;">{{ cell.d }}</p>
+                </div>
+              </figcaption>
+            </figure>
+          </sc-for>
+        </div>
+      </section>
+
+      <hr class="rule">
+
       <!-- the spiral, explained -->
       <section class="night" style="padding:clamp(56px,7vw,100px) 0;">
         <div class="wrap m-stack" style="display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center;">
@@ -3267,6 +3292,12 @@ class Component extends DCLogic {
         stack: "Swift 6 · SwiftUI · Supabase + PostGIS · Microsoft Graph API · Claude API",
         accent: "#7B2D26",
         room: "mmg",
+        plates: [
+          { t: "Mail", d: "Outlook rendered natively out of a local cache — the three-point oxblood rail flush to the left edge, tracked-out small caps down the sidebar, priority dots against the thread list." },
+          { t: "Map", d: "Job sites across the New Brunswick service areas. The card carries a seven-day workability read, live Open-Meteo conditions and CHS tide times; the panel toggles weather, tides and crew names." },
+          { t: "Ask", d: "\u2318K, a question in plain English, and the model answering with a tool call — searched mail by sender — then streaming the matching threads back as cards." },
+          { t: "Peek", d: "The sandboxed WKWebView overlay: a link opened without leaving the app, ⌘-click to send it to the real browser. Behind it, the Dock Marine site from project 03." }
+        ],
         dests: [
           { i: "01", n: "Today", d: "An AI-written briefing for the day — headline, subheadline, cards — with a composer for follow-up questions." },
           { i: "02", n: "Mail", d: "Outlook rendered natively from a local cache. Threads, priority, muted, scoped search, compose and reply." },
@@ -3598,8 +3629,9 @@ class Component extends DCLogic {
       for (let k = 1; k <= plateCount; k++) {
         const gid = "gallery-" + p.id + "-" + k;
         const nn = String(k).padStart(2, "0");
-        const label = p.title.toUpperCase() + " \u2014 PLATE " + nn;
-        gallery.push({ id: gid, n: nn, ph: "PLATE " + nn, onView: () => this.openLightbox(gid, label) });
+        const pl = (p.plates && p.plates[k - 1]) || null;
+        const label = p.title.toUpperCase() + " \u2014 " + (pl ? pl.t.toUpperCase() : "PLATE " + nn);
+        gallery.push({ id: gid, n: nn, ph: "PLATE " + nn, t: pl ? pl.t : "Plate " + nn, d: pl ? pl.d : "", onView: () => this.openLightbox(gid, label) });
       }
       detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, isMTM: p.room === "mtm", isMMG: p.room === "mmg", isDMC: p.room === "dmc", isRF: p.room === "rf", isGeneric: !p.room, dests: p.dests || [], field: p.field || [], stats: p.stats || [], integ: p.integ || [], blog: p.blog || [], process: p.process || [], ix: p.ix || [], pitches: p.pitches || [], recovery: p.recovery || [], screens: p.screens || [], pipe: p.pipe || [], gallery: gallery };
     }
