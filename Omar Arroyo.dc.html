@@ -493,7 +493,7 @@
 <script src="./image-slot.js"></script>
 </helmet>
 
-<div id="appRoot" style="min-height:100vh;background-color:#101014;position:relative;overflow-x:hidden;">
+<div id="appRoot" style="min-height:100vh;background-color:#101014;position:relative;overflow-x:hidden;overflow-x:clip;">
 
 
   <div id="scrollbar" data-no-capture style="position:fixed;top:0;left:0;height:2px;width:100%;background:#ff5a1f;transform:scaleX(0);transform-origin:0 50%;z-index:1000;will-change:transform;box-shadow:0 0 10px rgba(255,90,31,0.7);"></div>
@@ -769,7 +769,7 @@
     <div class="mmg" style="margin:-120px -6vw -70px;">
 
       <!-- masthead -->
-      <header style="border-bottom:1px solid var(--divider);background:rgba(245,240,232,.985);position:sticky;top:0;z-index:20;">
+      <header style="border-bottom:1px solid var(--divider);background:#F5F0E8;position:sticky;top:0;z-index:20;">
         <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:20px;height:60px;">
           <div class="serif" style="font-weight:500;font-size:13px;letter-spacing:3px;">MMG&#8194;&#183;&#8194;OPERATIONS</div>
           <button class="btn btn-ghost" data-hover onClick="{{ close }}" style="font-size:11px;letter-spacing:1.8px;text-transform:uppercase;">← Omar Arroyo</button>
@@ -969,7 +969,7 @@
     <sc-if value="{{ detail.isMTM }}" hint-placeholder-val="{{ false }}">
     <div class="mtm" style="margin:-120px -6vw -70px;">
 
-      <header style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px clamp(24px,6vw,80px);border-bottom:1px solid #e2e4df;position:sticky;top:0;background:rgba(246,247,245,.985);z-index:20;">
+      <header style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px clamp(24px,6vw,80px);border-bottom:1px solid #e2e4df;position:sticky;top:0;background:#f6f7f5;z-index:20;">
         <div style="font-family:'Playfair Display',serif;font-size:17px;letter-spacing:.02em;">A Mind to Mind</div>
         <button data-hover onClick="{{ close }}" style="appearance:none;border:none;background:none;cursor:pointer;font-family:'Almarai',sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#8a8781;padding:0;transition:color .3s;" style-hover="color:#547e75;">← Omar Arroyo</button>
       </header>
@@ -1457,7 +1457,7 @@
     <div class="rf" style="margin:-120px -6vw -70px;">
 
       <!-- the app's top bar: a soft icon button and one action -->
-      <header style="position:sticky;top:0;z-index:30;background:rgba(236,236,236,.975);">
+      <header style="position:sticky;top:0;z-index:30;background:#F2F1EF;">
         <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:18px;height:70px;">
           <div style="display:flex;align-items:center;gap:13px;">
             <div style="width:42px;height:42px;border-radius:14px;background:var(--card);display:grid;place-items:center;box-shadow:0 1px 2px rgba(40,40,40,.07),0 8px 18px -14px rgba(40,40,40,.5);">
@@ -1801,224 +1801,6 @@
     </div>
     </sc-if>
 
-    <sc-if value="{{ detail.isGeneric }}" hint-placeholder-val="{{ true }}">
-    <button data-hover onClick="{{ close }}" style="appearance:none;border:none;background:none;color:#8d8a84;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;padding:0;margin-bottom:60px;transition:color .3s;" style-hover="color:#ff5a1f;">← Back to index</button>
-
-    <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.16em;color:var(--pa);">{{ detail.num }} / 05</span>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#8d8a84;text-transform:uppercase;border:1px solid rgba(232,230,225,0.18);padding:6px 12px;">{{ detail.status }}</span>
-    </div>
-    <h1 style="margin:26px 0 0;font-weight:900;font-size:clamp(44px,8.5vw,150px);line-height:0.9;letter-spacing:-0.04em;text-transform:uppercase;text-wrap:balance;" class="ink-grad">{{ detail.title }}</h1>
-    <p style="margin:30px 0 0;max-width:680px;font-size:clamp(18px,1.8vw,24px);line-height:1.5;color:#cfccc6;text-wrap:pretty;">{{ detail.overview }}</p>
-
-    <sc-if value="{{ detail.web }}" hint-placeholder-val="{{ true }}">
-      <a data-hover href="{{ detail.link }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:12px;margin-top:34px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid var(--pa);padding:14px 24px;transition:background .3s,color .3s;" style-hover="background:#ff5a1f;color:#101014;">Visit Site →</a>
-    </sc-if>
-
-    <div style="margin-top:60px;border-top:1px solid rgba(232,230,225,0.12);border-left:1px solid rgba(232,230,225,0.12);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
-      <div style="border-right:1px solid rgba(232,230,225,0.12);border-bottom:1px solid rgba(232,230,225,0.12);padding:24px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;margin-bottom:12px;">Discipline</div>
-        <div style="font-size:15px;color:#e8e6e1;">{{ detail.kind }}</div>
-      </div>
-      <div style="border-right:1px solid rgba(232,230,225,0.12);border-bottom:1px solid rgba(232,230,225,0.12);padding:24px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;margin-bottom:12px;">Period</div>
-        <div style="font-size:15px;color:#e8e6e1;">{{ detail.year }}</div>
-      </div>
-      <div style="border-right:1px solid rgba(232,230,225,0.12);border-bottom:1px solid rgba(232,230,225,0.12);padding:24px;grid-column:span 2;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#56544f;text-transform:uppercase;margin-bottom:12px;">Stack</div>
-        <div style="font-size:15px;color:#e8e6e1;line-height:1.5;">{{ detail.stack }}</div>
-      </div>
-    </div>
-
-    <!-- EXHIBIT WALL — the device under a spotlight on a concrete wall, with its museum label -->
-    <div class="detail-plate" style="margin-top:56px;position:relative;isolation:isolate;overflow:hidden;background:#121217;border:1px solid rgba(232,230,225,0.14);color:#e9e5dc;padding:clamp(44px,6vw,84px) clamp(26px,4vw,58px) clamp(54px,7vw,96px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(34px,5vw,72px);align-items:center;">
-      <canvas data-graphite="53" data-kind="wall" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;opacity:.42;z-index:-1;pointer-events:none;"></canvas>
-      <div aria-hidden="true" style="position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(48% 78% at 27% -6%, rgba(255,214,170,0.17), rgba(255,120,60,0.05) 48%, rgba(0,0,0,0) 72%);"></div>
-      <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:32%;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,0.5));"></div>
-      <div style="display:flex;justify-content:center;">
-        <sc-if value="{{ detail.isMac }}" hint-placeholder-val="{{ true }}">
-          <div data-lens style="perspective:1700px;width:100%;max-width:620px;">
-            <div style="transform:rotateY(-11deg) rotateX(6deg);transform-origin:center;">
-              <div style="background:#0b0c0f;border:1px solid rgba(26,27,32,0.35);border-radius:16px 16px 4px 4px;padding:10px 10px 0;box-shadow:0 50px 70px -34px rgba(0,0,0,0.55);">
-                <div style="position:relative;border-radius:8px;overflow:hidden;background:#15161b;aspect-ratio:16/10;">
-                  <image-slot id="shot-{{ detail.id }}" src="images/shot-{{ detail.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ detail.shotLabel }}"></image-slot>
-                  <canvas data-sketch aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;"></canvas>
-                </div>
-              </div>
-              <div style="position:relative;height:14px;width:110%;margin-left:-5%;background:linear-gradient(180deg,#cbc9c3,#a7a59f);border-radius:0 0 13px 13px;">
-                <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:15%;height:6px;background:rgba(26,27,32,0.22);border-radius:0 0 8px 8px;"></div>
-              </div>
-            </div>
-          </div>
-        </sc-if>
-        <sc-if value="{{ detail.isPhone }}" hint-placeholder-val="{{ true }}">
-          <div data-lens style="perspective:1700px;width:100%;max-width:300px;">
-            <div style="transform:rotateY(12deg) rotateX(4deg);transform-origin:center;">
-              <div style="background:#0b0c0f;border-radius:50px;padding:12px;box-shadow:0 50px 70px -34px rgba(0,0,0,0.55);">
-                <div style="position:relative;border-radius:39px;overflow:hidden;background:#15161b;aspect-ratio:9/19.5;">
-                  <image-slot id="shot-{{ detail.id }}" src="images/shot-{{ detail.id }}" fit="cover" shape="rect" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ detail.shotLabel }}"></image-slot>
-                  <canvas data-sketch aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;"></canvas>
-                  <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);width:33%;height:22px;background:#0b0c0f;border-radius:14px;z-index:3;"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </sc-if>
-      </div>
-
-      <!-- wall label -->
-      <div style="border:1px solid rgba(232,230,225,0.2);background:rgba(12,12,16,0.62);backdrop-filter:blur(5px);padding:clamp(22px,2.4vw,32px) clamp(22px,2.6vw,34px);box-shadow:0 40px 60px -40px rgba(0,0,0,0.9);">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;">
-          <span style="color:var(--pa);">Plate {{ detail.num }} / 05</span><span style="color:#8d8a84;">{{ detail.status }}</span>
-        </div>
-        <div style="margin-top:16px;font-weight:700;font-size:clamp(20px,1.8vw,26px);letter-spacing:-0.01em;line-height:1.15;">{{ detail.title }}</div>
-        <div style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;color:#8d8a84;text-transform:uppercase;line-height:1.9;">{{ detail.kind }} · {{ detail.year }}<br><span style="color:#56544f;">Medium —</span> {{ detail.stack }}</div>
-        <div style="margin-top:22px;display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;color:#56544f;text-transform:uppercase;border-top:1px solid rgba(232,230,225,0.14);padding-top:14px;">
-          <span>{{ detail.graph.caption }}</span><span style="color:#8a8882;">{{ detail.graph.axis }}</span>
-        </div>
-        <svg viewBox="0 0 320 150" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;display:block;margin-top:18px;overflow:visible;">
-          <sc-for list="{{ detail.graph.lines }}" as="l" hint-placeholder-count="0"><line x1="{{ l.x1 }}" y1="{{ l.y1 }}" x2="{{ l.x2 }}" y2="{{ l.y2 }}" stroke="#e9e5dc" stroke-width="{{ l.w }}" stroke-opacity="{{ l.o }}" stroke-linecap="round"></line></sc-for>
-          <sc-for list="{{ detail.graph.rects }}" as="r" hint-placeholder-count="0"><rect x="{{ r.x }}" y="{{ r.y }}" width="{{ r.w }}" height="{{ r.h }}" fill="#e9e5dc" fill-opacity="{{ r.o }}"></rect></sc-for>
-          <sc-for list="{{ detail.graph.circles }}" as="c" hint-placeholder-count="0"><circle cx="{{ c.x }}" cy="{{ c.y }}" r="{{ c.r }}" fill="#e9e5dc" fill-opacity="{{ c.o }}"></circle></sc-for>
-        </svg>
-        <div style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#7a7872;text-transform:uppercase;text-wrap:pretty;">Figure derived from the build — structure over precision.</div>
-      </div>
-    </div>
-
-    <!-- LIVE — the real site, running and scrollable inside the machine -->
-    <sc-if value="{{ detail.isSite }}" hint-placeholder-val="{{ true }}">
-    <section style="margin-top:96px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;border-bottom:1px solid rgba(232,230,225,0.16);padding-bottom:16px;">
-        <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:var(--pa);text-transform:uppercase;">FIG. 06 — Live</div>
-          <h2 style="margin:14px 0 0;font-weight:900;font-size:clamp(30px,4.4vw,62px);line-height:0.88;letter-spacing:-0.04em;text-transform:uppercase;" class="ink-grad">The site as it stands</h2>
-        </div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7872;text-transform:uppercase;text-align:right;line-height:1.9;">Captured from production<br><span style="color:#56544f;">Hover the screen to browse it</span></div>
-      </div>
-
-      <div data-browser style="margin-top:38px;perspective:2000px;">
-        <div style="transform:rotateX(4deg);transform-origin:center top;">
-          <div style="background:#0b0c0f;border:1px solid rgba(232,230,225,0.16);border-radius:14px 14px 3px 3px;padding:11px 11px 0;box-shadow:0 60px 90px -50px rgba(0,0,0,1);">
-            <div style="position:relative;border-radius:7px;overflow:hidden;background:#15161b;aspect-ratio:16/10;display:flex;flex-direction:column;">
-              <!-- browser chrome -->
-              <div style="flex:none;display:flex;align-items:center;gap:12px;padding:0 14px;height:34px;background:#1b1c22;border-bottom:1px solid rgba(232,230,225,0.09);">
-                <span style="display:flex;gap:6px;flex:none;"><i style="width:9px;height:9px;border-radius:50%;background:#3a3b43;display:block;"></i><i style="width:9px;height:9px;border-radius:50%;background:#3a3b43;display:block;"></i><i style="width:9px;height:9px;border-radius:50%;background:#3a3b43;display:block;"></i></span>
-                <span style="flex:1;display:flex;align-items:center;gap:8px;min-width:0;background:#101014;border:1px solid rgba(232,230,225,0.1);border-radius:5px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:#8d8a84;">
-                  <i style="width:5px;height:5px;border-radius:50%;background:var(--pa);display:block;flex:none;box-shadow:0 0 7px var(--pa);"></i>
-                  <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ detail.site.label }}</span>
-                </span>
-              </div>
-              <!-- the page itself -->
-              <div data-bvp style="position:relative;flex:1;overflow:hidden;background:#fff;">
-                <img data-bimg src="{{ detail.site.shot }}" alt="" style="position:absolute;top:0;left:0;width:100%;display:block;will-change:transform;filter:saturate(0.35) brightness(0.72) contrast(1.04);transition:filter .7s ease;">
-              </div>
-            </div>
-          </div>
-          <div style="position:relative;height:13px;width:108%;margin-left:-4%;background:linear-gradient(180deg,#2a2b31,#17181d);border-radius:0 0 12px 12px;">
-            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:14%;height:5px;background:rgba(0,0,0,0.4);border-radius:0 0 7px 7px;"></div>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#56544f;text-transform:uppercase;">Colour returns when you look closely.</div>
-        <a data-hover href="{{ detail.site.url }}" target="_blank" rel="noopener" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#e8e6e1;text-transform:uppercase;text-decoration:none;border:1px solid var(--pa);padding:13px 22px;transition:background .3s,color .3s;" style-hover="background:var(--pa);color:#101014;">Open the real thing →</a>
-      </div>
-    </section>
-    </sc-if>
-
-    <!-- IDENTITY — the brand behind the build -->
-    <section style="margin-top:96px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;border-bottom:1px solid rgba(232,230,225,0.16);padding-bottom:16px;">
-        <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.28em;color:var(--pa);text-transform:uppercase;">FIG. 07 — Identity</div>
-          <h2 style="margin:14px 0 0;font-weight:900;font-size:clamp(30px,4.4vw,62px);line-height:0.88;letter-spacing:-0.04em;text-transform:uppercase;" class="ink-grad">Why it looks<br>like this</h2>
-        </div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7872;text-transform:uppercase;text-align:right;max-width:220px;line-height:1.9;">Palette · Typography · Intent</div>
-      </div>
-
-      <div class="about-grid" style="margin-top:44px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(34px,5vw,74px);align-items:start;">
-        <div>
-          <p style="margin:0;font-size:clamp(17px,1.55vw,21px);line-height:1.62;color:#cfccc6;text-wrap:pretty;">{{ detail.brand.purpose }}</p>
-          <p style="margin:26px 0 0;padding-left:18px;border-left:2px solid var(--pa);font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.85;letter-spacing:0.05em;color:#9d9a94;text-transform:uppercase;text-wrap:pretty;">{{ detail.brand.positioning }}</p>
-        </div>
-        <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.24em;color:#56544f;text-transform:uppercase;margin-bottom:16px;">Typefaces</div>
-          <sc-for list="{{ detail.brand.fonts }}" as="f" hint-placeholder-count="2">
-            <div style="display:flex;align-items:baseline;gap:18px;border-top:1px solid rgba(232,230,225,0.12);padding:16px 0;">
-              <div style="font-family:{{ f.f }};font-weight:{{ f.w }};font-size:38px;line-height:1;color:#e9e5dc;flex:none;min-width:64px;">Aa</div>
-              <div style="min-width:0;">
-                <div style="font-family:{{ f.f }};font-weight:{{ f.w }};font-size:16px;color:#e9e5dc;letter-spacing:0.01em;">{{ f.n }}</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;color:#7a7872;text-transform:uppercase;margin-top:5px;">{{ f.r }}</div>
-              </div>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-
-      <div style="margin-top:52px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.24em;color:#56544f;text-transform:uppercase;margin-bottom:18px;">Palette</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,148px),1fr));gap:1px;background:rgba(232,230,225,0.12);border:1px solid rgba(232,230,225,0.12);">
-          <sc-for list="{{ detail.brand.palette }}" as="c" hint-placeholder-count="6">
-            <div data-hover style="background:#101014;padding:0;transition:transform .45s cubic-bezier(.2,.7,.2,1);" style-hover="transform:translateY(-5px);">
-              <div style="height:96px;background:{{ c.h }};"></div>
-              <div style="padding:12px 13px 15px;">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#e9e5dc;text-transform:uppercase;">{{ c.h }}</div>
-                <div style="font-size:13px;color:#bdbab4;margin-top:6px;">{{ c.n }}</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.16em;color:#6a6862;text-transform:uppercase;margin-top:4px;">{{ c.r }}</div>
-              </div>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-    </section>
-
-    <div style="margin-top:80px;display:flex;flex-direction:column;gap:60px;">
-      <sc-for list="{{ detail.sections }}" as="sec" hint-placeholder-count="2">
-        <div class="detail-sec" style="display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:5vw;align-items:start;border-top:1px solid rgba(232,230,225,0.16);padding-top:34px;">
-          <h2 style="margin:0;font-weight:700;font-size:clamp(22px,2.4vw,32px);letter-spacing:-0.01em;">{{ sec.heading }}</h2>
-          <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:16px;">
-            <sc-for list="{{ sec.items }}" as="it" hint-placeholder-count="4">
-              <li style="display:flex;gap:16px;font-size:16px;line-height:1.6;color:#cfccc6;border-bottom:1px solid rgba(232,230,225,0.07);padding-bottom:16px;"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#56544f;padding-top:3px;">—</span><span style="text-wrap:pretty;">{{ it }}</span></li>
-            </sc-for>
-          </ul>
-        </div>
-      </sc-for>
-    </div>
-
-    <div style="margin-top:100px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;border-bottom:2px solid rgba(232,230,225,0.85);padding-bottom:18px;">
-        <h2 style="margin:0;font-weight:900;font-size:clamp(34px,5vw,72px);line-height:0.85;letter-spacing:-0.04em;text-transform:uppercase;">Gallery</h2>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#8a8882;text-transform:uppercase;">{{ detail.title }} — Index of plates · Click to enlarge</span>
-      </div>
-      <div style="margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,540px),1fr));gap:clamp(22px,3vw,40px);">
-        <sc-for list="{{ detail.gallery }}" as="cell" hint-placeholder-count="6">
-          <!-- one lit, framed plate on the wall -->
-          <figure data-hover data-lens style="position:relative;isolation:isolate;margin:0;background:#121217;border:1px solid rgba(232,230,225,0.14);padding:clamp(16px,2vw,24px) clamp(16px,2vw,24px) 14px;transition:transform .55s cubic-bezier(.2,.7,.2,1),border-color .4s,box-shadow .55s;box-shadow:0 30px 50px -36px rgba(0,0,0,0.9);" style-hover="transform:translateY(-7px);border-color:var(--pa);box-shadow:0 50px 70px -36px rgba(0,0,0,1),0 0 60px -20px rgba(0,0,0,0.6);">
-            <div aria-hidden="true" style="position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(72% 62% at 50% -12%, rgba(255,214,170,0.15), rgba(255,120,60,0.04) 46%, rgba(0,0,0,0) 72%);"></div>
-            <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:38%;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,0.45));"></div>
-            <div style="position:relative;aspect-ratio:4/3;background:#0b0c0f;border:1px solid rgba(232,230,225,0.1);box-shadow:inset 0 0 0 1px rgba(0,0,0,0.6),0 24px 40px -28px rgba(0,0,0,0.95);">
-              <image-slot id="{{ cell.id }}" src="images/{{ cell.id }}" fit="contain" shape="rect" res="2800" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ cell.ph }}"></image-slot>
-            </div>
-            <figcaption style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;">
-              <span style="display:flex;gap:14px;align-items:baseline;min-width:0;"><span style="color:var(--pa);">Plate {{ cell.n }}</span><span style="color:#6a6862;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ detail.title }}</span></span>
-              <button data-hover onClick="{{ cell.onView }}" style="appearance:none;cursor:pointer;background:none;border:1px solid rgba(232,230,225,0.28);color:#e8e6e1;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;padding:6px 11px;transition:background .25s,color .25s;flex:none;" style-hover="background:var(--pa);color:#101014;">View ⤢</button>
-            </figcaption>
-          </figure>
-        </sc-for>
-      </div>
-    </div>
-
-    <sc-if value="{{ detailNext }}" hint-placeholder-val="{{ true }}">
-      <button data-hover onClick="{{ detailNext.onOpen }}" style="margin-top:90px;width:100%;text-align:left;appearance:none;cursor:pointer;border:none;border-top:1px solid rgba(232,230,225,0.16);background:none;color:#e8e6e1;padding:46px 4px;display:flex;justify-content:space-between;align-items:center;gap:30px;font-family:inherit;transition:padding .4s;" style-hover="padding-left:24px;padding-right:24px;">
-        <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;color:#8d8a84;text-transform:uppercase;margin-bottom:14px;">Next — {{ detailNext.num }}</div>
-          <div style="font-weight:800;font-size:clamp(28px,4vw,56px);line-height:0.95;letter-spacing:-0.03em;text-transform:uppercase;">{{ detailNext.title }}</div>
-        </div>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:clamp(20px,3vw,40px);color:#e8e6e1;">→</span>
-      </button>
-    </sc-if>
-    </sc-if>
 
   </main>
   </sc-if>
@@ -3575,80 +3357,14 @@ class Component extends DCLogic {
     ];
   }
 
-  graphs() {
-    if (this._g) return this._g;
-    const out = {};
-    // 4A — MMG · phyllotaxis (the app's real Fibonacci loader)
-    (() => {
-      const c = []; const n = 150, cx = 160, cy = 76, ga = Math.PI * (3 - Math.sqrt(5));
-      for (let i = 0; i < n; i++) {
-        const a = i * ga, rr = 4.8 * Math.sqrt(i);
-        const x = cx + Math.cos(a) * rr * 1.7, y = cy + Math.sin(a) * rr;
-        if (x < 3 || x > 317 || y < 3 || y > 147) continue;
-        c.push({ x: +x.toFixed(1), y: +y.toFixed(1), r: +(1 + (i / n) * 1.7).toFixed(2), o: +(0.16 + 0.5 * (i / n)).toFixed(2) });
-      }
-      out.mmg = { caption: "FIG.4A — PHYLLOTAXIS / 571 NODES", axis: "SWIFTUI CANVAS · 12s CYCLE", circles: c, lines: [], rects: [] };
-    })();
-    // 4B — Nexus · node graph / mind map
-    (() => {
-      const pts = [[40,42],[92,28],[70,84],[122,60],[162,36],[150,104],[202,70],[212,122],[252,48],[262,102],[292,74],[182,130],[112,120],[30,98]];
-      const edges = [[0,1],[0,2],[1,3],[2,3],[3,4],[3,5],[4,6],[5,6],[6,7],[6,8],[8,9],[9,10],[7,11],[5,12],[2,13],[12,11],[8,10]];
-      const lines = edges.map(([a,b]) => ({ x1: pts[a][0], y1: pts[a][1], x2: pts[b][0], y2: pts[b][1], w: 0.8, o: 0.22 }));
-      const circles = pts.map((p,i) => ({ x: p[0], y: p[1], r: i % 4 === 0 ? 4 : 2.6, o: i % 4 === 0 ? 0.85 : 0.5 }));
-      out.nexus = { caption: "FIG.4B — NODE GRAPH / MIND MAP", axis: "NODES 14 · EDGES 17", circles, lines, rects: [] };
-    })();
-    // 4C — ReceiptFlow · OCR parse
-    (() => {
-      const rects = []; let y = 26; const widths = [118,176,88,158,138,68,148];
-      widths.forEach((w,i) => { rects.push({ x: 48, y, w, h: 5, o: i === 0 ? 0.8 : 0.3 }); y += 15; });
-      rects.push({ x: 212, y: 116, w: 64, h: 14, o: 0.8 });
-      const lines = [{ x1: 32, y1: 16, x2: 32, y2: 138, w: 1, o: 0.45 }, { x1: 48, y1: 96, x2: 300, y2: 96, w: 0.6, o: 0.2 }];
-      out.receiptflow = { caption: "FIG.4C — OCR PARSE / VISION", axis: "ON-DEVICE · 0 API COST", circles: [{ x: 32, y: 96, r: 3, o: 0.8 }], lines, rects };
-    })();
-    // 4D — Dock Marine · market map
-    (() => {
-      const lines = [];
-      for (let gx = 24; gx <= 300; gx += 38) lines.push({ x1: gx, y1: 14, x2: gx, y2: 136, w: 0.5, o: 0.12 });
-      for (let gy = 24; gy <= 130; gy += 28) lines.push({ x1: 18, y1: gy, x2: 304, y2: gy, w: 0.5, o: 0.12 });
-      const dots = [[42,42,1],[80,112,0],[122,60,0],[152,30,1],[192,92,0],[232,50,1],[262,120,0],[292,80,0],[62,82,0],[172,122,0],[212,28,0],[282,42,1]];
-      const circles = dots.map(([x,y,hl]) => ({ x, y, r: hl ? 5 : 3, o: hl ? 0.85 : 0.3 }));
-      out.dmc = { caption: "FIG.4D — MARKET MAP / MARINAS", axis: "ATLANTIC · CARIBBEAN", circles, lines, rects: [] };
-    })();
-    // 4E — Partnership Decks · expansion bars
-    (() => {
-      const rects = []; const base = 132; const hs = [26,34,30,48,44,60,56,74,70,92,100,120]; const bw = 16, gap = 8; let x = 26; const tops = [];
-      hs.forEach((h,i) => { rects.push({ x, y: base - h, w: bw, h, o: i === hs.length - 1 ? 0.8 : 0.26 }); tops.push([x + bw / 2, base - h]); x += bw + gap; });
-      const lines = [];
-      for (let i = 0; i < tops.length - 1; i++) lines.push({ x1: tops[i][0], y1: tops[i][1], x2: tops[i+1][0], y2: tops[i+1][1], w: 1, o: 0.55 });
-      lines.push({ x1: 18, y1: base, x2: 304, y2: base, w: 0.8, o: 0.4 });
-      const circles = tops.map(p => ({ x: p[0], y: p[1], r: 1.8, o: 0.6 }));
-      out.presentations = { caption: "FIG.4E — MARKET EXPANSION", axis: "DEALERS / QUARTER", circles, lines, rects };
-    })();
-    // 4F — A Mind to Mind · content pillars / hub-and-spoke
-    (() => {
-      const cx = 160, cy = 76;
-      const pillars = [[230,76],[195,117.6],[125,117.6],[90,76],[125,34.4],[195,34.4]];
-      const lines = pillars.map(p => ({ x1: cx, y1: cy, x2: p[0], y2: p[1], w: 0.8, o: 0.28 }));
-      const circles = [{ x: cx, y: cy, r: 5, o: 0.85 }];
-      pillars.forEach((p, i) => {
-        circles.push({ x: p[0], y: p[1], r: 3.2, o: 0.5 });
-        const sub = [[p[0] + (p[0] - cx) * 0.32, p[1] + (p[1] - cy) * 0.32]];
-        sub.forEach(s => { lines.push({ x1: p[0], y1: p[1], x2: s[0], y2: s[1], w: 0.5, o: 0.18 }); circles.push({ x: s[0], y: s[1], r: 1.6, o: 0.3 }); });
-      });
-      out.mindtomind = { caption: "FIG.4F — CONTENT PILLARS", axis: "BRAND · WELLNESS · GROWTH", circles, lines, rects: [] };
-    })();
-    this._g = out; return out;
-  }
-
   renderVals() {
     const all = this.data();
     const f = this.state.filter;
     const filtered = f === "ALL" ? all : all.filter((p) => p.tags.includes(f));
     const filterStyle = (active) => "appearance:none;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;padding:8px 14px;transition:background .3s,color .3s,border-color .3s;border:1px solid " +
       (active ? "#1a1b20;background:#1a1b20;color:#e7e5e0" : "rgba(26,27,32,0.28);background:transparent;color:#56544f");
-    const G = this.graphs();
     const total = String(all.length).padStart(2, "0");
-    const decorate = (p, i) => ({ ...p, total: total, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", flip: i % 2 === 1, typeOrder: i % 2 === 1 ? "2" : "1", visOrder: i % 2 === 1 ? "1" : "2" });
+    const decorate = (p, i) => ({ ...p, total: total, isMac: p.device === "macbook", isPhone: p.device === "iphone", flip: i % 2 === 1, typeOrder: i % 2 === 1 ? "2" : "1", visOrder: i % 2 === 1 ? "1" : "2" });
 
     let detailNext = null;
     let detailObj = null;
@@ -3666,7 +3382,7 @@ class Component extends DCLogic {
         const label = p.title.toUpperCase() + " \u2014 " + (pl ? pl.t.toUpperCase() : "PLATE " + nn);
         gallery.push({ id: gid, n: nn, ph: "PLATE " + nn, t: pl ? pl.t : "Plate " + nn, d: pl ? pl.d : "", onView: () => this.openLightbox(gid, label) });
       }
-      detailObj = { ...p, graph: G[p.id], isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, isMTM: p.room === "mtm", isMMG: p.room === "mmg", isDMC: p.room === "dmc", isRF: p.room === "rf", isGeneric: !p.room, dests: p.dests || [], field: p.field || [], stats: p.stats || [], integ: p.integ || [], blog: p.blog || [], process: p.process || [], ix: p.ix || [], pitches: p.pitches || [], recovery: p.recovery || [], screens: p.screens || [], pipe: p.pipe || [], gallery: gallery };
+      detailObj = { ...p, isMac: p.device === "macbook", isPhone: p.device === "iphone", isSite: !!p.site, accent: p.accent || "#ff5a1f", site: p.site || { url: "#", label: "", shot: "" }, isMTM: p.room === "mtm", isMMG: p.room === "mmg", isDMC: p.room === "dmc", isRF: p.room === "rf", dests: p.dests || [], field: p.field || [], stats: p.stats || [], integ: p.integ || [], blog: p.blog || [], process: p.process || [], ix: p.ix || [], pitches: p.pitches || [], recovery: p.recovery || [], screens: p.screens || [], pipe: p.pipe || [], gallery: gallery };
     }
 
     return {
