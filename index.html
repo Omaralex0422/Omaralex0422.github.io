@@ -1002,6 +1002,31 @@
 
       <hr class="rule">
 
+      <!-- the pages -->
+      <section style="padding:clamp(52px,7vw,92px) clamp(24px,6vw,80px);max-width:1180px;">
+        <div class="eyebrow">The pages</div>
+        <h2 style="margin-top:20px;font-size:clamp(30px,4vw,54px);line-height:1.12;max-width:18ch;">Every room of it.</h2>
+        <p style="margin:24px 0 clamp(32px,4vw,52px);max-width:56ch;color:#5a5853;font-weight:300;">Six captures off the live site rather than a mockup of it. Click any one to open it full size.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,375px),1fr));gap:clamp(24px,3vw,44px);">
+          <sc-for list="{{ detail.gallery }}" as="cell" hint-placeholder-count="6">
+            <figure data-hover onClick="{{ cell.onView }}" aria-label="{{ cell.t }} &#8212; open full size" style="margin:0;cursor:zoom-in;">
+              <div style="position:relative;aspect-ratio:16/9.4;background:var(--paper);border-radius:11px;overflow:hidden;box-shadow:0 1px 2px rgba(51,49,46,.06),0 24px 44px -32px rgba(51,49,46,.52);transition:transform .55s cubic-bezier(.2,.7,.2,1),box-shadow .55s ease;" style-hover="transform:translateY(-6px);box-shadow:0 1px 2px rgba(51,49,46,.07),0 34px 56px -32px rgba(51,49,46,.6);">
+                <image-slot id="{{ cell.id }}" src="images/{{ cell.id }}" fit="cover" shape="rect" res="3024" style="position:absolute;inset:0;width:100%;height:100%;" placeholder="{{ cell.ph }}"></image-slot>
+              </div>
+              <figcaption style="margin-top:17px;">
+                <div style="display:flex;align-items:baseline;gap:12px;">
+                  <span style="font-family:'Playfair Display',Georgia,serif;font-size:14px;color:var(--mist);">{{ cell.n }}</span>
+                  <span style="font-family:'Playfair Display',Georgia,serif;font-size:21px;line-height:1.2;color:var(--ink);">{{ cell.t }}</span>
+                </div>
+                <p style="margin:8px 0 0;font-size:14.5px;line-height:1.68;color:#6f6d68;font-weight:300;">{{ cell.d }}</p>
+              </figcaption>
+            </figure>
+          </sc-for>
+        </div>
+      </section>
+
+      <hr class="rule">
+
       <!-- brand -->
       <section style="padding:clamp(56px,7vw,96px) clamp(24px,6vw,80px);max-width:1180px;">
         <div class="eyebrow">The system</div>
@@ -3451,6 +3476,14 @@ class Component extends DCLogic {
         stack: "Brand Strategy · WordPress · SEO · Content · Meta Ads",
         accent: "#547e75",
         room: "mtm",
+        plates: [
+          { t: "The cover", d: "The masthead and the book. Playfair Display at regular weight, the sage wordmark centred, and a single pill in the corner — the whole identity settled in one screen." },
+          { t: "The blog", d: "The essay index: photograph left, title right, each one numbered. Thirty-five and counting, and Read More is the only affordance on the row." },
+          { t: "About", d: "A Playfair pull-quote at display size, the portrait beside it, and an accordion that keeps the long copy folded until it is asked for." },
+          { t: "Contact", d: "One line drawing, four fields and a sage button. The only place on the site that asks the reader for anything." },
+          { t: "The offer", d: "Three folded chapters, and the site's only two-button moment — sage to order the book, gold for the free audio." },
+          { t: "Prioritize", d: "The tool page, running the same accordion pattern and the same restraint as the book — applied to a product rather than a chapter list." }
+        ],
         site: { url: "https://www.denishachey.com", label: "denishachey.com", shot: "images/site-mindtomind.webp" },
         blog: [
           { n: "35", t: "The Cave You Fear to Enter", x: "The breakthrough you are searching for is hidden inside the exact task you are actively putting off." },
